@@ -19,7 +19,7 @@
 .brand b { color: var(--c-lime); font-weight: 700; }
 
 .nav-menu { display: flex; gap: 6px; margin: 0 auto; }
-.nav-item { position: relative; }
+.nav-item { position: static; }
 .nav-link {
   font-family: var(--font-label); font-weight: 500; text-transform: uppercase;
   letter-spacing: .06em; font-size: 14px; color: #fff;
@@ -34,7 +34,7 @@
 
 /* ----- Mega panel ----- */
 .mega {
-  position: absolute; top: var(--nav-h); left: 0; right: 0;
+  position: absolute; top: var(--nav-h); left: 0; right: 0; width: 100%;
   background: #0d0d0d;
   border-top: 2px solid var(--c-lime);
   box-shadow: 0 24px 50px rgba(0,0,0,.5);
@@ -59,8 +59,9 @@
   transition: background .15s var(--ease), transform .15s var(--ease);
 }
 .tile svg { width: 22px; height: 22px; stroke: var(--c-lime); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; transition: stroke .15s var(--ease); }
-.mega-link .t-title { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .04em; font-size: 14px; color: #fff; }
-.mega-link .t-desc { font-size: 13px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+.mega-link > span:last-child { display: flex; flex-direction: column; }
+.mega-link .t-title { display: block; font-family: var(--font-label); text-transform: uppercase; letter-spacing: .04em; font-size: 14px; color: #fff; }
+.mega-link .t-desc { display: block; font-size: 13px; line-height: 1.35; color: rgba(255,255,255,0.55); margin-top: 2px; }
 
 /* Featured card */
 .mega-feature { position: relative; background: #161616; overflow: hidden; display: flex; flex-direction: column; justify-content: flex-end; min-height: 220px; padding: 22px; }
