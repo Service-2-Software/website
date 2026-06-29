@@ -28,7 +28,7 @@
 
   /* ─── ROI Calculator ───────────────────────────────────── */
   function initCalculator() {
-    const calc = document.getElementById('roi-calculator');
+    const calc = document.getElementById('roi-calc-form') || document.getElementById('roi-calculator');
     if (!calc) return;
 
     // S2S program assumptions

@@ -77,8 +77,8 @@
 
 .btn-sm {
   font-size: 13px;
-  padding: 10px 26px;
-  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  padding: 10px 30px;
+  clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
 }
 
 .btn-sm.btn-ghost { padding: 0; }
