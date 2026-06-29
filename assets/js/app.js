@@ -10,10 +10,26 @@
     const track = document.querySelector('.ticker-track');
     if (!track) return;
 
-    // Duplicate items for seamless loop
-    const clone = track.cloneNode(true);
-    clone.setAttribute('aria-hidden', 'true');
-    track.parentNode.appendChild(clone);
+    // Duplicate all ticker items for a seamless infinite loop.
+    // Cloning the individual items (not the whole track) so the
+    // animation stays smooth and aria-hidden is scoped correctly.
+    const items = Array.from(track.querySelectorAll('.ticker-item'));
+    if (!items.length) return;
+
+    items.forEach(item => {
+      const clone = item.cloneNode(true);
+      clone.setAttribute('aria-hidden', 'true');
+      // Preserve the onerror handler on cloned images
+      const clonedImg = clone.querySelector('.ticker-logo');
+      const clonedFallback = clone.querySelector('.ticker-initials');
+      if (clonedImg && clonedFallback) {
+        clonedImg.addEventListener('error', function () {
+          this.style.display = 'none';
+          clonedFallback.style.display = 'flex';
+        });
+      }
+      track.appendChild(clone);
+    });
   }
 
   /* ─── Audience Card Hover ──────────────────────────────── */
