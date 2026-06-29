@@ -14,12 +14,16 @@
 .stats-strip .stat { border-right: 1px solid rgba(255,255,255,.08); }
 .stats-strip .stat:last-child { border-right: none; }
 
-/* Ticker */
+/* Ticker (auto-scrolling marquee) */
 .ticker { padding: 40px 0; }
 .ticker-label { text-align: center; font-family: var(--font-label); text-transform: uppercase; letter-spacing: .14em; font-size: 12px; color: var(--ink-on-black-soft); margin-bottom: 22px; }
-.ticker-row { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 44px; }
-.ticker-row img { height: 30px; width: auto; filter: brightness(0) invert(1); opacity: .7; transition: opacity .2s var(--ease); }
-.ticker-row img:hover { opacity: 1; }
+.ticker-marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.ticker-track { display: flex; align-items: center; gap: 64px; width: max-content; animation: ticker-scroll 32s linear infinite; }
+.ticker-marquee:hover .ticker-track { animation-play-state: paused; }
+.ticker-track img { height: 30px; width: auto; filter: brightness(0) invert(1); opacity: .7; transition: opacity .2s var(--ease); }
+.ticker-track img:hover { opacity: 1; }
+@keyframes ticker-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; flex-wrap: wrap; justify-content: center; } }
 
 /* Audience panels */
 .audience { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; padding-bottom: 80px; }
