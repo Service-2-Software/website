@@ -68,7 +68,7 @@
   <!-- ── WHY S2S / PARTNER RESULTS (White) ─────────────────── -->
   <section id="why-s2s" class="section-white section-pad">
     <div class="container">
-      <div style="display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;">
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start; min-width:0;">
         <div>
           <p class="eyebrow">The Case for Military Talent</p>
           <h2>Your Competitors Are<br>Still Guessing on Hires</h2>
@@ -81,7 +81,7 @@
             <li>S2S provides ongoing coaching throughout the program</li>
           </ul>
         </div>
-        <div id="results">
+        <div id="results" style="min-width:0; overflow:hidden;">
           <div class="partner-stats-grid" style="grid-template-columns:1fr; gap:20px;">
             <div class="partner-stat-card">
               <div class="stat-number">8x</div>
@@ -113,7 +113,7 @@
         <p style="color:var(--text-dark-secondary);">See how S2S compares to your current hiring and training spend.</p>
       </div>
 
-      <div class="calc-layout" id="roi-calculator">
+      <div class="calc-layout" id="roi-calc-form">
         <div class="calc-inputs">
           <div class="calc-input-group">
             <label class="calc-label" for="calc-reps">Number of SDR Hires Needed</label>
