@@ -1,0 +1,19 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Fonts (not committed — add to repo manually)
+assets/fonts/*.ttf
+assets/fonts/*.otf
+assets/fonts/*.woff
+assets/fonts/*.woff2
+
+# Build artifacts
+dist/
+node_modules/

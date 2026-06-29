@@ -1,0 +1,252 @@
+/* ============================================================
+   Service 2 Software — Footer
+   ============================================================ */
+
+.site-footer {
+  background: var(--black);
+  border-top: 1px solid var(--black-border);
+  padding: 72px 0 0;
+}
+
+/* ─── Newsletter Strip ────────────────────────────────────── */
+.footer-newsletter {
+  border-bottom: 1px solid var(--black-border);
+  padding-bottom: 56px;
+  margin-bottom: 56px;
+}
+
+.footer-newsletter-grid {
+  display: grid;
+  grid-template-columns: 1fr 420px;
+  gap: 48px;
+  align-items: center;
+}
+
+.footer-newsletter-copy h3 {
+  font-size: 28px;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+
+.footer-newsletter-copy p {
+  font-size: 15px;
+  color: var(--text-dark-secondary);
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.footer-newsletter-value {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 20px;
+  margin-top: 14px;
+}
+
+.footer-newsletter-value span {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-dark-secondary);
+}
+
+.footer-newsletter-value span::before {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  background: var(--lime);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  flex-shrink: 0;
+}
+
+.footer-newsletter-form {
+  display: flex;
+  gap: 0;
+}
+
+.footer-newsletter-form input {
+  flex: 1;
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 14px 18px;
+  background: var(--black-card);
+  border: 1.5px solid var(--black-border);
+  border-right: none;
+  color: var(--white);
+  outline: none;
+  transition: border-color 0.2s var(--ease);
+}
+
+.footer-newsletter-form input::placeholder {
+  color: var(--text-dark-muted);
+}
+
+.footer-newsletter-form input:focus {
+  border-color: var(--lime);
+}
+
+.footer-newsletter-form button {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 14px 28px;
+  background: var(--lime);
+  color: var(--black);
+  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s var(--ease);
+  margin-left: 8px;
+}
+
+.footer-newsletter-form button:hover {
+  background: var(--lime-hover);
+}
+
+.footer-newsletter-trust {
+  font-size: 12px;
+  color: var(--text-dark-muted);
+  margin-top: 10px;
+}
+
+/* ─── Footer Grid ─────────────────────────────────────────── */
+.footer-grid {
+  display: grid;
+  grid-template-columns: 200px 1fr 1fr 1fr;
+  gap: 40px;
+  padding-bottom: 56px;
+}
+
+/* ─── Brand Column ────────────────────────────────────────── */
+.footer-brand .wordmark {
+  font-size: 17px;
+  color: var(--white);
+  letter-spacing: 0.08em;
+  display: block;
+  margin-bottom: 14px;
+}
+
+.footer-brand .wordmark span {
+  color: var(--lime);
+}
+
+.footer-brand p {
+  font-size: 14px;
+  color: var(--text-dark-secondary);
+  line-height: 1.6;
+  margin-bottom: 20px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 10px;
+}
+
+.footer-social a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 46px;
+  background: var(--black-card);
+  border: 1px solid var(--black-border);
+  color: var(--text-dark-secondary);
+  transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
+}
+
+.footer-social a:hover {
+  background: var(--lime);
+  border-color: var(--lime);
+  color: var(--black);
+}
+
+.footer-social svg {
+  width: 18px;
+  height: 18px;
+  fill: currentColor;
+}
+
+/* ─── Link Columns ────────────────────────────────────────── */
+.footer-col h4 {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+  margin-bottom: 18px;
+}
+
+.footer-col ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-col a {
+  font-family: var(--font-body);
+  font-size: 14.5px;
+  color: var(--text-dark-secondary);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+
+.footer-col a:hover {
+  color: var(--white);
+}
+
+/* ─── Bottom Bar ──────────────────────────────────────────── */
+.footer-bottom {
+  border-top: 1px solid var(--black-border);
+  padding: 20px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.footer-copyright {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-dark-muted);
+}
+
+.footer-legal {
+  display: flex;
+  gap: 24px;
+}
+
+.footer-legal a {
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: var(--text-dark-muted);
+  text-decoration: none;
+  transition: color 0.15s var(--ease);
+}
+
+.footer-legal a:hover { color: var(--text-dark-secondary); }
+
+/* ─── Responsive ──────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .footer-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .footer-newsletter-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 640px) {
+  .footer-grid {
+    grid-template-columns: 1fr;
+  }
+  .footer-bottom {
+    flex-direction: column;
+    text-align: center;
+  }
+}

@@ -1,0 +1,187 @@
+/* ============================================================
+   Service 2 Software — Global Design System
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap');
+
+@font-face {
+  font-family: 'TT Lakes Condensed Bold';
+  src: url('../fonts/TTLakesCondensedBold.woff2') format('woff2'),
+       url('../fonts/TTLakesCondensedBold.ttf') format('truetype'),
+       url('../fonts/TTLakesCondensedBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ─── CSS Custom Properties ─────────────────────────────── */
+:root {
+  /* Brand Colors */
+  --lime:          #CAFF50;
+  --lime-hover:    #d6ff70;
+  --black:         #0A0A0A;
+  --black-surface: #141414;
+  --black-card:    #1A1A1A;
+  --black-border:  #2A2A2A;
+  --white:         #FFFFFF;
+
+  /* Text on dark */
+  --text-dark-primary:   rgba(255,255,255,0.95);
+  --text-dark-secondary: rgba(255,255,255,0.72);
+  --text-dark-muted:     rgba(255,255,255,0.48);
+
+  /* Text on light */
+  --text-light-primary:   rgba(0,0,0,0.90);
+  --text-light-secondary: rgba(0,0,0,0.62);
+  --text-light-muted:     rgba(0,0,0,0.40);
+
+  /* Typography */
+  --font-display: 'Oswald', sans-serif;
+  --font-body:    'Barlow', sans-serif;
+  --font-brand:   'TT Lakes Condensed Bold', 'Oswald', sans-serif;
+
+  /* Layout */
+  --nav-height:    72px;
+  --container-max: 1240px;
+
+  /* Transitions */
+  --ease: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ─── Reset ─────────────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--text-dark-primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+a   { color: inherit; text-decoration: none; }
+ul  { list-style: none; }
+button { cursor: pointer; font-family: inherit; border: none; background: none; }
+
+/* ─── Container ─────────────────────────────────────────── */
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 40px;
+}
+
+@media (max-width: 768px) {
+  .container { padding: 0 20px; }
+}
+
+/* ─── Section Colors ─────────────────────────────────────── */
+.section-black {
+  background: var(--black);
+  color: var(--text-dark-primary);
+}
+
+.section-white {
+  background: var(--white);
+  color: var(--text-light-primary);
+}
+
+.section-dark {
+  background: var(--black-surface);
+  color: var(--text-dark-primary);
+}
+
+/* ─── Typography ─────────────────────────────────────────── */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  line-height: 1.05;
+}
+
+p, li, blockquote {
+  font-family: var(--font-body);
+  line-height: 1.65;
+}
+
+.wordmark {
+  font-family: var(--font-brand);
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* Hollow text */
+.text-hollow {
+  color: transparent !important;
+  -webkit-text-stroke: 1.2px rgba(255,255,255,0.9);
+}
+
+.section-white .text-hollow {
+  -webkit-text-stroke: 1.2px rgba(0,0,0,0.85);
+}
+
+/* ─── Eyebrow Labels ─────────────────────────────────────── */
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+}
+
+.eyebrow::before {
+  content: '';
+  display: inline-block;
+  width: 26px;
+  height: 2px;
+  flex-shrink: 0;
+}
+
+.section-black .eyebrow,
+.section-dark .eyebrow {
+  color: var(--lime);
+}
+.section-black .eyebrow::before,
+.section-dark .eyebrow::before {
+  background: var(--lime);
+}
+
+.section-white .eyebrow {
+  color: var(--text-light-secondary);
+}
+.section-white .eyebrow::before {
+  background: var(--black);
+}
+
+/* ─── Utility ────────────────────────────────────────────── */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.text-lime   { color: var(--lime); }
+.text-white  { color: var(--white); }
+.text-center { text-align: center; }
