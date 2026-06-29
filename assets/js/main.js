@@ -1,5 +1,5 @@
 /* =====================================================================
-   Service 2 Software — shared site chrome + interactions
+   Service 2 Software: shared site chrome + interactions
    Nav + footer are injected here so there's a single source of truth
    across every page in the repo.
    ===================================================================== */
@@ -206,7 +206,11 @@
   }
 
   /* ---- ROI calculator ------------------------------------------------ */
-  var ROI = { programCost: 25000, repsTradCost: 120000, rampMonthsTrad: 9, rampMonthsS2S: 3 };
+  /* Illustrative assumptions. rampAttainment = share of full quota a rep
+     produces during the ramp months we compress (keeps the default honest,
+     near the brand's ~8x average ROI). Replace programCost with the real
+     annual partnership number when available. */
+  var ROI = { programCost: 25000, repsTradCost: 120000, rampMonthsTrad: 9, rampMonthsS2S: 3, rampAttainment: 0.35 };
   function fmt(n) { return "$" + Math.round(n).toLocaleString(); }
   function initROI() {
     var root = document.getElementById("roi");
@@ -219,7 +223,7 @@
       // pipeline value generated earlier by compressing ramp (months saved * monthly quota attainment)
       var monthsSaved = (ROI.rampMonthsTrad - ROI.rampMonthsS2S);
       var monthlyProd = (quota * acv) / 12;
-      var earlyValue = reps * monthsSaved * monthlyProd;
+      var earlyValue = reps * monthsSaved * monthlyProd * ROI.rampAttainment;
       var savings = reps * (ROI.repsTradCost - ROI.programCost);
       var invest = reps * ROI.programCost;
       var totalGain = earlyValue + savings;

@@ -281,6 +281,8 @@ p { margin: 0; }
 .card:hover::before { width: 100%; }
 .card:hover { transform: translateY(-3px); }
 .card h3 { font-size: 20px; margin-bottom: 10px; }
+.sec.k .card p { color: rgba(255,255,255,.82); font-size: 15.5px; line-height: 1.55; }
+.sec.w .card p { color: var(--on-paper-mute); font-size: 15.5px; line-height: 1.55; }
 .card .kpi { font-family: var(--f-display); font-weight: 700; font-size: 46px; color: #fff; line-height: 1; }
 .sec.w .card .kpi { color: var(--on-paper); }
 .card .kpi-l { font-family: var(--f-label); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--on-ink-faint); margin-top: 6px; }
