@@ -1,0 +1,253 @@
+/* =============================================================
+   Service 2 Software — Brand Design System
+   "Hire With Purpose"
+   -------------------------------------------------------------
+   This file is the single source of truth for the S2S brand.
+   Every page consumes these tokens + components so branding stays
+   consistent site-wide. Decisions encoded here come straight from
+   the design direction agreed in the build chat.
+   ============================================================= */
+
+/* ---------- 1. Design Tokens ---------- */
+:root {
+  /* Brand color: black/white system with a disciplined lime accent.
+     Lime is reserved for CTAs + small accents (< ~10% visual weight). */
+  --c-black: #0a0a0a;        /* near-black section bg */
+  --c-black-2: #111111;      /* raised surfaces on black */
+  --c-charcoal: #1a1a1a;     /* cards on black */
+  --c-white: #ffffff;
+  --c-off-white: #f5f5f3;    /* white section bg (slightly warm) */
+  --c-lime: #b4f000;         /* S2S green */
+  --c-lime-deep: #93c700;    /* lime hover/active */
+
+  /* Readable greys (tuned per feedback: lighter on black, darker on white) */
+  --ink-on-black: rgba(255, 255, 255, 0.70); /* body grey on black */
+  --ink-on-black-soft: rgba(255, 255, 255, 0.62);
+  --ink-on-white: #2c2c2c;                    /* body on white */
+  --ink-on-white-soft: rgba(0, 0, 0, 0.60);   /* labels/eyebrows on white */
+
+  /* Typography */
+  --font-wordmark: 'TT Lakes Condensed', 'Oswald', 'Arial Narrow', sans-serif; /* brand wordmark */
+  --font-display: 'Oswald', 'Arial Narrow', sans-serif;  /* headlines */
+  --font-label: 'Oswald', 'Arial Narrow', sans-serif;    /* eyebrows, buttons, nav */
+  --font-body: 'Barlow', 'Helvetica Neue', Arial, sans-serif; /* body copy */
+
+  /* Geometry */
+  --skew: 13px;              /* parallelogram skew for CTAs + marks */
+  --maxw: 1200px;
+  --nav-h: 76px;
+
+  --ease: cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+/* ---------- 2. Fonts ---------- */
+/* TT Lakes Condensed Bold is a paid font. Drop the real file at
+   assets/fonts/TTLakesCondensed-Bold.woff2 and this @font-face picks it up.
+   Until then, the wordmark falls back to Oswald (see --font-wordmark). */
+@font-face {
+  font-family: 'TT Lakes Condensed';
+  src: url('../fonts/TTLakesCondensed-Bold.woff2') format('woff2'),
+       url('../fonts/TTLakesCondensed-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ---------- 3. Reset / Base ---------- */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: var(--nav-h); }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  background: var(--c-black);
+  color: var(--c-white);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  line-height: 1.6;
+}
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4 { font-family: var(--font-display); font-weight: 700; line-height: 1.04; margin: 0; text-transform: uppercase; letter-spacing: 0.01em; }
+p { margin: 0 0 1rem; }
+ul { margin: 0; padding: 0; list-style: none; }
+
+/* ---------- 4. Layout helpers ---------- */
+.wrap { max-width: var(--maxw); margin: 0 auto; padding: 0 24px; }
+.section { padding: 96px 0; }
+.section--sm { padding: 64px 0; }
+
+/* Strict black-first alternation. Sections add .sec-k or .sec-w. */
+.sec-k { background: var(--c-black); color: var(--c-white); }
+.sec-w { background: var(--c-off-white); color: var(--ink-on-white); }
+.sec-k p { color: var(--ink-on-black); }
+.sec-w p { color: var(--ink-on-white); }
+.sec-k .lead, .sec-w .lead { font-size: 1.18rem; max-width: 60ch; }
+
+/* ---------- 5. Eyebrow (thin straight rule + label) ---------- */
+/* Lime rule on black, solid black rule on white. */
+.eyebrow {
+  font-family: var(--font-label);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  font-size: 0.82rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.eyebrow::before {
+  content: "";
+  width: 34px;
+  height: 2px;
+  background: var(--c-lime);
+  display: inline-block;
+}
+.sec-w .eyebrow { color: var(--ink-on-white-soft); }
+.sec-w .eyebrow::before { background: #000; }
+.eyebrow--center { justify-content: center; }
+
+/* ---------- 6. Hollow display text ---------- */
+/* Unified treatment: 1.2px bright white stroke on dark, darker stroke on white. */
+.hollow {
+  color: transparent;
+  -webkit-text-stroke: 1.2px rgba(255, 255, 255, 0.92);
+  text-stroke: 1.2px rgba(255, 255, 255, 0.92);
+}
+.sec-w .hollow, .hollow--dark {
+  -webkit-text-stroke: 1.2px rgba(0, 0, 0, 0.85);
+  text-stroke: 1.2px rgba(0, 0, 0, 0.85);
+}
+
+/* ---------- 7. Buttons (parallelogram CTAs) ---------- */
+.btn {
+  --bg: var(--c-lime);
+  --fg: #0a0a0a;
+  font-family: var(--font-label);
+  font-weight: 600;
+  font-size: 15px;            /* bumped per feedback */
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 15px 30px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  border: none;
+  background: var(--bg);
+  color: var(--fg);
+  clip-path: polygon(var(--skew) 0, 100% 0, calc(100% - var(--skew)) 100%, 0 100%);
+  transition: background .2s var(--ease), transform .2s var(--ease), color .2s var(--ease);
+}
+.btn:hover { background: var(--c-lime-deep); transform: translateY(-1px); }
+.btn .ico { transition: transform .2s var(--ease); }
+.btn:hover .ico { transform: translateX(3px); }
+
+/* Outlined / ghost parallelogram: thin white outline, fills lime on hover.
+   Uses a layered background so the angled border reads clean. */
+.btn--ghost {
+  position: relative;
+  background: transparent;
+  color: var(--c-white);
+  border: 1.2px solid rgba(255, 255, 255, 0.85); /* thinner per feedback */
+  clip-path: polygon(var(--skew) 0, 100% 0, calc(100% - var(--skew)) 100%, 0 100%);
+}
+.btn--ghost:hover { background: var(--c-lime); color: #0a0a0a; border-color: var(--c-lime); transform: translateY(-1px); }
+.sec-w .btn--ghost { color: #0a0a0a; border-color: rgba(0, 0, 0, 0.8); }
+.sec-w .btn--ghost:hover { color: #0a0a0a; }
+
+/* Solid primary on white sections = black fill */
+.sec-w .btn--invert { background: #0a0a0a; color: #fff; }
+.sec-w .btn--invert:hover { background: #000; }
+
+.btn--lg { font-size: 16px; padding: 17px 36px; }
+
+/* ---------- 8. Checklists ---------- */
+.check { display: flex; gap: 10px; align-items: flex-start; margin-bottom: 10px; }
+.check::before {
+  content: "";
+  flex: 0 0 18px; height: 18px; margin-top: 4px;
+  background: var(--c-lime);
+  clip-path: polygon(14% 44%, 0 58%, 40% 100%, 100% 16%, 86% 4%, 38% 70%);
+}
+
+/* ---------- 9. Cards ---------- */
+.card { background: var(--c-charcoal); padding: 28px; }
+.sec-w .card { background: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.06); }
+
+/* Stat card with lime hover edge */
+.stat {
+  border-top: 2px solid transparent;
+  padding: 22px 18px;
+  transition: border-color .2s var(--ease);
+}
+.stat:hover { border-top-color: var(--c-lime); }
+.stat .num { font-family: var(--font-display); font-weight: 700; font-size: 50px; line-height: 1; }
+.stat .lbl { font-family: var(--font-label); text-transform: uppercase; letter-spacing: 0.06em; font-size: 11.5px; margin-top: 8px; color: var(--ink-on-black-soft); }
+.sec-w .stat .lbl { color: var(--ink-on-white-soft); }
+
+/* ---------- 10. Forms ---------- */
+.field { margin-bottom: 16px; }
+.field label { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; font-size: 12.5px; display: block; margin-bottom: 6px; }
+.field input, .field select, .field textarea {
+  width: 100%;
+  font-family: var(--font-body);
+  font-size: 16px;
+  padding: 12px 14px;
+  border: 2px solid rgba(0,0,0,0.25);
+  background: #fff;
+  color: #111;
+}
+.sec-k .field input, .sec-k .field select, .sec-k .field textarea {
+  background: #161616; border-color: rgba(255,255,255,0.18); color: #fff;
+}
+.field input:focus, .field select:focus, .field textarea:focus {
+  outline: none; border-color: var(--c-lime); box-shadow: 0 0 0 3px rgba(180,240,0,0.25);
+}
+
+/* ---------- 11. Footer ---------- */
+.site-footer { background: var(--c-black); color: var(--c-white); padding: 72px 0 28px; border-top: 1px solid rgba(255,255,255,0.08); }
+.footer-grid { display: grid; grid-template-columns: 1.4fr repeat(3, 1fr); gap: 40px; }
+.footer-grid h4 { font-family: var(--font-label); font-size: 14px; letter-spacing: .1em; margin-bottom: 16px; color: #fff; }
+.footer-grid a { display: block; color: rgba(255,255,255,0.62); font-size: 14.5px; padding: 5px 0; transition: color .15s var(--ease); }
+.footer-grid a:hover { color: var(--c-lime); }
+.footer-word { font-family: var(--font-wordmark); font-size: 26px; letter-spacing: .04em; text-transform: uppercase; }
+.footer-socials { display: flex; gap: 12px; margin-top: 18px; }
+.footer-socials a {
+  width: 46px; height: 46px; display: grid; place-items: center;
+  background: #161616; color: #fff; transition: background .15s var(--ease), color .15s var(--ease);
+}
+.footer-socials a:hover { background: var(--c-lime); color: #0a0a0a; }
+.footer-bar { margin-top: 48px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; font-size: 13px; color: rgba(255,255,255,0.5); }
+
+/* Newsletter block (in footer area / home) */
+.newsletter { }
+.newsletter .copy { color: var(--ink-on-black); max-width: 46ch; }
+.sec-w .newsletter .copy { color: var(--ink-on-white); }
+.newsletter form { display: flex; gap: 10px; margin: 18px 0 10px; flex-wrap: wrap; }
+.newsletter input[type=email] {
+  flex: 1; min-width: 240px; font-size: 16px; padding: 13px 14px;
+  border: 2px solid #000; background: #fff; color: #111;
+}
+.sec-k .newsletter input[type=email] { border-color: rgba(255,255,255,.4); background:#161616; color:#fff; }
+.newsletter input[type=email]:focus { outline: none; border-color: var(--c-lime); box-shadow: 0 0 0 3px rgba(180,240,0,.3); }
+.newsletter .trust { font-size: 12.5px; color: var(--ink-on-black-soft); }
+.sec-w .newsletter .trust { color: var(--ink-on-white-soft); }
+
+/* ---------- 12. Utility ---------- */
+.center { text-align: center; }
+.grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 28px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; }
+.mt-1 { margin-top: 12px; } .mt-2 { margin-top: 24px; } .mt-3 { margin-top: 40px; }
+.kicker { color: var(--c-lime); font-family: var(--font-label); text-transform: uppercase; letter-spacing: .1em; font-size: 12.5px; }
+
+@media (max-width: 880px) {
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+  .grid-3, .grid-4 { grid-template-columns: 1fr 1fr; }
+  .grid-2 { grid-template-columns: 1fr; }
+  .section { padding: 64px 0; }
+}
+@media (max-width: 560px) {
+  .footer-grid, .grid-3, .grid-4 { grid-template-columns: 1fr; }
+}
