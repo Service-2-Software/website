@@ -132,8 +132,8 @@
   text-transform: uppercase;
   color: var(--black);
   background: var(--lime);
-  padding: 9px 22px;
-  clip-path: polygon(12px 0%, 100% 0%, calc(100% - 12px) 100%, 0% 100%);
+  padding: 9px 28px;
+  clip-path: polygon(16px 0%, 100% 0%, calc(100% - 16px) 100%, 0% 100%);
   transition: background 0.2s;
 }
 
