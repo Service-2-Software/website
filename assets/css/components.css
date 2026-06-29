@@ -19,8 +19,8 @@
   transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
   position: relative;
   /* Parallelogram via clip-path */
-  clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
-  padding: 14px 36px;
+  clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
+  padding: 14px 40px;
 }
 
 .btn-primary {
