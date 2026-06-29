@@ -1,0 +1,44 @@
+/* ===== For Companies page ===== */
+.page-hero { padding-top: 70px; padding-bottom: 70px; }
+.page-hero-grid { display: grid; grid-template-columns: 1.1fr 0.9fr; gap: 48px; align-items: center; }
+.page-hero-title { font-size: clamp(40px, 6.4vw, 88px); }
+.section-title { font-size: clamp(28px, 4vw, 50px); margin-bottom: 14px; }
+
+/* Dark stat cards on white section (sharp contrast, lime edge on hover) */
+.stat-card { background: var(--c-charcoal); color: #fff; text-align: center; border-top: 2px solid transparent; transition: border-color .2s var(--ease); }
+.sec-w .stat-card { box-shadow: none; }
+.stat-card:hover { border-top-color: var(--c-lime); }
+.stat-card .num { font-family: var(--font-display); font-weight: 700; font-size: 52px; line-height: 1; }
+.stat-card .lbl { font-family: var(--font-body); color: rgba(255,255,255,.72); margin-top: 8px; font-size: 15px; }
+
+/* Phases (How It Works, white section) */
+.phase { background: #fff; padding: 26px; border-top: 3px solid var(--c-lime); box-shadow: 0 1px 0 rgba(0,0,0,.06); }
+.phase-num { font-family: var(--font-display); font-weight: 700; font-size: 40px; color: var(--c-lime); -webkit-text-stroke: 1px rgba(0,0,0,.25); }
+.phase h3 { font-size: 22px; margin: 8px 0; }
+.phase p { font-size: 15.5px; }
+
+/* ROI calculator */
+.roi-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: start; }
+.roi-inputs { background: #141414; padding: 28px; border-top: 3px solid var(--c-lime); }
+.roi-results { background: var(--c-charcoal); padding: 28px; }
+.roi-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid rgba(255,255,255,.08); }
+.roi-row span { color: var(--ink-on-black); }
+.roi-row strong { font-family: var(--font-display); font-weight: 600; font-size: 20px; }
+.roi-total { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding: 18px 20px; background: #0d0d0d; border: 1px solid var(--c-lime); }
+.roi-total span { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; }
+.roi-total strong { font-family: var(--font-display); font-weight: 700; font-size: 44px; color: var(--c-lime); line-height: 1; }
+.roi-note { font-size: 12.5px; color: var(--ink-on-black-soft); margin: 14px 0 18px; }
+
+/* Proof quote */
+.proof { max-width: 880px; margin: 0 auto; }
+.big-quote { font-family: var(--font-display); font-weight: 500; text-transform: none; font-size: clamp(24px, 3.4vw, 38px); line-height: 1.25; margin: 0 0 18px; }
+
+/* Form */
+.form-wrap { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+.form-card { background: #fff; padding: 30px; border-top: 3px solid var(--c-lime); box-shadow: 0 10px 40px rgba(0,0,0,.08); }
+.calendly-slot { margin-top: 12px; }
+
+@media (max-width: 980px) {
+  .page-hero-grid, .roi-grid, .form-wrap { grid-template-columns: 1fr; }
+  .page-hero .hero-media { order: -1; }
+}
