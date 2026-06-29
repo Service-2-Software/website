@@ -18,9 +18,9 @@
   border: none;
   transition: background 0.2s var(--ease), color 0.2s var(--ease), border-color 0.2s var(--ease);
   position: relative;
-  /* Parallelogram via clip-path */
-  clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
-  padding: 14px 36px;
+  /* Parallelogram via clip-path — 20px offset creates visible ~24° slant */
+  clip-path: polygon(20px 0%, 100% 0%, calc(100% - 20px) 100%, 0% 100%);
+  padding: 14px 40px;
 }
 
 .btn-primary {
@@ -77,8 +77,8 @@
 
 .btn-sm {
   font-size: 13px;
-  padding: 10px 26px;
-  clip-path: polygon(10px 0%, 100% 0%, calc(100% - 10px) 100%, 0% 100%);
+  padding: 10px 30px;
+  clip-path: polygon(14px 0%, 100% 0%, calc(100% - 14px) 100%, 0% 100%);
 }
 
 .btn-sm.btn-ghost { padding: 0; }

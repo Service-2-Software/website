@@ -175,6 +175,21 @@
 /* Hide ticker logos that fail to load */
 .ticker-logo[data-error] { display: none; }
 
+/* Text fallback logos (shown when logo.dev images not yet configured) */
+.ticker-text-logo {
+  font-family: var(--font-display);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.45);
+  flex-shrink: 0;
+  white-space: nowrap;
+  transition: color 0.2s var(--ease);
+}
+
+.ticker-text-logo:hover { color: rgba(255,255,255,0.75); }
+
 /* ─── Audience Cards ──────────────────────────────────────── */
 #audiences {
   padding: 0;
