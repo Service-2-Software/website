@@ -1,0 +1,30 @@
+/* ===== Blog index + article ===== */
+.page-hero { padding-top: 80px; padding-bottom: 60px; }
+.page-hero-title { font-size: clamp(34px, 5.2vw, 70px); }
+.section-title { font-size: clamp(26px, 3.6vw, 44px); margin-bottom: 14px; }
+
+.blog-grid .blog-card { background: #fff; box-shadow: 0 1px 0 rgba(0,0,0,.06); transition: transform .2s var(--ease), box-shadow .2s var(--ease); }
+.blog-grid .blog-card:hover { transform: translateY(-3px); box-shadow: 0 12px 30px rgba(0,0,0,.1); }
+.blog-grid .bc-title { color: #111; }
+
+/* FAQ */
+.faq { border-bottom: 1px solid rgba(255,255,255,.1); padding: 6px 0; }
+.faq summary { cursor: pointer; font-family: var(--font-display); font-weight: 600; text-transform: uppercase; font-size: 18px; padding: 16px 0; list-style: none; display: flex; justify-content: space-between; align-items: center; }
+.faq summary::after { content: "+"; color: var(--c-lime); font-size: 24px; }
+.faq[open] summary::after { content: "−"; }
+.faq p { color: var(--ink-on-black); padding-bottom: 16px; }
+
+/* Article */
+.article { padding: 80px 0; }
+.article-wrap { max-width: 760px; margin: 0 auto; }
+.article-title { font-size: clamp(32px, 5vw, 56px); margin: 8px 0 10px; }
+.article-meta { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .08em; font-size: 12.5px; color: var(--ink-on-white-soft); margin-bottom: 28px; }
+.article-lead { font-size: 1.2rem; }
+.article-wrap h2 { font-size: 28px; margin: 34px 0 12px; }
+.article-wrap p { font-size: 17px; color: #222; }
+.compare { width: 100%; border-collapse: collapse; margin: 18px 0; }
+.compare th, .compare td { text-align: left; padding: 12px 14px; border-bottom: 1px solid rgba(0,0,0,.12); font-size: 15.5px; }
+.compare thead th { font-family: var(--font-label); text-transform: uppercase; letter-spacing: .05em; }
+.compare td:last-child { color: #111; font-weight: 600; }
+.article-cta { margin-top: 44px; padding: 32px; background: #0a0a0a; color: #fff; border-left: 4px solid var(--c-lime); }
+.article-cta h3 { font-size: 24px; margin-bottom: 16px; }
