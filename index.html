@@ -2062,7 +2062,7 @@ function currentPageId(){
   return ac.id.replace(/^page-/,'');
 }
 function trackPage(name,anchor){
-  if(!s2sGaReady||typeof gtag!=='function')return;
+  if(!s2sGaReady||typeof gtag!=='function'||getCookieConsent()!=='granted')return;
   var path='/'+(name||'home')+(anchor?'#'+anchor:'');
   gtag('event','page_view',{page_title:document.title,page_location:location.origin+path,page_path:path});
 }
