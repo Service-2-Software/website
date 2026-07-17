@@ -33,7 +33,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 
 - First-visit banner in `index.html` stores `s2s_cookie_consent` in `localStorage` (`granted` / `denied`).
 - Google Analytics 4 uses Consent Mode defaults (`analytics_storage` denied) until Accept.
-- Set `S2S_GA_ID` in `index.html` to your Measurement ID (`G-XXXXXXXX`) before analytics will load.
+- `S2S_GA_ID` in `index.html` is set to the existing GA4 Measurement ID (`G-SK3FHELY0M`).
 - Privacy policy SPA page: `page-privacy`. Footer links: Privacy · Cookie Settings.
 
 ## Infrastructure controls (AWS)
@@ -79,4 +79,4 @@ Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Compa
 2. Configure GitHub Actions secrets / OIDC for AWS deploy (see README).
 3. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
 4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
-5. Create a GA4 property and set `S2S_GA_ID` in `index.html` to the Measurement ID.
+5. ~~Create a GA4 property and set `S2S_GA_ID`~~ — done (`G-SK3FHELY0M`).

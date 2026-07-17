@@ -79,12 +79,7 @@ ActiveCampaign lead forms are wired (`docs/SECURITY.md`).
 A cookie banner appears on first visit. Visitors can accept analytics or keep essential-only.
 Choice is stored in `localStorage` and can be changed via footer **Cookie Settings**.
 
-**To turn on traffic analytics:**
-
-1. Create a [Google Analytics 4](https://analytics.google.com/) property for `service2software.org`.
-2. Copy the Measurement ID (`G-XXXXXXXX`).
-3. In `index.html`, set `var S2S_GA_ID='G-XXXXXXXX';` (search for `S2S_GA_ID`).
-4. Redeploy. GA loads only after the visitor accepts analytics cookies.
+**Traffic analytics:** GA4 Measurement ID `G-SK3FHELY0M` is set in `index.html` (`S2S_GA_ID`). GA loads only after the visitor accepts analytics cookies.
 
 Lead/CRM data (names, emails from forms) continues to flow into ActiveCampaign separately from page analytics.
 CloudFront access logs in AWS provide basic request-level traffic for ops/security.
