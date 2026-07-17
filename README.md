@@ -71,5 +71,5 @@ Hardening applied in `index.html` + CloudFront:
 - Sandboxed testimonials iframe
 - Private origin, TLS 1.2+, HSTS
 
-Open product TODOs (not blockers for hosting): ActiveCampaign form IDs,
-production Core portal URL. Details in `docs/SECURITY.md`.
+Open product TODO (not a hosting blocker): production Core portal URL.
+ActiveCampaign lead forms are wired (`docs/SECURITY.md`).
