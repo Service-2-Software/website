@@ -73,3 +73,13 @@ Hardening applied in `index.html` + CloudFront:
 
 Open product TODO (not a hosting blocker): production Core portal URL.
 ActiveCampaign lead forms are wired (`docs/SECURITY.md`).
+
+## Cookie consent & visitor analytics
+
+A cookie banner appears on first visit. Visitors can accept analytics or keep essential-only.
+Choice is stored in `localStorage` and can be changed via footer **Cookie Settings**.
+
+**Traffic analytics:** GA4 Measurement ID `G-SK3FHELY0M` is set in `index.html` (`S2S_GA_ID`). GA loads only after the visitor accepts analytics cookies.
+
+Lead/CRM data (names, emails from forms) continues to flow into ActiveCampaign separately from page analytics.
+CloudFront access logs in AWS provide basic request-level traffic for ops/security.
