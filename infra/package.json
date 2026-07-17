@@ -1,0 +1,27 @@
+{
+  "name": "s2s-website-infra",
+  "version": "1.0.0",
+  "private": true,
+  "description": "CDK infra for Service 2 Software static website (S3 + CloudFront)",
+  "scripts": {
+    "build": "tsc",
+    "cdk": "cdk",
+    "synth": "cdk synth",
+    "diff": "cdk diff",
+    "deploy": "cdk deploy --require-approval never",
+    "destroy": "cdk destroy --force"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "aws-cdk-lib": "^2.204.0",
+    "constructs": "^10.4.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.15.30",
+    "aws-cdk": "^2.204.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.3"
+  }
+}
