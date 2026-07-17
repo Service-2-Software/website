@@ -27,6 +27,14 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `embed-v2.testimonial.to` — testimonials iframe
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts
 - `images.unsplash.com` — stock imagery
+- `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (loaded only after cookie consent)
+
+## Cookie consent & analytics
+
+- First-visit banner in `index.html` stores `s2s_cookie_consent` in `localStorage` (`granted` / `denied`).
+- Google Analytics 4 uses Consent Mode defaults (`analytics_storage` denied) until Accept.
+- Set `S2S_GA_ID` in `index.html` to your Measurement ID (`G-XXXXXXXX`) before analytics will load.
+- Privacy policy SPA page: `page-privacy`. Footer links: Privacy · Cookie Settings.
 
 ## Infrastructure controls (AWS)
 
@@ -71,3 +79,4 @@ Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Compa
 2. Configure GitHub Actions secrets / OIDC for AWS deploy (see README).
 3. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
 4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
+5. Create a GA4 property and set `S2S_GA_ID` in `index.html` to the Measurement ID.
