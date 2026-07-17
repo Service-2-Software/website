@@ -1094,15 +1094,15 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- TODO: set ActiveCampaign form ID (u/f) — Military Application form -->
+        <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return hfSubmit(this,'mil')">
-          <input type="hidden" name="u" value="TODO_AC_FORM_ID"><input type="hidden" name="f" value="TODO_AC_FORM_ID">
+          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field"><label>Branch of Service</label><select name="branch" required><option value="" disabled selected>Select branch&hellip;</option><option>Army</option><option>Marine Corps</option><option>Navy</option><option>Air Force</option><option>Space Force</option><option>Coast Guard</option></select></div>
-            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="ets" required><option value="" disabled selected>Select window&hellip;</option><option>More than 12 months</option><option>6&ndash;12 months</option><option>3&ndash;6 months</option><option>Less than 3 months</option><option>Already separated</option></select></div>
+            <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
+            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1116,14 +1116,14 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Talk to Our Team.</h3>
         <p class="bw hf-ps">Simple annual pricing. No surprise fees. Tell us what you need and book a call in one step.</p>
-        <!-- TODO: set ActiveCampaign form ID (u/f) — Partner Inquiry form -->
+        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
         <form onsubmit="return hfSubmit(this,'co')">
-          <input type="hidden" name="u" value="TODO_AC_FORM_ID"><input type="hidden" name="f" value="TODO_AC_FORM_ID">
+          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
-            <div class="ac-field"><label>Company</label><input type="text" name="company" placeholder="Company name" required></div>
-            <div class="ac-field"><label>What Roles Are You Hiring?</label><select name="roles" required><option value="" disabled selected>Select roles&hellip;</option><option>SDR / BDR</option><option>Account Executive</option><option>Customer Success</option><option>Multiple / Other</option></select></div>
+            <div class="ac-field"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
+            <div class="ac-field"><label>What Roles Are You Hiring?</label><select name="field[34]" required><option value="" disabled selected>Select roles&hellip;</option><option value="SDR / BDR">SDR / BDR</option><option value="Account Executive">Account Executive</option><option value="Customer Success">Customer Success</option><option value="Multiple / Other">Multiple / Other</option></select></div>
           </div>
           <div class="ac-submit">
             <button class="btn bk2" type="submit">Schedule a Call &rarr;</button>
@@ -1191,15 +1191,15 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- TODO: set ActiveCampaign form ID in hidden inputs u/f below once the "Military Application" form is created in AC -->
+        <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return acSubmit(this,'mil')">
-          <input type="hidden" name="u" value="TODO_AC_FORM_ID"><input type="hidden" name="f" value="TODO_AC_FORM_ID">
+          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field"><label>Branch of Service</label><select name="branch" required><option value="" disabled selected>Select branch&hellip;</option><option>Army</option><option>Marine Corps</option><option>Navy</option><option>Air Force</option><option>Space Force</option><option>Coast Guard</option></select></div>
-            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="ets" required><option value="" disabled selected>Select window&hellip;</option><option>More than 12 months</option><option>6&ndash;12 months</option><option>3&ndash;6 months</option><option>Less than 3 months</option><option>Already separated</option></select></div>
+            <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
+            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1373,13 +1373,13 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
           <h2 class="h2k" style="margin-top:16px">Talk to<br>Our Team.</h2>
           <p class="bk" style="margin-top:16px">Simple annual pricing. No surprise fees. Tell us what you need and book a call with our team in one step.</p>
         </div>
-        <!-- TODO: set ActiveCampaign form ID in hidden inputs u/f below once the "Partner Inquiry" form is created in AC -->
+        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
         <form class="lead lead-k" onsubmit="return leadSubmit(this,'co')">
-          <input type="hidden" name="u" value="TODO_AC_FORM_ID"><input type="hidden" name="f" value="TODO_AC_FORM_ID">
+          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
           <div class="lf"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
           <div class="lf"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
-          <div class="lf"><label>Company</label><input type="text" name="company" placeholder="Company name" required></div>
-          <div class="lf"><label>What roles are you hiring?</label><select name="roles" required><option value="">Select roles…</option><option>SDR / BDR</option><option>Account Executive</option><option>Customer Success</option><option>Multiple / Other</option></select></div>
+          <div class="lf"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
+          <div class="lf"><label>What roles are you hiring?</label><select name="field[34]" required><option value="">Select roles…</option><option value="SDR / BDR">SDR / BDR</option><option value="Account Executive">Account Executive</option><option value="Customer Success">Customer Success</option><option value="Multiple / Other">Multiple / Other</option></select></div>
           <div class="lsub"><button class="btn bg" type="submit">Schedule a Call →</button><span class="lmicro">Avg. partner ROI: 8x · 70% internship-to-hire conversion</span></div>
         </form>
       </div>
@@ -1561,9 +1561,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <p class="bw" style="margin-top:14px">Placement wins, new cohort dates, partner hiring trends, and SkillBridge guides. Straight to your inbox, once a month.</p>
       </div>
       <div>
-        <!-- TODO: set ActiveCampaign form ID (u/f) for the "Home Page Group" list form once created in AC -->
+        <!-- ActiveCampaign: Home Page Group (u/f=13) -->
         <form class="nlform" id="nl-form" onsubmit="return nlSubmit(this)" novalidate>
-          <input type="hidden" name="u" value="TODO_AC_FORM_ID"><input type="hidden" name="f" value="TODO_AC_FORM_ID">
+          <input type="hidden" name="u" value="13"><input type="hidden" name="f" value="13"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="7b81ae25-d22b-4b40-8645-c9a2ea1ceff8">
           <span class="nlwrap"><input class="nlinput" type="email" name="email" placeholder="Your email address" required autocomplete="email"></span>
           <button class="nlbtn" type="submit">Subscribe →</button>
         </form>
@@ -1931,7 +1931,7 @@ const CAL_URLS={
 function leadSubmit(form,key){
   try{
     const fd=new FormData(form);
-    if(fd.get('u')!=='TODO_AC_FORM_ID'){
+    if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(()=>{});
     }
   }catch(e){}
@@ -1954,7 +1954,7 @@ function nlSubmit(form){
   }
   try{
     var fd=new FormData(form);
-    if(fd.get('u')!=='TODO_AC_FORM_ID'){
+    if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
@@ -2009,7 +2009,7 @@ function hfReset(){
 function hfSubmit(form,w){
   try{
     var fd=new FormData(form);
-    if(fd.get('u')!=='TODO_AC_FORM_ID'){
+    if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
@@ -2031,7 +2031,7 @@ function acReset(){
 function acSubmit(form,w){
   try{
     var fd=new FormData(form);
-    if(fd.get('u')!=='TODO_AC_FORM_ID'){
+    if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}

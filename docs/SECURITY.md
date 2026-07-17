@@ -15,7 +15,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 | Medium | `innerHTML` used for confirmation copy (XSS footgun) | Fixed — switched to `textContent` |
 | Low | External `target="_blank"` links without `rel="noopener noreferrer"` | Fixed |
 | Low | Testimonial iframe had no sandbox / referrer policy | Fixed — sandbox + referrerpolicy |
-| Low | ActiveCampaign form IDs still placeholders (`TODO_AC_FORM_ID`) | Open — forms no-op until IDs are set |
+| Low | ActiveCampaign form IDs still placeholders (`TODO_AC_FORM_ID`) | Fixed — wired to forms 11/12/13 |
 | Info | Calendly script loaded without SRI | Accepted — third-party widget; CSP allowlists origin |
 | Info | `mode: 'no-cors'` AC POSTs | Expected for AC `proc.php`; response opaque by design |
 | Info | Inline scripts/styles require `'unsafe-inline'` in CSP | Accepted for single-file SPA; tighten if/when assets are split |
@@ -51,10 +51,23 @@ this static marketing site:
 - Viewer-certificate TLS check can false-positive on the default `*.cloudfront.net`
   cert; stack sets `minimumProtocolVersion: TLS_V1_2_2021`
 
+## ActiveCampaign forms (wired)
+
+Public form posts go to `service2software.activehosted.com/proc.php`. No API key
+is embedded in the site — only public form `u`/`f` (and related) fields.
+
+| Site form | AC form | `u` / `f` |
+| --- | --- | --- |
+| Military Application (home + military) | Military Application | 11 |
+| Partner Inquiry (home + companies) | Partner Inquiry | 12 |
+| Newsletter | Home Page Group | 13 |
+
+Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Company,
+`field[34]` Hiring roles. Newsletter list: **Home Page Group**.
+
 ## Remaining ops TODOs
 
-1. Replace `TODO_AC_FORM_ID` values once ActiveCampaign forms exist.
-2. Point S2S Core / Candidate portal links to production URLs.
-3. Configure GitHub Actions secrets / OIDC for AWS deploy (see README).
-4. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
-5. Optional: attach AWS WAF WebACL to the CloudFront distribution.
+1. Point S2S Core / Candidate portal links to production URLs.
+2. Configure GitHub Actions secrets / OIDC for AWS deploy (see README).
+3. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
+4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
