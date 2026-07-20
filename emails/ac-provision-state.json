@@ -16,7 +16,8 @@
     "partner-nurture-roi": "32",
     "newsletter-welcome": "33",
     "newsletter-story": "34",
-    "newsletter-offer": "35"
+    "candidate-what-we-offer": "36",
+    "partner-what-we-offer": "37"
   },
   "campaigns": {
     "candidate-booking-confirmation": "18",
@@ -29,6 +30,7 @@
     "partner-nurture-roi": "25",
     "newsletter-welcome": "26",
     "newsletter-story": "27",
-    "newsletter-offer": "28"
+    "candidate-what-we-offer": "29",
+    "partner-what-we-offer": "30"
   }
 }

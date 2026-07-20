@@ -117,11 +117,53 @@ Form actions cannot add tags via API (AC returns 500). Prefer **list + WEBSITE_S
 | Newsletter automation **7** | Existing send messages **14/15/16** overwritten with Brooke HTML |
 | Candidate automation **3** | Send message updated to Brooke “book your intro call”; **change trigger from form 7 → form 11** in UI |
 
-## Manual checklist (finish wiring)
+## What you need to do in ActiveCampaign / Calendly / Salesforce
 
-1. **Automations → Candidate Application - COMPLETE (3):** change start trigger to form *Military Application* (11) or “Subscribes to Website Candidates”; activate if inactive.
-2. **Create Partner journey automation** (API cannot create automations): trigger form 12 / list 6 → partner nudge + Calendly confirmation series.
-3. **Create Calendly confirmation automations** for tags `calendly-integration-S2S_Discovery_Call_w/_Patrick` and `calendly-integration-S2S_Initial_Call_with_David` using campaigns in `ac-provision-state.json`.
-4. Confirm Calendly → `INITIAL_CALL_DATETIME` field mapping.
-5. Confirm Salesforce lead routing for lists 5/6 (see table above).
-6. Smoke test: home candidate form → list 5 + `WEBSITE_SOURCE=home-candidate` → book Patrick Calendly → confirmation with datetime.
+AC’s API **cannot create automations**, so these UI steps finish the mapping:
+
+### 1. ActiveCampaign automations (required)
+
+| Automation | Trigger | Sends (use these campaign names) |
+| --- | --- | --- |
+| Candidate journey | Form **Military Application (11)** or list **Website Candidates** | Book intro call → (wait) What SkillBridge looks like → What we offer (candidate) |
+| Partner journey | Form **Partner Inquiry (12)** or list **Website Partners** | Schedule hiring call → How hiring works → What we offer (partner) |
+| Candidate booked | Tag `calendly-integration-S2S_Discovery_Call_w/_Patrick` | **Candidate · Booking confirmation** then reminder |
+| Partner booked | Tag `calendly-integration-S2S_Initial_Call_with_David` | **Partner · Booking confirmation** then reminder |
+| Newsletter | Form **Home Page Group (13)** / list 4 | Welcome → Story & mission (**no** combined candidate/partner offer) |
+
+Also: open automation **3** and change its trigger from old form **7** → form **11** (or list 5).
+
+### 2. Calendly → ActiveCampaign field map (required)
+
+In AC **Settings → Integrations → Calendly** (or the Calendly AC app):
+
+| Calendly value | AC contact field |
+| --- | --- |
+| Event start time | **Initial Call Datetime** (`INITIAL_CALL_DATETIME`, id 31) |
+| Invitee email / name | Email / first + last name (usually automatic) |
+
+Without this, booking emails show a blank `%INITIAL_CALL_DATETIME%`.
+
+### 3. Salesforce sync rules (required)
+
+In AC **Salesforce** connection settings:
+
+| AC signal | Salesforce |
+| --- | --- |
+| List **Website Candidates** or `WEBSITE_SOURCE` = `home-candidate` / `military-page` | Lead → Recruiting; Lead Source `Website - Candidate`; Owner **Patrick** |
+| List **Website Partners** or source `home-partner` / `companies-page` | Lead → Partner/Sales; Lead Source `Website - Partner`; Owner **David** |
+| List **Home Page Group** only | Marketing only — do **not** auto-create a sales Lead |
+| Sync fields | `WEBSITE_SOURCE`, `BRANCH`, `ETS_WINDOW`, `COMPANY`, `HIRING_ROLES`, `INITIAL_CALL_DATETIME` |
+
+### 4. Smoke tests
+
+1. Submit **home candidate** form → contact on list 5, `WEBSITE_SOURCE=home-candidate` → book Patrick’s Calendly → confirmation has datetime.
+2. Submit **companies** form → list 6, `WEBSITE_SOURCE=companies-page` → book David’s Calendly.
+3. Click an email site link (e.g. ROI) → lands on CloudFront with `?page=companies&section=roi-calc`.
+
+### Link notes
+
+- Booking CTAs use Calendly (Patrick / David) — correct.
+- Site links use the **live CloudFront** URL (`d2by6tunn6pa78.cloudfront.net`) with `?page=&section=` deep links.  
+  **Do not use `www.service2software.org` in these campaigns yet** — that host is still Kajabi.
+- Combined “candidates & partners” offer emails were **removed**; use the separate Candidate / Partner “What we offer” campaigns instead.

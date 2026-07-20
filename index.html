@@ -1992,6 +1992,16 @@ function spa(n,a){closeMegas();document.querySelectorAll('.page').forEach(p=>p.c
 function nv(n){sp(n);tn()}
 function nva(n,a){spa(n,a);tn()}
 function tn(){document.getElementById('mn').classList.toggle('op')}
+/* Email / shared deep links: ?page=military&section=mil-cal */
+(function s2sDeepLink(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var page=q.get('page');
+    var section=q.get('section');
+    if(!page)return;
+    if(section)spa(page,section); else sp(page);
+  }catch(e){}
+})();
 
 /* ─── COOKIE CONSENT + ANALYTICS (GA4 Consent Mode) ───
    Set S2S_GA_ID to your Google Analytics 4 Measurement ID (G-XXXXXXXX).

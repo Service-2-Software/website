@@ -14,16 +14,15 @@ CAL_CANDIDATE = (
     "initial-call-with-service-2-software"
 )
 CAL_PARTNER = "https://calendly.com/davidhester/s2s-hiring"
-SITE = "https://service2software.org"
+# New marketing site (custom domain still on Kajabi — do not use www.service2software.org yet)
+SITE = "https://d2by6tunn6pa78.cloudfront.net"
+SITE_MILITARY = f"{SITE}/?page=military&section=mil-cal"
+SITE_COMPANIES = f"{SITE}/?page=companies&section=co-cal"
+SITE_ROI = f"{SITE}/?page=companies&section=roi-calc"
 
 
 def link(href: str, label: str) -> str:
-    return (
-        f'<a href="{href}" style="color:{BRAND_LIME};'
-        f'background:#111111;text-decoration:underline;">{label}</a>'
-        if False
-        else f'<a href="{href}" style="color:#1a73e8;">{label}</a>'
-    )
+    return f'<a href="{href}" style="color:#1a73e8;">{label}</a>'
 
 
 def candidate_booking_confirmation() -> str:
@@ -258,7 +257,7 @@ def partner_nurture_roi() -> str:
         ),
         callout_html=(
             f"<strong>Want numbers for your team?</strong> "
-            f'{link(SITE + "/#co-cal", "Use the ROI calculator on our site")} '
+            f"{link(SITE_ROI, 'Use the ROI calculator on our site')} "
             f"or {link(CAL_PARTNER, 'book a hiring call')}."
         ),
         closing_html="Happy to walk through compliance, timeline, and open roles anytime.",
@@ -268,24 +267,81 @@ def partner_nurture_roi() -> str:
     )
 
 
-def newsletter_welcome() -> str:
+def candidate_what_we_offer() -> str:
     return render_email(
-        preheader="Welcome to Service 2 Software — veteran talent, SkillBridge careers.",
+        preheader="A fully funded SkillBridge internship in tech sales.",
         greeting_html="Hi %FIRSTNAME%,",
         body_html=(
-            "Welcome. You're on the list for updates on SkillBridge pathways into "
-            "tech sales — for transitioning service members and the companies who hire them."
+            "If you're separating soon, here's what Service 2 Software offers "
+            "service members transitioning into tech sales."
         ),
-        section_title="Two ways to go deeper",
+        section_title="For candidates",
         section_body_html=(
-            f"• Service members: {link(CAL_CANDIDATE, 'book an intro call')}<br/>"
-            f"• Hiring leaders: {link(CAL_PARTNER, 'schedule a hiring conversation')}"
+            "A fully funded SkillBridge internship in tech sales while you stay "
+            "on military pay and benefits. You'll train with intention, get matched "
+            "to a hiring partner on purpose, and build real pipeline before ETS."
         ),
         callout_html=(
-            "<strong>Hire With Purpose.</strong> S2S is a DoW-approved 501(c)(3) "
-            "SkillBridge program — no fees to candidates, ever."
+            f'<a href="{CAL_CANDIDATE}" style="display:inline-block;background:'
+            f'{BRAND_LIME};color:#111111;font-weight:700;text-decoration:none;'
+            'padding:12px 18px;border-radius:4px;">Apply / book intro call →</a>'
         ),
-        closing_html="Glad you're here.",
+        closing_html=(
+            f"Prefer to browse first? {link(SITE_MILITARY, 'See the military pathway')}."
+        ),
+        signoff_name="Patrick Gilroy",
+        signoff_title="Recruiting Manager, Service2Software",
+        signoff_email="patrick@service2software.org",
+    )
+
+
+def partner_what_we_offer() -> str:
+    return render_email(
+        preheader="Pre-trained veteran talent for your sales team.",
+        greeting_html="Hi %FIRSTNAME%,",
+        body_html=(
+            "If you're hiring SDRs or building a sales team, here's what "
+            "partnering with Service 2 Software looks like."
+        ),
+        section_title="For hiring partners",
+        section_body_html=(
+            "Pre-trained veteran talent, a structured SkillBridge internship, "
+            "and a recruiting process built for retention — not just placement. "
+            "Interns build real pipeline before you make a full-time offer."
+        ),
+        callout_html=(
+            f'<a href="{CAL_PARTNER}" style="display:inline-block;background:'
+            f'{BRAND_LIME};color:#111111;font-weight:700;text-decoration:none;'
+            'padding:12px 18px;border-radius:4px;">Talk to us about hiring →</a>'
+        ),
+        closing_html=(
+            f"Want the numbers first? {link(SITE_ROI, 'Open the ROI calculator')} "
+            f"or {link(SITE_COMPANIES, 'see how partner hiring works')}."
+        ),
+        signoff_name="David Hester",
+        signoff_title="Service 2 Software",
+        signoff_email="david@service2software.org",
+    )
+
+
+def newsletter_welcome() -> str:
+    """Brand-only welcome for the undifferentiated newsletter list (no dual CTAs)."""
+    return render_email(
+        preheader="Welcome to Service 2 Software — Hire With Purpose.",
+        greeting_html="Hi %FIRSTNAME%,",
+        body_html=(
+            "Welcome. You're on the list for updates on SkillBridge pathways "
+            "into tech sales — from Service 2 Software, a DoW-approved 501(c)(3)."
+        ),
+        section_title="Hire With Purpose",
+        section_body_html=(
+            "We train veterans for modern tech sales and match them with companies "
+            "ready to hire with purpose. No fees to candidates — ever."
+        ),
+        callout_html=(
+            f"Explore the site: {link(SITE, 'Service 2 Software')}."
+        ),
+        closing_html="Glad you're here — more from us soon.",
         signoff_name="Allie Medawar",
         signoff_title="Service 2 Software",
         signoff_email="allie@service2software.org",
@@ -307,35 +363,10 @@ def newsletter_story() -> str:
             "so veterans earn full-time offers before ETS, and companies hire people "
             "who've already proven they can sell."
         ),
-        closing_html=f"Explore more at {link(SITE, 'service2software.org')}.",
+        closing_html=f"Explore more at {link(SITE, 'our website')}.",
         signoff_name="David Hester",
         signoff_title="Service 2 Software",
         signoff_email="david@service2software.org",
-    )
-
-
-def newsletter_offer() -> str:
-    return render_email(
-        preheader="SkillBridge internships that create real pipeline.",
-        greeting_html="Hi %FIRSTNAME%,",
-        body_html=(
-            "Whether you're separating soon or hiring SDRs, here's what S2S offers."
-        ),
-        section_title="For candidates &amp; partners",
-        section_body_html=(
-            "<strong>Candidates:</strong> fully funded SkillBridge internship in tech "
-            "sales while you stay on military pay.<br/><br/>"
-            "<strong>Partners:</strong> pre-trained veteran talent, structured "
-            "internship, and a recruiting process built for retention."
-        ),
-        callout_html=(
-            f"{link(CAL_CANDIDATE, 'Apply / book intro call')} · "
-            f"{link(CAL_PARTNER, 'Talk to us about hiring')}"
-        ),
-        closing_html="Reply anytime — a human reads these.",
-        signoff_name="Allie Medawar",
-        signoff_title="Service 2 Software",
-        signoff_email="allie@service2software.org",
     )
 
 
@@ -389,6 +420,18 @@ TEMPLATES = [
         "build": candidate_nurture_skillbridge,
     },
     {
+        "key": "candidate-what-we-offer",
+        "name": "S2S · Candidate · What we offer",
+        "subject": "%FIRSTNAME%, here's what S2S offers transitioning service members",
+        "fromname": "Patrick Gilroy",
+        "fromemail": "patrick@service2software.org",
+        "reply2": "patrick@service2software.org",
+        "list": "website-candidates",
+        "journey": "candidate",
+        "trigger": "candidate-nurture-offer",
+        "build": candidate_what_we_offer,
+    },
+    {
         "key": "partner-booking-confirmation",
         "name": "S2S · Partner · Booking confirmation",
         "subject": "%FIRSTNAME%, you're booked — hiring call with David",
@@ -437,6 +480,18 @@ TEMPLATES = [
         "build": partner_nurture_roi,
     },
     {
+        "key": "partner-what-we-offer",
+        "name": "S2S · Partner · What we offer",
+        "subject": "%FIRSTNAME%, here's what S2S offers hiring partners",
+        "fromname": "David Hester",
+        "fromemail": "david@service2software.org",
+        "reply2": "david@service2software.org",
+        "list": "website-partners",
+        "journey": "partner",
+        "trigger": "partner-nurture-offer",
+        "build": partner_what_we_offer,
+    },
+    {
         "key": "newsletter-welcome",
         "name": "S2S · Newsletter · Welcome",
         "subject": "Welcome to Service 2 Software",
@@ -459,18 +514,6 @@ TEMPLATES = [
         "journey": "newsletter",
         "trigger": "newsletter-d3",
         "build": newsletter_story,
-    },
-    {
-        "key": "newsletter-offer",
-        "name": "S2S · Newsletter · What we offer",
-        "subject": "SkillBridge pathways for talent and hiring teams",
-        "fromname": "Allie Medawar",
-        "fromemail": "allie@service2software.org",
-        "reply2": "allie@service2software.org",
-        "list": "home-page-group",
-        "journey": "newsletter",
-        "trigger": "newsletter-d6",
-        "build": newsletter_offer,
     },
 ]
 

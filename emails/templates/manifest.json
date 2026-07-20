@@ -48,6 +48,18 @@
     "file": "candidate-nurture-skillbridge.html"
   },
   {
+    "key": "candidate-what-we-offer",
+    "name": "S2S \u00b7 Candidate \u00b7 What we offer",
+    "subject": "%FIRSTNAME%, here's what S2S offers transitioning service members",
+    "fromname": "Patrick Gilroy",
+    "fromemail": "patrick@service2software.org",
+    "reply2": "patrick@service2software.org",
+    "list": "website-candidates",
+    "journey": "candidate",
+    "trigger": "candidate-nurture-offer",
+    "file": "candidate-what-we-offer.html"
+  },
+  {
     "key": "partner-booking-confirmation",
     "name": "S2S \u00b7 Partner \u00b7 Booking confirmation",
     "subject": "%FIRSTNAME%, you're booked \u2014 hiring call with David",
@@ -96,6 +108,18 @@
     "file": "partner-nurture-roi.html"
   },
   {
+    "key": "partner-what-we-offer",
+    "name": "S2S \u00b7 Partner \u00b7 What we offer",
+    "subject": "%FIRSTNAME%, here's what S2S offers hiring partners",
+    "fromname": "David Hester",
+    "fromemail": "david@service2software.org",
+    "reply2": "david@service2software.org",
+    "list": "website-partners",
+    "journey": "partner",
+    "trigger": "partner-nurture-offer",
+    "file": "partner-what-we-offer.html"
+  },
+  {
     "key": "newsletter-welcome",
     "name": "S2S \u00b7 Newsletter \u00b7 Welcome",
     "subject": "Welcome to Service 2 Software",
@@ -118,17 +142,5 @@
     "journey": "newsletter",
     "trigger": "newsletter-d3",
     "file": "newsletter-story.html"
-  },
-  {
-    "key": "newsletter-offer",
-    "name": "S2S \u00b7 Newsletter \u00b7 What we offer",
-    "subject": "SkillBridge pathways for talent and hiring teams",
-    "fromname": "Allie Medawar",
-    "fromemail": "allie@service2software.org",
-    "reply2": "allie@service2software.org",
-    "list": "home-page-group",
-    "journey": "newsletter",
-    "trigger": "newsletter-d6",
-    "file": "newsletter-offer.html"
   }
 ]
