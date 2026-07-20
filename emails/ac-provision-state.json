@@ -1,0 +1,34 @@
+{
+  "lists": {
+    "master-contact-list": "3",
+    "home-page-group": "4",
+    "website-candidates": "5",
+    "website-partners": "6"
+  },
+  "messages": {
+    "candidate-booking-confirmation": "25",
+    "candidate-book-nudge": "26",
+    "candidate-reminder": "27",
+    "candidate-nurture-skillbridge": "28",
+    "partner-booking-confirmation": "29",
+    "partner-book-nudge": "30",
+    "partner-reminder": "31",
+    "partner-nurture-roi": "32",
+    "newsletter-welcome": "33",
+    "newsletter-story": "34",
+    "newsletter-offer": "35"
+  },
+  "campaigns": {
+    "candidate-booking-confirmation": "18",
+    "candidate-book-nudge": "19",
+    "candidate-reminder": "20",
+    "candidate-nurture-skillbridge": "21",
+    "partner-booking-confirmation": "22",
+    "partner-book-nudge": "23",
+    "partner-reminder": "24",
+    "partner-nurture-roi": "25",
+    "newsletter-welcome": "26",
+    "newsletter-story": "27",
+    "newsletter-offer": "28"
+  }
+}

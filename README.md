@@ -83,3 +83,8 @@ Choice is stored in `localStorage` and can be changed via footer **Cookie Settin
 
 Lead/CRM data (names, emails from forms) continues to flow into ActiveCampaign separately from page analytics.
 CloudFront access logs in AWS provide basic request-level traffic for ops/security.
+
+## Email campaigns (ActiveCampaign)
+
+Brooke-format templates and campaign provisioning live under `emails/` + `scripts/provision_ac_campaigns.py`.  
+See [`docs/EMAIL_CAMPAIGNS.md`](docs/EMAIL_CAMPAIGNS.md) for candidate/partner/newsletter series, Calendly datetime mapping, and Salesforce routing.

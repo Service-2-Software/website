@@ -64,14 +64,17 @@ this static marketing site:
 Public form posts go to `service2software.activehosted.com/proc.php`. No API key
 is embedded in the site — only public form `u`/`f` (and related) fields.
 
-| Site form | AC form | `u` / `f` |
-| --- | --- | --- |
-| Military Application (home + military) | Military Application | 11 |
-| Partner Inquiry (home + companies) | Partner Inquiry | 12 |
-| Newsletter | Home Page Group | 13 |
+| Site form | AC form | `u` / `f` | List | `field[36]` source |
+| --- | --- | --- | --- | --- |
+| Military Application (home) | Military Application | 11 | Website Candidates (5) | `home-candidate` |
+| Military Application (military page) | Military Application | 11 | Website Candidates (5) | `military-page` |
+| Partner Inquiry (home) | Partner Inquiry | 12 | Website Partners (6) | `home-partner` |
+| Partner Inquiry (companies) | Partner Inquiry | 12 | Website Partners (6) | `companies-page` |
+| Newsletter | Home Page Group | 13 | Home Page Group (4) | `newsletter` |
 
 Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Company,
-`field[34]` Hiring roles. Newsletter list: **Home Page Group**.
+`field[34]` Hiring roles, `field[36]` Website Source, `field[31]` Initial Call Datetime
+(Calendly). Email series + automation checklist: [`docs/EMAIL_CAMPAIGNS.md`](EMAIL_CAMPAIGNS.md).
 
 ## Remaining ops TODOs
 

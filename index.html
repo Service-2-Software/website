@@ -1117,6 +1117,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return hfSubmit(this,'mil')">
           <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+        <input type="hidden" name="field[36]" value="home-candidate">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
@@ -1139,6 +1140,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
         <form onsubmit="return hfSubmit(this,'co')">
           <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+        <input type="hidden" name="field[36]" value="home-partner">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
@@ -1214,6 +1216,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return acSubmit(this,'mil')">
           <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+        <input type="hidden" name="field[36]" value="military-page">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
@@ -1396,6 +1399,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
         <form class="lead lead-k" onsubmit="return leadSubmit(this,'co')">
           <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+        <input type="hidden" name="field[36]" value="companies-page">
           <div class="lf"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
           <div class="lf"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
           <div class="lf"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
@@ -1510,7 +1514,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <div class="icell rv"><div class="in2">50+</div><div class="il">Partner Companies</div></div>
         <div class="icell rv"><div class="in2">$330K+</div><div class="il">Training Donated in 2025</div></div>
       </div>
-      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=4169e1',null)">Get Involved With S2S →</button></div>
+      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=ceff00',null)">Get Involved With S2S →</button></div>
     </div>
   </section>
 
@@ -1584,6 +1588,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Home Page Group (u/f=13) -->
         <form class="nlform" id="nl-form" onsubmit="return nlSubmit(this)" novalidate>
           <input type="hidden" name="u" value="13"><input type="hidden" name="f" value="13"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="7b81ae25-d22b-4b40-8645-c9a2ea1ceff8">
+        <input type="hidden" name="field[36]" value="newsletter">
           <span class="nlwrap"><input class="nlinput" type="email" name="email" placeholder="Your email address" required autocomplete="email"></span>
           <button class="nlbtn" type="submit">Subscribe →</button>
         </form>
@@ -2096,16 +2101,29 @@ window.addEventListener('load',rv)
 
 /* LEAD FORMS — submit to ActiveCampaign (fire-and-forget), then reveal Calendly booking */
 const CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
-function leadSubmit(form,key){
+function s2sValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((v||'').trim());}
+function s2sFlashInvalid(el){if(!el)return;el.focus();var prev=el.style.borderColor;el.style.borderColor='#c62828';setTimeout(function(){el.style.borderColor=prev||'';},1600);}
+function s2sValidateLeadForm(form){
+  var em=form.querySelector('[name=email]');
+  if(!em||!s2sValidEmail(em.value)){s2sFlashInvalid(em);return false;}
+  var name=form.querySelector('[name=fullname]');
+  if(name&&!(name.value||'').trim()){s2sFlashInvalid(name);return false;}
+  return true;
+}
+function s2sPostAC(form){
   try{
-    const fd=new FormData(form);
+    var fd=new FormData(form);
     if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(()=>{});
+      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
+}
+function leadSubmit(form,key){
+  if(!s2sValidateLeadForm(form))return false;
+  s2sPostAC(form);
   document.getElementById(key+'-step1').style.display='none';
   const book=document.getElementById(key+'-book');
   book.classList.add('on');
@@ -2116,19 +2134,8 @@ function leadSubmit(form,key){
 
 /* NEWSLETTER — validate, post to ActiveCampaign (Home Page Group list), show confirmation */
 function nlSubmit(form){
-  var em=form.querySelector('[name=email]');
-  var v=(em.value||'').trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
-    em.focus();em.style.borderColor='#c62828';
-    setTimeout(function(){em.style.borderColor='';},1600);
-    return false;
-  }
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sPostAC(form);
   form.style.display='none';
   document.getElementById('nl-done').style.display='inline-flex';
   return false;
@@ -2136,8 +2143,8 @@ function nlSubmit(form){
 
 /* GATED APPLY FLOW (v4) — gate → path form → ActiveCampaign (fire-and-forget) → matching Calendly */
 const AC_GATE_CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
 /* Calendly POPUP (subdued-background overlay) with name/email prefilled from the submitted form */
 var LAST_CAL=null;
@@ -2178,12 +2185,8 @@ function hfReset(){
   hfScroll();
 }
 function hfSubmit(form,w){
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sPostAC(form);
   document.getElementById('hf-mil').style.display='none';
   document.getElementById('hf-co').style.display='none';
   document.getElementById('hf-book-h').textContent=(w==='mil')?'\u2713 Application received.':'\u2713 Got it \u2014 you\u2019re in.';
@@ -2200,12 +2203,8 @@ function acReset(){
   acScroll();
 }
 function acSubmit(form,w){
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sPostAC(form);
   document.getElementById('ac-mil').style.display='none';
   document.getElementById('ac-book-h').textContent='\u2713 Application received.';
   document.getElementById('ac-book-s').textContent='Lock in your intro call now. Candidates who book immediately move through approval fastest.';
