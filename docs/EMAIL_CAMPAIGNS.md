@@ -1,8 +1,8 @@
-# Email campaigns — ActiveCampaign + Calendly + Salesforce
+# Email campaigns — journeys, tags, Calendly, Salesforce
 
-Brooke-format HTML templates live in [`emails/templates/`](../emails/templates/).  
-Rebuild with `python3 emails/build_templates.py`.  
-Provision messages/campaigns/lists into ActiveCampaign with:
+Brooke-format templates: [`emails/templates/`](../emails/templates/)  
+Journey map: [`emails/journey-map.json`](../emails/journey-map.json)  
+Rebuild + provision:
 
 ```bash
 export ACTIVECAMPAIGN_API_URL=https://service2software.api-us1.com
@@ -11,159 +11,108 @@ python3 emails/build_templates.py
 python3 scripts/provision_ac_campaigns.py
 ```
 
-State file (message/campaign IDs): `emails/ac-provision-state.json`.
+## Website behavior (shipped)
 
-## Website → ActiveCampaign entry points
+| CTA | Behavior |
+| --- | --- |
+| Homepage / nav **Apply Now** | Scrolls to **Get In The Fight**, opens **Transitioning Service Member** form |
+| Homepage **Hire Military Talent** | Scrolls to **Get In The Fight**, opens **Company Looking to Hire** form |
+| **Already separated** ETS | No Calendly popup; confirmation copy only; `JOURNEY_SEGMENT=cand-journey-separated-onedone` |
+| **Not you? Change selection** | Styled in red |
+| Opt-ins on all lead forms | `field[37]` Newsletter, `field[38]` SMS (legal), `field[39]` Journey Segment |
 
-| Site CTA / form | AC form | List | `field[36]` WEBSITE_SOURCE |
-| --- | --- | --- | --- |
-| Home → Candidate | 11 Military Application | Website Candidates (5) | `home-candidate` |
-| Military page Apply | 11 | Website Candidates (5) | `military-page` |
-| Home → Partner | 12 Partner Inquiry | Website Partners (6) | `home-partner` |
-| Companies page Inquire | 12 | Website Partners (6) | `companies-page` |
-| Newsletter | 13 Home Page Group | Home Page Group (4) | `newsletter` |
+## Custom fields
 
-Automations should also subscribe Candidates/Partners onto **Master Contact List (3)** if you still want a single omnibus list.
-
-Email validation runs client-side before the AC `proc.php` post.
-
-## Campaign series (automations)
-
-ActiveCampaign’s API cannot create automations (405). Messages + draft campaigns are provisioned; wire these automations once in the AC UI (**Automations → Create**). Use the provisioned campaign/message names (`S2S · …`).
-
-### A. Candidate journey (form 11 / list Website Candidates)
-
-1. **Trigger:** Submits form *Military Application* **or** Subscribes to *Website Candidates*
-2. **Immediate:** Send `S2S · Candidate · Book your intro call`
-3. **Wait 1 day** → If contact does **not** have Calendly tag  
-   `calendly-integration-S2S_Discovery_Call_w/_Patrick`  
-   (or `call-booked-candidate`) → resend book nudge once
-4. **Trigger (separate automation):** Tag added  
-   `calendly-integration-S2S_Discovery_Call_w/_Patrick`  
-   → Send `S2S · Candidate · Booking confirmation`  
-   (uses `%INITIAL_CALL_DATETIME%` — field 31)
-5. **Wait until 24h before** call (or 1 day after booking) → Send `S2S · Candidate · Call reminder`
-6. **Wait 2 days after form** (if still engaged) → Send `S2S · Candidate · What SkillBridge looks like`
-
-### B. Partner journey (form 12 / list Website Partners)
-
-1. **Trigger:** Submits *Partner Inquiry* **or** Subscribes to *Website Partners*
-2. **Immediate:** Send `S2S · Partner · Schedule hiring call`
-3. **Trigger:** Tag  
-   `calendly-integration-S2S_Initial_Call_with_David`  
-   → Send `S2S · Partner · Booking confirmation`
-4. Reminder + nurture: `S2S · Partner · Call reminder`, `S2S · Partner · How hiring works`
-
-### C. Newsletter (form 13 / list Home Page Group)
-
-1. **Trigger:** Submits *Home Page Group* / subscribes to list 4  
-2. Immediate → `S2S · Newsletter · Welcome`  
-3. Wait 2–3 days → `S2S · Newsletter · Story & mission`  
-4. Wait 2–3 days → `S2S · Newsletter · What we offer`  
-
-Replace the inactive “3-Email Welcome Sequence” (automation 7) content with these Brooke-format campaigns, or turn that automation off and use this series.
-
-## Calendly wiring
-
-Native AC↔Calendly integration is already tagging contacts:
-
-| Calendly event | AC tag (existing) | Confirmation email |
+| ID | Perstag | Use |
 | --- | --- | --- |
-| Patrick initial / discovery call | `calendly-integration-S2S_Discovery_Call_w/_Patrick` | Candidate booking confirmation |
-| David hiring call | `calendly-integration-S2S_Initial_Call_with_David` | Partner booking confirmation |
-| CEO intro / about | `calendly-integration-S2S_CEO_Intro_Call` | Optional — About “Get Involved” |
+| 32 | `ETS_WINDOW` | Candidate separation window |
+| 34 | `HIRING_ROLES` | Partner roles |
+| 36 | `WEBSITE_SOURCE` | Which CTA/page |
+| 37 | `NEWSLETTER_OPTIN` | `Yes` if checked |
+| 38 | `SMS_OPTIN` | `Yes` if checked |
+| 39 | `JOURNEY_SEGMENT` | Initial nobook/separated segment (set in browser) |
+| 31 | `INITIAL_CALL_DATETIME` | Calendly start time |
 
-**Required in Calendly → ActiveCampaign field mapping:**  
-map event start time → contact field **Initial Call Datetime** (`INITIAL_CALL_DATETIME`, field id **31**).  
-Confirm under ActiveCampaign → *Settings → Integrations → Calendly* (or the Calendly AC app settings).
+## 1. Candidate journeys (ETS × booking)
 
-Site Calendly URLs (unchanged):
+On apply, site sets `JOURNEY_SEGMENT` to the **nobook** (or separated) tag name.  
+When Patrick’s Calendly tag is added, AC automation should **swap** to the matching **booked** journey tag.
 
-- Candidates: `calendly.com/patrick-service2software/initial-call-with-service-2-software`
-- Partners: `calendly.com/davidhester/s2s-hiring`
-- About: `calendly.com/davidhester/30minutes`
+| ID | ETS answer | Booked? | Tag | Campaign |
+| --- | --- | --- | --- | --- |
+| 1a | 6–12 mo **or** More than 12 mo | Yes | `cand-journey-6-12-booked` | `S2S · Candidate · 6-12mo booked` |
+| 1b | 3–6 months | Yes | `cand-journey-3-6-booked` | `S2S · Candidate · 3-6mo booked` |
+| 1c | Less than 3 months | Yes | `cand-journey-lt3-booked` | `S2S · Candidate · <3mo booked` |
+| 1d | 6–12 mo **or** More than 12 mo | No | `cand-journey-6-12-nobook` | `S2S · Candidate · 6-12mo no book` |
+| 1e | 3–6 months | No | `cand-journey-3-6-nobook` | `S2S · Candidate · 3-6mo no book` |
+| 1f | Less than 3 months | No | `cand-journey-lt3-nobook` | `S2S · Candidate · <3mo no book` |
+| — | Already separated | N/A | `cand-journey-separated-onedone` | `S2S · Candidate · Separated one-and-done` (**no Calendly**) |
 
-## Salesforce routing
+Also create/apply bucket tags on form submit (via AC If/Else on `ETS_WINDOW`):  
+`cand-ets-gt12`, `cand-ets-6-12`, `cand-ets-3-6`, `cand-ets-lt3`, `cand-ets-separated`.
 
-AC Salesforce connection `ActiveCamp.USA36` is active (`connections` id 1).  
-Configure sync rules in **AC → Salesforce** so website leads land on the right pipeline:
+### Candidate automations to build in AC UI
 
-| Signal | Salesforce routing |
-| --- | --- |
-| List *Website Candidates* or `WEBSITE_SOURCE` starts with `home-candidate` / `military-page` | Lead — Recruiting pipeline; Lead Source = `Website - Candidate`; Owner = Patrick Gilroy |
-| List *Website Partners* or source `home-partner` / `companies-page` | Lead — Partner/Sales pipeline; Lead Source = `Website - Partner`; Owner = David Hester |
-| List *Home Page Group* only | Marketing contact / campaign member — **do not** create a sales Lead unless they later apply or inquire |
-| Calendly booked tags | Update Lead Status (e.g. `Intro Call Booked`) and sync `INITIAL_CALL_DATETIME` |
+1. **Apply (form Military Application / list Website Candidates)**  
+   - If/Else on `ETS_WINDOW` → Add matching `cand-ets-*` tag + `cand-journey-*-nobook` (or separated one-done)  
+   - If `NEWSLETTER_OPTIN = Yes` → tag `optin-newsletter` (+ subscribe Home Page Group if desired)  
+   - If `SMS_OPTIN = Yes` → tag `optin-sms`  
+   - If **not** separated → Send matching **nobook** campaign; Wait 1 day; if still no Patrick Calendly tag → nudge once  
+   - If **separated** → Send **Separated one-and-done** only (never Calendly)
 
-Ensure these contact fields sync to Salesforce:  
-`WEBSITE_SOURCE`, `BRANCH`, `ETS_WINDOW`, `COMPANY`, `HIRING_ROLES`, `INITIAL_CALL_DATETIME`, phone, email, full name.
+2. **Booked (tag `calendly-integration-S2S_Discovery_Call_w/_Patrick`)**  
+   - Add `cand-call-booked` + `website-servicemember-booked`  
+   - Remove matching `*-nobook` journey tag; add matching `*-booked` journey tag (If/Else on `ETS_WINDOW`)  
+   - Send matching **booked** campaign (uses `%INITIAL_CALL_DATETIME%`)
 
-Existing SF bridge tags (`created-from-salesforce-lead`, `added-to-salesforce`, etc.) remain owned by the native connector.
+## 2. Partner journeys (roles × booking)
 
-## Tags created for journeys
+| ID | Roles answer | Booked? | Tag | Campaign |
+| --- | --- | --- | --- | --- |
+| 2a | SDR/BDR **and/or** Account Executive | Yes | `partner-journey-sdr-ae-booked` | `S2S · Partner · SDR/AE booked` |
+| 2b | Customer Success | Yes | `partner-journey-cs-booked` | `S2S · Partner · CS booked` |
+| 2c | Multiple / Other | Yes | `partner-journey-other-booked` | `S2S · Partner · Other booked` |
+| 2a | SDR/BDR **and/or** AE | No | `partner-journey-sdr-ae-nobook` | `S2S · Partner · SDR/AE no book` |
+| 2b | Customer Success | No | `partner-journey-cs-nobook` | `S2S · Partner · CS no book` |
+| 2c | Multiple / Other | No | `partner-journey-other-nobook` | `S2S · Partner · Other no book` |
 
-`src-home-candidate`, `src-home-partner`, `src-military-page`, `src-companies-page`, `src-newsletter`, `src-about-involved`, `journey-candidate`, `journey-partner`, `journey-newsletter`, `call-booked-candidate`, `call-booked-partner`, `awaiting-calendly-candidate`, `awaiting-calendly-partner`.
+Role bucket tags: `partner-roles-sdr-ae`, `partner-roles-cs`, `partner-roles-other`.
 
-Form actions cannot add tags via API (AC returns 500). Prefer **list + WEBSITE_SOURCE** for automation conditions; optionally add “Add tag” actions manually on forms 11/12/13 in the AC form builder.
+### Partner automations
 
-## Already provisioned in ActiveCampaign
+1. **Apply (form Partner Inquiry)** → role tags + `partner-journey-*-nobook` + opt-in tags → send matching nobook campaign  
+2. **Booked (tag `calendly-integration-S2S_Initial_Call_with_David`)** → `partner-call-booked` / `website-partner-booked` → swap to `*-booked` journey tag → send booked campaign
 
-| Resource | IDs / notes |
-| --- | --- |
-| Lists | Website Candidates **5**, Website Partners **6** (+ Master **3**, Home Page Group **4**) |
-| Custom field | `WEBSITE_SOURCE` field **36**; `INITIAL_CALL_DATETIME` field **31** |
-| Forms | **11** → list 5; **12** → list 6; **13** → list 4 |
-| Messages + draft campaigns | See `emails/ac-provision-state.json` (keys `candidate-*`, `partner-*`, `newsletter-*`) |
-| Newsletter automation **7** | Existing send messages **14/15/16** overwritten with Brooke HTML |
-| Candidate automation **3** | Send message updated to Brooke “book your intro call”; **change trigger from form 7 → form 11** in UI |
+## 3. Newsletter / SMS opt-in
 
-## What you need to do in ActiveCampaign / Calendly / Salesforce
+Checkboxes on candidate + partner forms post:
 
-AC’s API **cannot create automations**, so these UI steps finish the mapping:
+- `field[37]=Yes` → automation adds `optin-newsletter` (and optionally list **Home Page Group**)  
+- `field[38]=Yes` → automation adds `optin-sms` (Twilio / compliance — only text if tagged)
 
-### 1. ActiveCampaign automations (required)
+Newsletter welcome sender: **dave@service2software.org**.  
+Candidate journey senders: **recruiting@service2software.org**.
 
-| Automation | Trigger | Sends (use these campaign names) |
+## 4. Calendly + Salesforce (your checklist)
+
+| Task | Owner | Detail |
 | --- | --- | --- |
-| Candidate journey | Form **Military Application (11)** or list **Website Candidates** | Book intro call → (wait) What SkillBridge looks like → What we offer (candidate) |
-| Partner journey | Form **Partner Inquiry (12)** or list **Website Partners** | Schedule hiring call → How hiring works → What we offer (partner) |
-| Candidate booked | Tag `calendly-integration-S2S_Discovery_Call_w/_Patrick` | **Candidate · Booking confirmation** then reminder |
-| Partner booked | Tag `calendly-integration-S2S_Initial_Call_with_David` | **Partner · Booking confirmation** then reminder |
-| Newsletter | Form **Home Page Group (13)** / list 4 | Welcome → Story & mission (**no** combined candidate/partner offer) |
+| Map Calendly start → `INITIAL_CALL_DATETIME` (31) | AC/Calendly settings | Required for booked emails |
+| Calendly → Salesforce sync | Ops | Critical dependency called out with Dave |
+| Salesforce routing | AC Salesforce connector | List 5 / candidate tags → Recruiting/Patrick; List 6 / partner tags → David; newsletter-only → no sales Lead |
+| Wire automations above | AC UI | API cannot create automation graphs |
+| Test leads per ETS + role | Pre go-live | Confirm correct journey tag + email |
+| SMS campaign resubmit | After site live | Twilio may block until portal URL is live |
 
-Also: open automation **3** and change its trigger from old form **7** → form **11** (or list 5).
+## Sending addresses (warmed)
 
-### 2. Calendly → ActiveCampaign field map (required)
+- `recruiting@` — candidate journeys  
+- `dave@service2software.org` — newsletter  
+- `info@` / `support@` — portal/general (not these marketing journeys)
 
-In AC **Settings → Integrations → Calendly** (or the Calendly AC app):
+## Manual AC steps (cannot be done via API)
 
-| Calendly value | AC contact field |
-| --- | --- |
-| Event start time | **Initial Call Datetime** (`INITIAL_CALL_DATETIME`, id 31) |
-| Invitee email / name | Email / first + last name (usually automatic) |
-
-Without this, booking emails show a blank `%INITIAL_CALL_DATETIME%`.
-
-### 3. Salesforce sync rules (required)
-
-In AC **Salesforce** connection settings:
-
-| AC signal | Salesforce |
-| --- | --- |
-| List **Website Candidates** or `WEBSITE_SOURCE` = `home-candidate` / `military-page` | Lead → Recruiting; Lead Source `Website - Candidate`; Owner **Patrick** |
-| List **Website Partners** or source `home-partner` / `companies-page` | Lead → Partner/Sales; Lead Source `Website - Partner`; Owner **David** |
-| List **Home Page Group** only | Marketing only — do **not** auto-create a sales Lead |
-| Sync fields | `WEBSITE_SOURCE`, `BRANCH`, `ETS_WINDOW`, `COMPANY`, `HIRING_ROLES`, `INITIAL_CALL_DATETIME` |
-
-### 4. Smoke tests
-
-1. Submit **home candidate** form → contact on list 5, `WEBSITE_SOURCE=home-candidate` → book Patrick’s Calendly → confirmation has datetime.
-2. Submit **companies** form → list 6, `WEBSITE_SOURCE=companies-page` → book David’s Calendly.
-3. Click an email site link (e.g. ROI) → lands on CloudFront with `?page=companies&section=roi-calc`.
-
-### Link notes
-
-- Booking CTAs use Calendly (Patrick / David) — correct.
-- Site links use the **live CloudFront** URL (`d2by6tunn6pa78.cloudfront.net`) with `?page=&section=` deep links.  
-  **Do not use `www.service2software.org` in these campaigns yet** — that host is still Kajabi.
-- Combined “candidates & partners” offer emails were **removed**; use the separate Candidate / Partner “What we offer” campaigns instead.
+1. Build candidate + partner automations from the tables above (If/Else on fields/tags → Send matching `S2S · …` campaign).  
+2. Confirm Calendly field map + SF sync.  
+3. Activate automations after a test lead per segment.  
+4. Dave: revise copy in Claude using Brock/Brooke template against the provisioned HTML.

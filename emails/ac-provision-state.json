@@ -17,7 +17,20 @@
     "newsletter-welcome": "33",
     "newsletter-story": "34",
     "candidate-what-we-offer": "36",
-    "partner-what-we-offer": "37"
+    "partner-what-we-offer": "37",
+    "cand-journey-separated-onedone": "43",
+    "cand-journey-6-12-nobook": "44",
+    "cand-journey-3-6-nobook": "45",
+    "cand-journey-lt3-nobook": "46",
+    "cand-journey-6-12-booked": "47",
+    "cand-journey-3-6-booked": "48",
+    "cand-journey-lt3-booked": "49",
+    "partner-journey-sdr-ae-nobook": "50",
+    "partner-journey-cs-nobook": "51",
+    "partner-journey-other-nobook": "52",
+    "partner-journey-sdr-ae-booked": "53",
+    "partner-journey-cs-booked": "54",
+    "partner-journey-other-booked": "55"
   },
   "campaigns": {
     "candidate-booking-confirmation": "18",
@@ -31,6 +44,19 @@
     "newsletter-welcome": "26",
     "newsletter-story": "27",
     "candidate-what-we-offer": "29",
-    "partner-what-we-offer": "30"
+    "partner-what-we-offer": "30",
+    "cand-journey-separated-onedone": "41",
+    "cand-journey-6-12-nobook": "42",
+    "cand-journey-3-6-nobook": "43",
+    "cand-journey-lt3-nobook": "44",
+    "cand-journey-6-12-booked": "45",
+    "cand-journey-3-6-booked": "46",
+    "cand-journey-lt3-booked": "47",
+    "partner-journey-sdr-ae-nobook": "48",
+    "partner-journey-cs-nobook": "49",
+    "partner-journey-other-nobook": "50",
+    "partner-journey-sdr-ae-booked": "51",
+    "partner-journey-cs-booked": "52",
+    "partner-journey-other-booked": "53"
   }
 }

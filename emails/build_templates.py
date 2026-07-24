@@ -7,6 +7,7 @@ import json
 from pathlib import Path
 
 from layout import BRAND_LIME, render_email
+from journeys import JOURNEY_TEMPLATES
 
 OUT = Path(__file__).resolve().parent / "templates"
 CAL_CANDIDATE = (
@@ -376,8 +377,8 @@ TEMPLATES = [
         "name": "S2S · Candidate · Booking confirmation",
         "subject": "%FIRSTNAME%, you're booked — intro call with Patrick",
         "fromname": "Patrick Gilroy",
-        "fromemail": "patrick@service2software.org",
-        "reply2": "patrick@service2software.org",
+        "fromemail": "recruiting@service2software.org",
+        "reply2": "recruiting@service2software.org",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "calendly-candidate-booked",
@@ -388,8 +389,8 @@ TEMPLATES = [
         "name": "S2S · Candidate · Book your intro call",
         "subject": "%FIRSTNAME%, next step: book your 20-minute intro call",
         "fromname": "Patrick Gilroy",
-        "fromemail": "patrick@service2software.org",
-        "reply2": "patrick@service2software.org",
+        "fromemail": "recruiting@service2software.org",
+        "reply2": "recruiting@service2software.org",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "form-candidate",
@@ -400,8 +401,8 @@ TEMPLATES = [
         "name": "S2S · Candidate · Call reminder",
         "subject": "Reminder: your S2S intro call is coming up",
         "fromname": "Patrick Gilroy",
-        "fromemail": "patrick@service2software.org",
-        "reply2": "patrick@service2software.org",
+        "fromemail": "recruiting@service2software.org",
+        "reply2": "recruiting@service2software.org",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "calendly-candidate-reminder",
@@ -412,8 +413,8 @@ TEMPLATES = [
         "name": "S2S · Candidate · What SkillBridge looks like",
         "subject": "What a funded SkillBridge internship actually looks like",
         "fromname": "Patrick Gilroy",
-        "fromemail": "patrick@service2software.org",
-        "reply2": "patrick@service2software.org",
+        "fromemail": "recruiting@service2software.org",
+        "reply2": "recruiting@service2software.org",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "candidate-nurture-d2",
@@ -424,8 +425,8 @@ TEMPLATES = [
         "name": "S2S · Candidate · What we offer",
         "subject": "%FIRSTNAME%, here's what S2S offers transitioning service members",
         "fromname": "Patrick Gilroy",
-        "fromemail": "patrick@service2software.org",
-        "reply2": "patrick@service2software.org",
+        "fromemail": "recruiting@service2software.org",
+        "reply2": "recruiting@service2software.org",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "candidate-nurture-offer",
@@ -495,9 +496,9 @@ TEMPLATES = [
         "key": "newsletter-welcome",
         "name": "S2S · Newsletter · Welcome",
         "subject": "Welcome to Service 2 Software",
-        "fromname": "Allie Medawar",
-        "fromemail": "allie@service2software.org",
-        "reply2": "allie@service2software.org",
+        "fromname": "David Hester",
+        "fromemail": "dave@service2software.org",
+        "reply2": "dave@service2software.org",
         "list": "home-page-group",
         "journey": "newsletter",
         "trigger": "form-newsletter",
@@ -508,14 +509,17 @@ TEMPLATES = [
         "name": "S2S · Newsletter · Story & mission",
         "subject": "Why Service 2 Software exists",
         "fromname": "David Hester",
-        "fromemail": "david@service2software.org",
-        "reply2": "david@service2software.org",
+        "fromemail": "dave@service2software.org",
+        "reply2": "dave@service2software.org",
         "list": "home-page-group",
         "journey": "newsletter",
         "trigger": "newsletter-d3",
         "build": newsletter_story,
     },
 ]
+
+# ETS/role × booking journeys (candidate 1a–1f, partner 2a–2c ± booked)
+TEMPLATES.extend(JOURNEY_TEMPLATES)
 
 
 def main() -> None:
