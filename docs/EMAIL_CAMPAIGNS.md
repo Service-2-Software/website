@@ -110,9 +110,30 @@ Candidate journey senders: **recruiting@service2software.org**.
 - `dave@service2software.org` — newsletter  
 - `info@` / `support@` — portal/general (not these marketing journeys)
 
+## Post–initial-call email (Pre-Core portal)
+
+Source doc: [`docs/pre-core-candidate-portal.md`](pre-core-candidate-portal.md)  
+Campaign: **`S2S · Candidate · Post-call Pre-Core portal`**  
+Template key: `candidate-post-call-precore-portal`
+
+**When to send:** after the candidate **completes** their initial call with Patrick (not when they only book).
+
+| Step | Action |
+| --- | --- |
+| 1 | Create/use tag `cand-initial-call-completed` |
+| 2 | Apply that tag when the call is done (Salesforce Lead Status sync, or Patrick/recruiter marks complete in AC) |
+| 3 | Automation: **Tag is added** `cand-initial-call-completed` → **Send** `S2S · Candidate · Post-call Pre-Core portal` |
+
+Portal links in the email:
+
+- Pre-Core login: https://s2score.service2software.org/candidatelogin  
+- Pre-Core home: https://s2score.service2software.org/candidates/leads  
+- Core (after acceptance): https://s2score.service2software.org/login  
+
 ## Manual AC steps (cannot be done via API)
 
 1. Build candidate + partner automations from the tables above (If/Else on fields/tags → Send matching `S2S · …` campaign).  
 2. Confirm Calendly field map + SF sync.  
-3. Activate automations after a test lead per segment.  
-4. Dave: revise copy in Claude using Brock/Brooke template against the provisioned HTML.
+3. Wire **post-call Pre-Core portal** automation on `cand-initial-call-completed`.  
+4. Activate automations after a test lead per segment.  
+5. Dave: revise copy in Claude using Brock/Brooke template against the provisioned HTML.

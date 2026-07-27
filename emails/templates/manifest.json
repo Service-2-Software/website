@@ -311,5 +311,18 @@
     "fromemail": "david@service2software.org",
     "reply2": "david@service2software.org",
     "file": "partner-journey-other-booked.html"
+  },
+  {
+    "key": "candidate-post-call-precore-portal",
+    "name": "S2S \u00b7 Candidate \u00b7 Post-call Pre-Core portal",
+    "subject": "%FIRSTNAME%, create your Pre-Core portal account",
+    "list": "website-candidates",
+    "journey": "candidate",
+    "trigger": "tag:cand-initial-call-completed",
+    "tag": "cand-initial-call-completed",
+    "fromname": "Service 2 Software Recruiting",
+    "fromemail": "recruiting@service2software.org",
+    "reply2": "recruiting@service2software.org",
+    "file": "candidate-post-call-precore-portal.html"
   }
 ]

@@ -14,6 +14,7 @@ def render_email(
     details_box_html: str | None = None,
     section_title: str | None = None,
     section_body_html: str | None = None,
+    extra_sections: list[tuple[str, str]] | None = None,
     callout_html: str | None = None,
     closing_html: str,
     signoff_name: str,
@@ -35,16 +36,23 @@ def render_email(
                 </td>
               </tr>"""
 
-    section = ""
-    if section_title and section_body_html:
-        section = f"""
+    def _section_row(title: str, body: str) -> str:
+        return f"""
               <tr>
-                <td style="padding:0 0 8px 0;font-family:Arial,Helvetica,sans-serif;">
-                  <div style="font-size:20px;font-weight:700;color:{BRAND_BLACK};margin:0 0 6px 0;">{section_title}</div>
+                <td style="padding:18px 0 8px 0;font-family:Arial,Helvetica,sans-serif;">
+                  <div style="font-size:20px;font-weight:700;color:{BRAND_BLACK};margin:0 0 6px 0;">{title}</div>
                   <div style="width:48px;height:3px;background:{BRAND_LIME};margin:0 0 14px 0;"></div>
-                  <div style="font-size:15px;line-height:1.7;color:{BRAND_BLACK};">{section_body_html}</div>
+                  <div style="font-size:15px;line-height:1.7;color:{BRAND_BLACK};">{body}</div>
                 </td>
               </tr>"""
+
+    section = ""
+    if section_title and section_body_html:
+        section = _section_row(section_title, section_body_html)
+
+    extras = ""
+    if extra_sections:
+        extras = "".join(_section_row(t, b) for t, b in extra_sections)
 
     callout = ""
     if callout_html:
@@ -98,6 +106,7 @@ def render_email(
                 </tr>
                 {details}
                 {section}
+                {extras}
                 {callout}
                 <tr>
                   <td style="padding:22px 0 0 0;font-size:15px;line-height:1.7;color:{BRAND_BLACK};">

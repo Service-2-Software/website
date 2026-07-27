@@ -8,6 +8,7 @@ from pathlib import Path
 
 from layout import BRAND_LIME, render_email
 from journeys import JOURNEY_TEMPLATES
+from post_call import POST_CALL_TEMPLATES
 
 OUT = Path(__file__).resolve().parent / "templates"
 CAL_CANDIDATE = (
@@ -520,6 +521,8 @@ TEMPLATES = [
 
 # ETS/role × booking journeys (candidate 1a–1f, partner 2a–2c ± booked)
 TEMPLATES.extend(JOURNEY_TEMPLATES)
+# After Patrick initial call is completed → Pre-Core portal guide
+TEMPLATES.extend(POST_CALL_TEMPLATES)
 
 
 def main() -> None:

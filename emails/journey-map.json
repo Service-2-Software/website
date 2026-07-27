@@ -113,5 +113,12 @@
       "booked": false,
       "tag": "partner-journey-other-nobook"
     }
+  },
+  "post_call": {
+    "tag": "cand-initial-call-completed",
+    "campaign": "S2S \u00b7 Candidate \u00b7 Post-call Pre-Core portal",
+    "template": "candidate-post-call-precore-portal",
+    "source_doc": "docs/pre-core-candidate-portal.md",
+    "trigger": "After initial call with Patrick is completed (not booking)"
   }
 }
