@@ -80,3 +80,7 @@ Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Compa
 3. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
 4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
 5. ~~Create a GA4 property and set `S2S_GA_ID`~~ — done (`G-SK3FHELY0M`).
+
+## Related
+
+CRM/ops automations (Salesforce + ActiveCampaign + Cursor): [`CRM_AUTOMATIONS.md`](./CRM_AUTOMATIONS.md).

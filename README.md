@@ -83,3 +83,9 @@ Choice is stored in `localStorage` and can be changed via footer **Cookie Settin
 
 Lead/CRM data (names, emails from forms) continues to flow into ActiveCampaign separately from page analytics.
 CloudFront access logs in AWS provide basic request-level traffic for ops/security.
+
+## Salesforce + ActiveCampaign automations
+
+Cursor Automations + MCP playbook for military/partner lead triage, daily digests,
+and AC↔Salesforce sync health: [`docs/CRM_AUTOMATIONS.md`](docs/CRM_AUTOMATIONS.md).
+MCP server template: [`.cursor/mcp.json.example`](.cursor/mcp.json.example).
