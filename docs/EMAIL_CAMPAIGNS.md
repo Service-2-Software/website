@@ -130,6 +130,22 @@ Portal links in the email:
 - Pre-Core home: https://s2score.service2software.org/candidates/leads  
 - Core (after acceptance): https://s2score.service2software.org/login  
 
+## Form smoke test (API)
+
+Automated checks (Aug 2026) posted each site form to `proc.php` and verified contacts in AC:
+
+| Form path | List | `WEBSITE_SOURCE` | Journey / extras |
+| --- | --- | --- | --- |
+| Home candidate | Website Candidates (5) | `home-candidate` | `JOURNEY_SEGMENT` + ETS/Branch |
+| Military page | Website Candidates (5) | `military-page` | same |
+| Home partner | Website Partners (6) | `home-partner` | roles + company |
+| Companies page | Website Partners (6) | `companies-page` | roles + company |
+| Newsletter | Home Page Group (4) | `newsletter` | email only |
+
+**Fix applied:** `ETS_WINDOW` (32), `HIRING_ROLES` (34), and `COMPANY` (35) had no list field relations, so those values were dropped on form post. They are now related to lists 3–6.
+
+**Still manual:** Activate automations in AC UI and confirm the actual emails send. `Candidate Journey` (automation 8) is triggered on form 11 but showed `entered=0` / inactive during smoke test — flip it **Active** and submit one real test lead to confirm the send steps.
+
 ## Manual AC steps (cannot be done via API)
 
 1. Build candidate + partner automations from the tables above (If/Else on fields/tags → Send matching `S2S · …` campaign).  
