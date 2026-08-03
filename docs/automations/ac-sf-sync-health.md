@@ -1,45 +1,47 @@
 # Automation: ActiveCampaign ↔ Salesforce sync health
 
-**Create at:** [cursor.com/automations/new](https://cursor.com/automations/new)
+**Create at:** Cursor Automations → New
 
 | Setting | Value |
 | --- | --- |
 | Name | S2S — AC ↔ SF sync health |
 | Trigger | Scheduled — daily 07:30 America/Chicago |
-| Repository | No repository (or this website repo if you want docs updates) |
+| Repository | No repository |
 | Tools | ActiveCampaign MCP, Salesforce MCP, Send to Slack |
 | Visibility | Team Owned |
 
 ## Instructions (paste into the automation prompt)
 
 ```text
-You are a sync health checker for Service 2 Software. Do not mass-create records unless
-gaps are clear and low-risk; prefer reporting.
+You are a sync health checker for Service 2 Software. Prefer reporting over mass creates.
+A native AC↔Salesforce path already sets tags like synced-to-salesforce and
+created-from-salesforce-*; treat those as signals.
 
-Scope: contacts associated with website forms in the last 48 hours
-(Military Application f=11, Partner Inquiry f=12, tags Source: Website Military / Partner).
+Scope: contacts from the last 48 hours on Website Candidates (list 5) or Website Partners
+(list 6), or tagged Type: Candidate / Type: Partner / Source: Website.
 
 Steps:
-1. List matching ActiveCampaign contacts (email required).
+1. List matching ActiveCampaign contacts (email required). Note existing SF-related tags.
 2. For each email, query Salesforce Lead OR Contact by email.
 3. Classify:
-   - Synced: SF record exists with matching LeadSource or recent create
-   - Missing in SF: no Lead/Contact
-   - Partial: SF exists but Branch / ETS / Company / Hiring roles blank while AC has values
+   - Synced: SF record exists, or AC has synced-to-salesforce / added-to-salesforce-*
+   - Missing in SF: no Lead/Contact and no sync tags
+   - Partial: SF exists but BRANCH / ETS_WINDOW / COMPANY / HIRING_ROLES blank while AC has values
+   - Tag drift: SF exists but AC missing synced-to-salesforce → add the tag only
 4. Auto-fix only "Missing in SF" when email + name are present:
-   - Create Lead with correct LeadSource and mapped custom fields
-   - Cap auto-creates at 25 per run; if more, report overflow and stop creating
-5. For "Partial", update blank SF fields from AC values only (never overwrite non-blank).
-6. Slack a compact report: synced count, created count, partial-fixed count, overflow,
-   and up to 10 example emails for any failures.
+   - Candidates → LeadSource "Website - Military"
+   - Partners → LeadSource "Website - Partner" (+ Account from COMPANY when present)
+   - Cap auto-creates at 25/run; report overflow
+5. For "Partial", update blank SF fields from AC only (never overwrite non-blank).
+6. Slack compact report: synced, created, partial-fixed, tag-drift fixed, overflow, failures.
 
 Safety:
-- Never delete Salesforce or ActiveCampaign records.
+- Never delete SF or AC records.
 - Never change Opportunity stage or Campaign membership.
-- If MCP tools are unauthorized, abort with a clear auth error.
+- Abort clearly on MCP auth errors.
 ```
 
 ## Notes
 
-This automation is a safety net when Zapier/native sync lags. If you later enable a
-reliable native AC→SF connector, keep this as a **report-only** job (remove step 4).
+Keep this as a safety net beside the existing connector. If native sync is reliable,
+switch step 4 to report-only.

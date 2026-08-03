@@ -1,6 +1,6 @@
 # Automation: Daily pipeline digest
 
-**Create at:** [cursor.com/automations/new](https://cursor.com/automations/new)
+**Create at:** Cursor Automations → New
 
 | Setting | Value |
 | --- | --- |
@@ -15,23 +15,28 @@
 ```text
 Produce a weekday morning digest for Service 2 Software ops.
 
-Pull (last 24 hours unless noted):
-1. ActiveCampaign
-   - New military applicants (form 11 / tag Source: Website Military)
-   - New partner inquiries (form 12 / tag Source: Website Partner)
-   - Newsletter signups (form 13) — count only
-2. Salesforce
-   - New Leads with LeadSource containing "Website"
-   - Open Leads owned by the team that have no activity in 7+ days (cap at 10)
-   - Any Leads with Priority Hot / ETS <3 months if those fields/tags exist
+Pull (last 24 hours unless noted) from ActiveCampaign using existing tags/lists:
+1. Candidates: list Website Candidates (5) or Type: Candidate / journey-candidate
+   — include BRANCH + ETS_WINDOW; call out cand-ets-lt3 and cand-ets-separated as hot
+2. Partners: list Website Partners (6) or Type: Partner / journey-partner
+   — include COMPANY + HIRING_ROLES
+3. Newsletter: list Home Page Group (4) / src-newsletter / journey-newsletter — count only
+4. Booking: Stage: Booked vs Stage: No-Book counts for candidates and partners
+
+Salesforce:
+- New Leads with LeadSource containing "Website"
+- Open Leads with no activity in 7+ days (cap 10)
+- Exceptions: AC contacts tagged Type: Candidate or Type: Partner in last 48h
+  that lack synced-to-salesforce AND have no SF Lead/Contact by email
 
 Post one Slack message with sections:
-- Military applicants (count + up to 5 bullets: name, branch, ETS)
-- Partner inquiries (count + up to 5 bullets: company, roles)
+- Military / candidates (count + up to 5 bullets)
+- Partners (count + up to 5 bullets)
 - Newsletter signups (count)
-- Salesforce stale leads needing follow-up (up to 5)
-- Exceptions: AC contacts from website forms in the last 48h missing a matching SF Lead/Contact
+- Booked vs no-book
+- Salesforce stale leads
+- Sync exceptions
 
-If volumes are zero, still post a one-line "quiet day" message.
-Do not invent numbers. If a query fails, say which system failed.
+If volumes are zero, post a one-line quiet-day message.
+Do not invent numbers. If a query fails, name the system.
 ```

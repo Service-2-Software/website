@@ -17,6 +17,39 @@ No API keys are embedded in the HTML — only public form IDs.
 After military/partner submits, the site opens a Calendly gate. Lead/CRM data
 continues to flow into ActiveCampaign separately from GA4 analytics.
 
+### Verified account facts (API check)
+
+Lists:
+
+| List | ID | Use |
+| --- | --- | --- |
+| Master Contact List | 3 | Global |
+| Home Page Group | 4 | Newsletter |
+| Website Candidates | 5 | Military applicants |
+| Website Partners | 6 | Partner inquiries |
+
+Custom fields (API ids match website `field[n]`):
+
+| ID | Title | Perstag |
+| --- | --- | --- |
+| 5 | Branch | `BRANCH` |
+| 32 | How Far From Separation (ETS/EAS) | `ETS_WINDOW` |
+| 34 | What Roles Are You Hiring? | `HIRING_ROLES` |
+| 35 | Company | `COMPANY` |
+
+Existing tag taxonomy (do **not** invent parallel tags):
+
+- Source/page: `src-home-candidate`, `src-military-page`, `src-home-partner`, `src-companies-page`, `src-newsletter`, `Source: Website`
+- Journey: `journey-candidate`, `journey-partner`, `journey-newsletter`
+- Type: `Type: Candidate`, `Type: Partner`
+- ETS / tenure: `cand-ets-gt12`, `cand-ets-6-12`, `cand-ets-3-6`, `cand-ets-lt3`, `cand-ets-separated` and `Tenure: *`
+- Partner roles: `partner-roles-sdr-ae`, `partner-roles-cs`, `partner-roles-other` and `Role: *`
+- Booking: `Stage: Booked`, `Stage: No-Book`, `call-booked-*`, `*-call-nobook`
+- Salesforce sync already present: `synced-to-salesforce`, `created-from-salesforce-*`, `added-to-salesforce-*`
+
+Native AC↔Salesforce tagging is already in use. Cursor Automations should **respect**
+those tags and fill gaps (judgment, digests, exceptions), not duplicate sync.
+
 ## Target architecture
 
 ```text
@@ -39,9 +72,10 @@ Website forms ──► ActiveCampaign (source of truth for marketing)
 | Salesforce | Candidate/partner pipeline stages, ownership, reporting |
 | Cursor Automations | Sync checks, triage, digests, exception handling |
 
-Native AC↔Salesforce sync (Zapier / native connector / middleware) can still
-handle the bulk create/update path. Cursor Automations are best for **judgment
-work**: scoring, routing, drafting outreach, flagging bad data, weekly digests.
+ActiveCampaign already carries Salesforce sync tags (`synced-to-salesforce`,
+`created-from-salesforce-*`, etc.), so a connector is likely live. Cursor
+Automations should complement it with **judgment work**: triage, routing,
+drafting outreach, digests, and exception handling — not a second bulk sync.
 
 ## Prerequisites
 
@@ -118,13 +152,16 @@ Ready-to-paste prompts live in [`docs/automations/`](./automations/):
 
 ## ActiveCampaign native setup (recommended companion)
 
-Inside ActiveCampaign, create automations that fire on form submit:
+Inside ActiveCampaign, form-submit automations should align with the existing
+tag taxonomy (many of these may already exist):
 
-1. **Military Application submitted** → Tag `Source: Website Military` → Add to
-   list → Webhook to Cursor (military triage) → Start nurture.
-2. **Partner Inquiry submitted** → Tag `Source: Website Partner` → Webhook to
-   Cursor (partner routing) → Notify partner-ops list.
-3. **Newsletter subscribe** → Add to Home Page Group → Welcome series only.
+1. **Military Application** → list Website Candidates → tags `Type: Candidate`,
+   `journey-candidate`, page source (`src-military-page` / `src-home-candidate`),
+   ETS/`cand-ets-*` → webhook to Cursor military triage → nurture.
+2. **Partner Inquiry** → list Website Partners → tags `Type: Partner`,
+   `journey-partner`, role tags → webhook to Cursor partner routing.
+3. **Newsletter** → list Home Page Group → `src-newsletter` /
+   `journey-newsletter` / `optin-newsletter` → welcome series only.
 
 Keep webhooks idempotent: include contact email + AC contact id in the payload.
 

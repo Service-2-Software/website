@@ -1,6 +1,6 @@
 # Automation: Partner inquiry routing
 
-**Create at:** [cursor.com/automations/new](https://cursor.com/automations/new)
+**Create at:** Cursor Automations → New
 
 | Setting | Value |
 | --- | --- |
@@ -16,33 +16,39 @@
 You route Service 2 Software partner / employer inquiries from ActiveCampaign into Salesforce
 and notify the partnerships channel.
 
-Context:
-- Website Partner Inquiry posts to ActiveCampaign form f=12.
-- Custom fields: Company = field[35], Hiring roles = field[34].
-- LeadSource for Salesforce = "Website - Partner".
+Context (live AC account):
+- Website Partner Inquiry = form id 12. List: Website Partners (id 6).
+- Fields: COMPANY (id 35), HIRING_ROLES (id 34).
+- Prefer existing tags:
+  src-home-partner / src-companies-page, journey-partner, Type: Partner,
+  partner-roles-sdr-ae | partner-roles-cs | partner-roles-other,
+  Role: SDR-AE | Role: CS | Role: Other,
+  Stage: Booked | Stage: No-Book, synced-to-salesforce / created-from-salesforce-* .
 
 On each run:
-1. Resolve the partner contact from the webhook payload, or find AC contacts from the last
-   2 hours with Partner Inquiry / tag "Source: Website Partner".
-2. Tag in ActiveCampaign: "Source: Website Partner" and a role tag from field[34]
-   (e.g. "Hiring: SDR / BDR").
+1. Resolve contact from webhook, or find AC contacts from the last 2 hours on list 6
+   / Type: Partner / journey-partner.
+2. Ensure Type: Partner, journey-partner, and role tags from HIRING_ROLES
+   (SDR/BDR or Account Executive → partner-roles-sdr-ae + Role: SDR-AE;
+    Customer Success → partner-roles-cs + Role: CS;
+    Multiple/Other → partner-roles-other + Role: Other).
 3. Salesforce:
-   - Upsert Account by company name (field[35]) when company is present.
-   - Upsert Lead or Contact by email; link to Account when possible.
-   - Set LeadSource = "Website - Partner".
-   - Store hiring roles on Hiring_Roles__c (or nearest custom field after describe).
-   - Do not change existing Opportunity stages; only create a Lead/Contact for new inquiries.
-4. Slack: one message per new inquiry with name, email, company, roles, and SF links/ids.
-   If the hiring role is "Account Executive" or "Multiple / Other", prefix with "High priority partner".
-5. Idempotent: skip Slack if this email was already processed in the last 24 hours (use Memories
-   if enabled, keyed by email).
+   - Upsert Account by COMPANY when present.
+   - Upsert Lead/Contact by email; link to Account when possible.
+   - LeadSource = "Website - Partner". Store HIRING_ROLES on Hiring_Roles__c (or nearest).
+   - Do not change Opportunity stages.
+   - Tag synced-to-salesforce after successful write if missing.
+4. Slack: one message per new inquiry (name, email, company, roles, SF ids).
+   Prefix "High priority partner" when role is Account Executive or Multiple/Other.
+5. Idempotent: skip Slack if this email was already notified in the last 24 hours
+   (Memories keyed by email if enabled).
 6. Stop clearly on MCP auth errors. Never dump secrets.
 ```
 
 ## ActiveCampaign companion
 
-Automation on form **Partner Inquiry** submit:
+On form **Partner Inquiry** submit (if not already):
 
-1. Tag `Source: Website Partner`
-2. Webhook → this Cursor automation URL
-3. Notify internal partner list / start partner nurture if you have one
+1. Add to list Website Partners
+2. Apply `Type: Partner`, `journey-partner`, page source + role tags
+3. Webhook → this Cursor automation URL
