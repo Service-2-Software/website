@@ -47,7 +47,7 @@ FORM_ROUTING = {
         "lists": ["website-candidates"],
         "submit": "show-thank-you",
     },
-    "12": {
+    "16": {
         "name": "Partner Inquiry",
         "lists": ["website-partners"],
         "submit": "show-thank-you",
@@ -279,7 +279,7 @@ def upsert_messages_and_campaigns(lists: dict, state: dict) -> None:
 
 def add_website_source_to_forms() -> None:
     """Ensure forms include WEBSITE_SOURCE field (id 36) in cfields when possible."""
-    for fid in ("11", "12", "13"):
+    for fid in ("11", "16", "13"):
         code, data = v3("GET", f"forms/{fid}")
         if code != 200:
             print(f"skip cfields form {fid}: {code}")

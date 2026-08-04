@@ -68,8 +68,8 @@ is embedded in the site — only public form `u`/`f` (and related) fields.
 | --- | --- | --- | --- | --- |
 | Military Application (home) | Military Application | 11 | Website Candidates (5) | `home-candidate` |
 | Military Application (military page) | Military Application | 11 | Website Candidates (5) | `military-page` |
-| Partner Inquiry (home) | Partner Inquiry | 12 | Website Partners (6) | `home-partner` |
-| Partner Inquiry (companies) | Partner Inquiry | 12 | Website Partners (6) | `companies-page` |
+| Partner Inquiry (home) | Partner Inquiry | 16 | Website Partners (6) | `home-partner` |
+| Partner Inquiry (companies) | Partner Inquiry | 16 | Website Partners (6) | `companies-page` |
 | Newsletter | Home Page Group | 13 | Home Page Group (4) | `newsletter` |
 
 Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Company,
