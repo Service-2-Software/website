@@ -31,7 +31,8 @@
     "partner-journey-sdr-ae-booked": "53",
     "partner-journey-cs-booked": "54",
     "partner-journey-other-booked": "55",
-    "candidate-post-call-precore-portal": "56"
+    "candidate-post-call-precore-portal": "56",
+    "candidate-ineligible-timing": "69"
   },
   "campaigns": {
     "candidate-booking-confirmation": "18",
@@ -59,6 +60,7 @@
     "partner-journey-sdr-ae-booked": "51",
     "partner-journey-cs-booked": "52",
     "partner-journey-other-booked": "53",
-    "candidate-post-call-precore-portal": "54"
+    "candidate-post-call-precore-portal": "54",
+    "candidate-ineligible-timing": "72"
   }
 }

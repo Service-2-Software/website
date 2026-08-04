@@ -69,6 +69,39 @@ def cand_separated_onedone() -> str:
     )
 
 
+def cand_ineligible_timing() -> str:
+    return render_email(
+        preheader="An update on your Service 2 Software SkillBridge application.",
+        greeting_html="Hi %FIRSTNAME%,",
+        body_html=(
+            "Thank you for your interest in Service 2 Software and for sharing "
+            "your transition timeline with our team."
+        ),
+        section_title="An update on your application",
+        section_body_html=(
+            "Based on the separation timeline you shared, unfortunately there "
+            "is not enough active-duty time remaining to complete the required "
+            "onboarding and approval process and participate in our program "
+            "through DoD SkillBridge.<br/><br/>"
+            "Because SkillBridge participation must take place before separation, "
+            "we are unable to move your application forward for this program."
+        ),
+        callout_html=(
+            "<strong>This decision is based on timing—not your experience or "
+            "potential.</strong> If the separation date on your application is "
+            "incorrect, please reply to this email so our recruiting team can "
+            "review it."
+        ),
+        closing_html=(
+            "We appreciate your interest in S2S and wish you the best in your "
+            "transition to civilian employment."
+        ),
+        signoff_name="Service 2 Software Recruiting",
+        signoff_title="Recruiting Team, Service2Software",
+        signoff_email="recruiting@service2software.org",
+    )
+
+
 def cand_nobook(window_label: str, urgency: str) -> str:
     return render_email(
         preheader=f"You applied ({window_label}) — lock your intro call.",
@@ -212,10 +245,7 @@ def cand_36_booked() -> str:
 
 
 def cand_lt3_booked() -> str:
-    return cand_booked(
-        "less than 3 months",
-        "we'll move fast on fit and feasibility for your ETS.",
-    )
+    return cand_ineligible_timing()
 
 
 def partner_sdr_nobook() -> str:
@@ -261,6 +291,17 @@ def partner_other_booked() -> str:
 
 
 JOURNEY_TEMPLATES = [
+    {
+        "key": "candidate-ineligible-timing",
+        "name": "S2S · Candidate · Ineligible — timing",
+        "subject": "%FIRSTNAME%, an update on your SkillBridge application",
+        "list": "website-candidates",
+        "journey": "candidate",
+        "trigger": "tag:cand-journey-ineligible-timing",
+        "tag": "cand-journey-ineligible-timing",
+        "build": cand_ineligible_timing,
+        **FROM_RECRUITING,
+    },
     {
         "key": "cand-journey-separated-onedone",
         "name": "S2S · Candidate · Separated one-and-done",
@@ -329,8 +370,8 @@ JOURNEY_TEMPLATES = [
     },
     {
         "key": "cand-journey-lt3-booked",
-        "name": "S2S · Candidate · <3mo booked",
-        "subject": "%FIRSTNAME%, you're booked — fast-track prep",
+        "name": "S2S · Candidate · <3mo / separated — timing update",
+        "subject": "%FIRSTNAME%, an update on your SkillBridge application",
         "list": "website-candidates",
         "journey": "candidate",
         "trigger": "tag:cand-journey-lt3-booked",

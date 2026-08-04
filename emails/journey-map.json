@@ -27,11 +27,13 @@
     },
     "1c": {
       "ets": [
-        "Less than 3 months"
+        "Less than 3 months",
+        "Already separated"
       ],
       "booked": true,
-      "tag": "cand-journey-lt3-booked",
-      "campaign": "S2S \u00b7 Candidate \u00b7 <3mo booked"
+      "tag": "cand-journey-ineligible-timing",
+      "campaign": "S2S \u00b7 Candidate \u00b7 Ineligible \u2014 timing",
+      "calendly": false
     },
     "1d": {
       "ets": [

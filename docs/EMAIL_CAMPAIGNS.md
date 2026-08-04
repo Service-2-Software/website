@@ -42,7 +42,7 @@ When Patrick’s Calendly tag is added, AC automation should **swap** to the mat
 | --- | --- | --- | --- | --- |
 | 1a | 6–12 mo **or** More than 12 mo | Yes | `cand-journey-6-12-booked` | `S2S · Candidate · 6-12mo booked` |
 | 1b | 3–6 months | Yes | `cand-journey-3-6-booked` | `S2S · Candidate · 3-6mo booked` |
-| 1c | Less than 3 months | Yes | `cand-journey-lt3-booked` | `S2S · Candidate · <3mo booked` |
+| 1c | Less than 3 months **or already separated** | Yes / existing booking | `cand-journey-ineligible-timing` | `S2S · Candidate · Ineligible — timing` |
 | 1d | 6–12 mo **or** More than 12 mo | No | `cand-journey-6-12-nobook` | `S2S · Candidate · 6-12mo no book` |
 | 1e | 3–6 months | No | `cand-journey-3-6-nobook` | `S2S · Candidate · 3-6mo no book` |
 | 1f | Less than 3 months | No | `cand-journey-lt3-nobook` | `S2S · Candidate · <3mo no book` |
@@ -63,7 +63,10 @@ Also create/apply bucket tags on form submit (via AC If/Else on `ETS_WINDOW`):
 2. **Booked (tag `calendly-integration-S2S_Discovery_Call_w/_Patrick`)**  
    - Add `cand-call-booked` + `website-servicemember-booked`  
    - Remove matching `*-nobook` journey tag; add matching `*-booked` journey tag (If/Else on `ETS_WINDOW`)  
-   - Send matching **booked** campaign (uses `%INITIAL_CALL_DATETIME%`)
+   - If `ETS_WINDOW` is **Less than 3 months OR Already separated**: add
+     `cand-journey-ineligible-timing` and send **S2S · Candidate · Ineligible — timing**
+     (no Calendly link)
+   - Otherwise send the matching **booked** campaign (uses `%INITIAL_CALL_DATETIME%`)
 
 ## 2. Partner journeys (roles × booking)
 

@@ -144,6 +144,19 @@
     "file": "newsletter-story.html"
   },
   {
+    "key": "candidate-ineligible-timing",
+    "name": "S2S \u00b7 Candidate \u00b7 Ineligible \u2014 timing",
+    "subject": "%FIRSTNAME%, an update on your SkillBridge application",
+    "list": "website-candidates",
+    "journey": "candidate",
+    "trigger": "tag:cand-journey-ineligible-timing",
+    "tag": "cand-journey-ineligible-timing",
+    "fromname": "Service 2 Software Recruiting",
+    "fromemail": "recruiting@service2software.org",
+    "reply2": "recruiting@service2software.org",
+    "file": "candidate-ineligible-timing.html"
+  },
+  {
     "key": "cand-journey-separated-onedone",
     "name": "S2S \u00b7 Candidate \u00b7 Separated one-and-done",
     "subject": "%FIRSTNAME%, thanks for applying \u2014 next steps by email",
@@ -223,8 +236,8 @@
   },
   {
     "key": "cand-journey-lt3-booked",
-    "name": "S2S \u00b7 Candidate \u00b7 <3mo booked",
-    "subject": "%FIRSTNAME%, you're booked \u2014 fast-track prep",
+    "name": "S2S \u00b7 Candidate \u00b7 <3mo / separated \u2014 timing update",
+    "subject": "%FIRSTNAME%, an update on your SkillBridge application",
     "list": "website-candidates",
     "journey": "candidate",
     "trigger": "tag:cand-journey-lt3-booked",
