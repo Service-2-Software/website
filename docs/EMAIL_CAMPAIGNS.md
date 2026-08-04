@@ -86,6 +86,50 @@ Role bucket tags: `partner-roles-sdr-ae`, `partner-roles-cs`, `partner-roles-oth
 1. **Apply (form Partner Inquiry)** → role tags + `partner-journey-*-nobook` + opt-in tags → send matching nobook campaign  
 2. **Booked (tag `calendly-integration-S2S_Initial_Call_with_David`)** → `partner-call-booked` / `website-partner-booked` → swap to `*-booked` journey tag → send booked campaign
 
+### Partner SMS automations (Twilio approved)
+
+Both partner forms collect the core AC `phone` field and an unchecked
+`SMS_OPTIN` checkbox. If SMS consent is checked, the browser requires a
+10–15 digit phone number. Never send when `SMS_OPTIN` is blank.
+
+#### A. `Website - Partner SMS — Inquiry / No Call`
+
+1. Trigger: **Submits form** → `Partner Inquiry` (Form 16), runs once.
+2. If/Else (**AND**):
+   - `SMS_OPTIN` equals `Yes`
+   - Phone is not blank
+3. **No** → End.
+4. **Yes**:
+   - Add `optin-sms`
+   - Add `partner-sms-consented`
+   - Send SMS:
+
+   > S2S: Thanks for your interest in hiring military talent. Book a call with David: https://calendly.com/davidhester/s2s-hiring Reply STOP to opt out.
+
+   - Add `partner-sms-nudge-sent`
+   - Wait 1 day
+   - If tag `calendly-integration-S2S_Initial_Call_with_David` exists → End
+   - Otherwise send one final SMS:
+
+   > S2S: Still interested in veteran talent? Choose a time with David: https://calendly.com/davidhester/s2s-hiring Reply STOP to opt out.
+
+   - End; do not send more booking nudges.
+
+#### B. `Website - Partner SMS — Call Booked`
+
+1. Trigger: tag `calendly-integration-S2S_Initial_Call_with_David` is added,
+   runs once.
+2. If/Else (**AND**): `SMS_OPTIN = Yes` and Phone is not blank.
+3. **No** → End.
+4. **Yes** → Send:
+
+   > S2S: Your hiring call with David is booked for %INITIAL_CALL_DATETIME%. Need another time? https://calendly.com/davidhester/s2s-hiring Reply STOP to opt out.
+
+5. Add `partner-sms-booked-confirmation-sent`; End.
+
+Do not add another reminder if Calendly already sends SMS reminders. AC/Twilio
+STOP suppression must remain authoritative: never re-add an opted-out number.
+
 ## 3. Newsletter / SMS opt-in
 
 Checkboxes on candidate + partner forms post:
@@ -105,7 +149,7 @@ Candidate journey senders: **recruiting@service2software.org**.
 | Salesforce routing | AC Salesforce connector | List 5 / candidate tags → Recruiting/Patrick; List 6 / partner tags → David; newsletter-only → no sales Lead |
 | Wire automations above | AC UI | API cannot create automation graphs |
 | Test leads per ETS + role | Pre go-live | Confirm correct journey tag + email |
-| SMS campaign resubmit | After site live | Twilio may block until portal URL is live |
+| SMS campaign | Approved | Build the consent-gated SMS automations above |
 
 ## Sending addresses (warmed)
 

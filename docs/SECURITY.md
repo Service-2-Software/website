@@ -75,7 +75,8 @@ is embedded in the site — only public form `u`/`f` (and related) fields.
 Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Company,
 `field[34]` Hiring roles, `field[36]` Website Source, `field[37]` Newsletter opt-in,
 `field[38]` SMS opt-in, `field[39]` Journey segment, `field[31]` Initial Call Datetime
-(Calendly). Homepage Apply/Hire CTAs open Get In The Fight. Already-separated candidates
+(Calendly), plus the core AC `phone` field on candidate and partner forms. SMS consent is
+unchecked by default and requires a valid phone number. Homepage Apply/Hire CTAs open Get In The Fight. Already-separated candidates
 skip Calendly. Journey tags + automation checklist: [`docs/EMAIL_CAMPAIGNS.md`](EMAIL_CAMPAIGNS.md).
 
 ## Remaining ops TODOs
