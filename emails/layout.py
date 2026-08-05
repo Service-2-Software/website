@@ -4,6 +4,10 @@ BRAND_LIME = "#CEFF00"
 BRAND_BLACK = "#111111"
 BRAND_MUTED = "#666666"
 BRAND_SOFT = "#F4FBE3"
+BRAND_WORDMARK = (
+    "https://service2software.activehosted.com/content/pkjoam/2026/07/27/"
+    "94ef5e12-7838-4f52-9808-7f50811e72eb.png"
+)
 
 
 def render_email(
@@ -84,7 +88,7 @@ def render_email(
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;">
           <tr>
             <td style="background:{BRAND_BLACK};padding:28px 32px 20px 32px;font-family:Arial,Helvetica,sans-serif;">
-              <div style="font-size:22px;font-weight:800;letter-spacing:0.04em;color:#ffffff;text-transform:uppercase;">SERVICE 2 SOFTWARE</div>
+              <img src="{BRAND_WORDMARK}" width="536" alt="SERVICE 2 SOFTWARE" style="display:block;width:100%;max-width:536px;height:auto;border:0;outline:none;text-decoration:none;" />
               <div style="margin-top:8px;font-size:11px;letter-spacing:0.18em;color:rgba(255,255,255,0.75);text-transform:uppercase;">Veteran Talent · SkillBridge Careers</div>
             </td>
           </tr>
