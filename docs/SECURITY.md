@@ -75,7 +75,7 @@ Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Compa
 
 ## Remaining ops TODOs
 
-1. Point S2S Core / Candidate portal links to production URLs.
+1. ~~Point S2S Core / Candidate portal links to production URLs.~~ — S2S Core → `https://s2score.servicesoftware.org`; Candidate → `https://app.gohighlevel.com`.
 2. Configure GitHub Actions secrets / OIDC for AWS deploy (see README).
 3. Attach custom domain (`service2software.org`) + ACM cert in us-east-1.
 4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
