@@ -2,9 +2,9 @@
 
 Marketing site for **Service 2 Software (S2S)** — Hire With Purpose.
 
-This branch ships Dave’s latest single-file HTML (`index.html`) plus AWS hosting
-infra (private S3 + CloudFront) and a security hardening pass. See
-[`docs/SECURITY.md`](docs/SECURITY.md).
+This branch ships the marketing site (`index.html` + `assets/`) plus AWS hosting
+infra (private S3 + CloudFront) and a security/perf hardening pass. See
+[`docs/SECURITY.md`](docs/SECURITY.md) for the latest pre-launch scan.
 
 ## Local preview
 

@@ -141,6 +141,7 @@ export class WebsiteStack extends cdk.Stack {
 
     const siteRoot = path.join(__dirname, "..", "..");
 
+    // HTML/root: short TTL so content updates show quickly after deploy+invalidation.
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
       sources: [
         s3deploy.Source.asset(siteRoot, {
@@ -155,6 +156,8 @@ export class WebsiteStack extends cdk.Stack {
             "docs",
             "node_modules/**",
             "node_modules",
+            "assets/**",
+            "assets",
             "*.md",
             ".gitignore",
             ".env*",
@@ -165,6 +168,30 @@ export class WebsiteStack extends cdk.Stack {
       distribution,
       distributionPaths: ["/*"],
       memoryLimit: 512,
+      cacheControl: [
+        s3deploy.CacheControl.fromString(
+          "public, max-age=60, must-revalidate"
+        ),
+      ],
+    });
+
+    // Static media under /assets: longer browser cache (CloudFront still
+    // invalidated on deploy). Filenames are content-hashed where extracted.
+    new s3deploy.BucketDeployment(this, "DeployAssets", {
+      sources: [s3deploy.Source.asset(path.join(siteRoot, "assets"))],
+      destinationBucket: siteBucket,
+      destinationKeyPrefix: "assets",
+      distribution,
+      distributionPaths: ["/assets/*"],
+      memoryLimit: 512,
+      prune: false,
+      // Team headshots reuse stable filenames; avoid immutable so updates
+      // appear within a day without requiring rename/hash churn.
+      cacheControl: [
+        s3deploy.CacheControl.fromString(
+          "public, max-age=86400, must-revalidate"
+        ),
+      ],
     });
 
     new cdk.CfnOutput(this, "BucketName", {
