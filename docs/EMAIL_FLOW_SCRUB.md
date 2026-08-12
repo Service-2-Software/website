@@ -16,33 +16,42 @@ Full machine log: `/opt/cursor/artifacts/email_flow_scrub_2026-08-12.log` (cloud
 
 Static and public integration look healthy. Live automation list is **partially** known from the user’s Automations screenshot; canvas triggers / If/Else / Send mappings still need capture.
 
-## Live automations (partial — user screenshot 2026-08-12)
+## Live automations (from user Desktop browser screenshots 2026-08-12)
 
-From `/app/automations` (visible rows only; list may continue below the fold):
+Merged from two Automations list crops (names as shown in AC UI):
 
-| Automation | Status | Notes |
+| Automation | Status | Maps to expected |
 | --- | --- | --- |
-| Candidate SMS — Call Booked | **Active** | Matches expected Candidate SMS booked journey |
-| Candidate SMS — Applied / No Call | **Active** | Matches expected Candidate SMS apply journey |
-| Automation 4 | **Inactive** | Name is a stub — open canvas to identify / rename / delete |
-| Website - Candidate — Initial Call Completed | **Active** | Matches post-call Pre-Core portal journey |
+| Website - Candidate Journey - Applied / No Call | **Active** | Candidate apply / ETS / separated email |
+| Website - Candidate — Booked Call | **Active** | Patrick Calendly booked (+ timing-ineligible?) |
+| Website - Candidate — Initial Call Completed | **Active** | Post-call Pre-Core portal |
+| Candidate SMS — Applied / No Call | **Active** | Candidate SMS apply |
+| Candidate SMS — Call Booked / Website - Candidate SMS — Call Booked | **Active** | Candidate SMS booked (same journey; verify not duplicate rows) |
+| Inquiry / No Call (#2) | *(seen; confirm Active)* | Likely Partner apply / no-call email — **open to confirm Form 16** |
+| Website - Partner — Booked Call | **Active** | David Calendly booked |
+| Website - Partner SMS Consent / Nudge | **Active** | Partner SMS inquiry / no call |
+| Website - Partner SMS Call Booked | **Active** | Partner SMS booked |
+| Newsletter - Welcome | **Active** | Newsletter welcome |
+| Automation 4 | **Inactive** | Stub — identify / rename / delete |
 
-### Still need to confirm (not visible in that crop, or canvas not opened)
+### Coverage vs expected journeys
 
-Email journeys (expected Active):
+| Expected journey | Present in list? |
+| --- | --- |
+| Candidate Applied / No Call (email) | **Yes** — Active |
+| Candidate Booked Call (email) | **Yes** — Active |
+| Candidate Initial Call Completed | **Yes** — Active |
+| Partner Inquiry / No Call (email) | **Likely** — `Inquiry / No Call (#2)` (confirm) |
+| Partner Booked Call (email) | **Yes** — Active |
+| Newsletter Welcome | **Yes** — Active |
+| Candidate SMS Applied / No Call | **Yes** — Active |
+| Candidate SMS Call Booked | **Yes** — Active |
+| Partner SMS Inquiry / No Call | **Yes** — Active (`Consent / Nudge`) |
+| Partner SMS Call Booked | **Yes** — Active |
 
-1. Candidate Applied / No Call (Form 11 / ETS branches / separated one-and-done)
-2. Candidate Booked Call (Patrick Calendly tag / timing-ineligible branch)
-3. Partner Inquiry / No Call (Form 16 / role branches)
-4. Partner Booked Call (David Calendly tag)
-5. Newsletter Welcome (list 4 / newsletter opt-in)
+### Still need from canvases (Edit → screenshot)
 
-SMS (expected if phone + consent wired):
-
-6. Partner SMS — Inquiry / No Call
-7. Partner SMS — Call Booked
-
-For each Active email automation, still need: trigger, If/Else fields, Wait steps, Send → campaign name/ID.
+For each Active automation: trigger, If/Else (`ETS_WINDOW` / `HIRING_ROLES` / `SMS_OPTIN` + phone), Wait steps, Send → campaign name, and that timing-ineligible + separated paths exist on the candidate canvases.
 
 ## What passed
 
@@ -79,17 +88,18 @@ Observed from this cloud VM egress IP: **`52.73.250.138`**.
 
 `ACTIVECAMPAIGN_API_URL` and `ACTIVECAMPAIGN_API_KEY` **are present** in the environment (key length 72). This is not a missing-secret problem — it is an **API WAF / IP block** (or equivalent) on authenticated routes.
 
-Browser automation against AC also hit **“Your session has expired”** — no durable UI session in the agent VM.
+Cloud **agent** browser automation still hits **“Your session has expired.”** The user’s Cursor Desktop Simple Browser *is* logged in (Automations list visible) — that session is **not** shared with the agent’s remote Chrome, so the agent cannot click through canvases itself.
 
-Therefore this scrub could **not**:
+Partial automation names/statuses were taken from the user’s screenshot (see table above). This scrub still could **not**:
 
-1. List automations or Active/Inactive status  
-2. Inspect triggers (form / tag / list)  
+1. List the **full** automations page (rows below the fold)  
+2. Inspect triggers (form / tag / list) on each canvas  
 3. Inspect If/Else on `ETS_WINDOW`, `HIRING_ROLES`, `SMS_OPTIN`  
 4. Map Send steps → campaign/message IDs vs provision state  
 5. Confirm post-submit list membership, fieldValues, tags  
 6. Confirm ContactAutomation enrollment  
 7. Confirm email/SMS delivery logs  
+8. Identify what **Automation 4** (Inactive) actually is  
 
 ## How to unblock (pick one)
 
