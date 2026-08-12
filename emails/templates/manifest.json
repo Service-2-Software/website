@@ -235,19 +235,6 @@
     "file": "cand-journey-3-6-booked.html"
   },
   {
-    "key": "cand-journey-lt3-booked",
-    "name": "S2S \u00b7 Candidate \u00b7 <3mo / separated \u2014 timing update",
-    "subject": "%FIRSTNAME%, an update on your SkillBridge application",
-    "list": "website-candidates",
-    "journey": "candidate",
-    "trigger": "tag:cand-journey-lt3-booked",
-    "tag": "cand-journey-lt3-booked",
-    "fromname": "Service 2 Software Recruiting",
-    "fromemail": "recruiting@service2software.org",
-    "reply2": "recruiting@service2software.org",
-    "file": "cand-journey-lt3-booked.html"
-  },
-  {
     "key": "partner-journey-sdr-ae-nobook",
     "name": "S2S \u00b7 Partner \u00b7 SDR/AE no book",
     "subject": "%FIRSTNAME%, schedule a hiring call (SDR/AE)",

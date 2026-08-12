@@ -198,14 +198,36 @@ def find_message_by_subject(subject: str):
     code, data = v3("GET", "messages", params={"limit": 100})
     if code != 200:
         return None
-    for m in data.get("messages", []):
-        if m.get("subject") == subject and m.get("fromemail"):
-            return m
-    return None
+    matches = [
+        m
+        for m in data.get("messages", [])
+        if m.get("subject") == subject and m.get("fromemail")
+    ]
+    if len(matches) > 1:
+        # Two manifest keys sharing a subject would silently collapse onto one
+        # message and make both campaigns send the same body.
+        raise SystemExit(
+            f"Ambiguous subject {subject!r} matches messages "
+            f"{[m['id'] for m in matches]}; resolve before provisioning."
+        )
+    return matches[0] if matches else None
+
+
+def assert_unique_subjects(manifest: list[dict]) -> None:
+    seen: dict[str, str] = {}
+    for item in manifest:
+        clash = seen.get(item["subject"])
+        if clash:
+            raise SystemExit(
+                f"Duplicate subject {item['subject']!r} on keys {clash!r} and "
+                f"{item['key']!r}; subject is the fallback match key."
+            )
+        seen[item["subject"]] = item["key"]
 
 
 def upsert_messages_and_campaigns(lists: dict, state: dict) -> None:
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
+    assert_unique_subjects(manifest)
     state.setdefault("messages", {})
     state.setdefault("campaigns", {})
 

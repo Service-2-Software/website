@@ -24,7 +24,6 @@
     "cand-journey-lt3-nobook": "46",
     "cand-journey-6-12-booked": "47",
     "cand-journey-3-6-booked": "48",
-    "cand-journey-lt3-booked": "49",
     "partner-journey-sdr-ae-nobook": "50",
     "partner-journey-cs-nobook": "51",
     "partner-journey-other-nobook": "52",
@@ -53,7 +52,6 @@
     "cand-journey-lt3-nobook": "44",
     "cand-journey-6-12-booked": "45",
     "cand-journey-3-6-booked": "46",
-    "cand-journey-lt3-booked": "47",
     "partner-journey-sdr-ae-nobook": "48",
     "partner-journey-cs-nobook": "49",
     "partner-journey-other-nobook": "50",
@@ -62,5 +60,13 @@
     "partner-journey-other-booked": "53",
     "candidate-post-call-precore-portal": "54",
     "candidate-ineligible-timing": "72"
+  },
+  "retired": {
+    "cand-journey-lt3-booked": {
+      "message": "49",
+      "campaign": "47",
+      "superseded_by": "candidate-ineligible-timing",
+      "action": "archive in AC UI"
+    }
   }
 }

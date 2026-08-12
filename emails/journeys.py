@@ -244,10 +244,6 @@ def cand_36_booked() -> str:
     )
 
 
-def cand_lt3_booked() -> str:
-    return cand_ineligible_timing()
-
-
 def partner_sdr_nobook() -> str:
     return partner_nobook(
         "SDR / BDR and/or Account Executive",
@@ -366,17 +362,6 @@ JOURNEY_TEMPLATES = [
         "trigger": "tag:cand-journey-3-6-booked",
         "tag": "cand-journey-3-6-booked",
         "build": cand_36_booked,
-        **FROM_RECRUITING,
-    },
-    {
-        "key": "cand-journey-lt3-booked",
-        "name": "S2S · Candidate · <3mo / separated — timing update",
-        "subject": "%FIRSTNAME%, an update on your SkillBridge application",
-        "list": "website-candidates",
-        "journey": "candidate",
-        "trigger": "tag:cand-journey-lt3-booked",
-        "tag": "cand-journey-lt3-booked",
-        "build": cand_lt3_booked,
         **FROM_RECRUITING,
     },
     {

@@ -122,5 +122,14 @@
     "template": "candidate-post-call-precore-portal",
     "source_doc": "docs/pre-core-candidate-portal.md",
     "trigger": "After initial call with Patrick is completed (not booking)"
+  },
+  "retired": {
+    "cand-journey-lt3-booked": {
+      "reason": "Byte-identical duplicate of candidate-ineligible-timing (same subject and body). Superseded by journey 1c.",
+      "superseded_by": "candidate-ineligible-timing",
+      "ac_message_id": "49",
+      "ac_campaign_id": "47",
+      "action": "Archive AC campaign 47 and message 49; ensure no automation Send step still points at them."
+    }
   }
 }
