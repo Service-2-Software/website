@@ -20,6 +20,10 @@ jobs:
     defaults:
       run:
         working-directory: infra
+    env:
+      SITE_DOMAIN: ${{ vars.SITE_DOMAIN || 'service2software.org' }}
+      SITE_WWW_DOMAIN: ${{ vars.SITE_WWW_DOMAIN || 'www.service2software.org' }}
+      AWS_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -38,13 +42,89 @@ jobs:
         uses: aws-actions/configure-aws-credentials@v4
         with:
           role-to-assume: ${{ secrets.AWS_DEPLOY_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Ensure ACM certificate (us-east-1)
+        id: acm
+        working-directory: ${{ github.workspace }}
+        run: |
+          set -euo pipefail
+          DOMAIN="${SITE_DOMAIN}"
+          WWW="${SITE_WWW_DOMAIN}"
+
+          # Prefer an explicit repo variable when set.
+          if [ -n "${{ vars.ACM_CERTIFICATE_ARN }}" ]; then
+            echo "certificate_arn=${{ vars.ACM_CERTIFICATE_ARN }}" >> "$GITHUB_OUTPUT"
+            echo "Using ACM_CERTIFICATE_ARN from repo variable"
+            exit 0
+          fi
+
+          # Find an ISSUED cert covering apex + www, else request one.
+          EXISTING="$(aws acm list-certificates --region us-east-1 \
+            --certificate-statuses ISSUED PENDING_VALIDATION \
+            --query "CertificateSummaryList[?DomainName=='${DOMAIN}'].CertificateArn | [0]" \
+            --output text)"
+
+          if [ "$EXISTING" = "None" ] || [ -z "$EXISTING" ]; then
+            echo "Requesting ACM certificate for ${DOMAIN} + ${WWW}"
+            EXISTING="$(aws acm request-certificate \
+              --region us-east-1 \
+              --domain-name "${DOMAIN}" \
+              --subject-alternative-names "${WWW}" \
+              --validation-method DNS \
+              --tags Key=Project,Value=s2s-website \
+              --query CertificateArn --output text)"
+            # Wait briefly for DomainValidationOptions to populate
+            sleep 8
+          else
+            echo "Found existing certificate: ${EXISTING}"
+          fi
+
+          echo "certificate_arn=${EXISTING}" >> "$GITHUB_OUTPUT"
+
+          STATUS="$(aws acm describe-certificate --region us-east-1 \
+            --certificate-arn "${EXISTING}" \
+            --query 'Certificate.Status' --output text)"
+          echo "certificate_status=${STATUS}" >> "$GITHUB_OUTPUT"
+          echo "ACM status: ${STATUS}"
+
+          echo "::group::ACM DNS validation records (add in Cloudflare DNS)"
+          aws acm describe-certificate --region us-east-1 \
+            --certificate-arn "${EXISTING}" \
+            --query 'Certificate.DomainValidationOptions[].ResourceRecord' \
+            --output table || true
+          echo "::endgroup::"
+
+          if [ "$STATUS" = "ISSUED" ]; then
+            echo "attach_custom_domain=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "attach_custom_domain=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::ACM certificate is ${STATUS}. Add the DNS validation CNAMEs in Cloudflare, wait for ISSUED, then re-run this workflow to attach ${DOMAIN}."
+          fi
 
       - name: CDK synth
         run: npx cdk synth
+        env:
+          CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          SITE_DOMAIN: ${{ env.SITE_DOMAIN }}
+          SITE_WWW_DOMAIN: ${{ env.SITE_WWW_DOMAIN }}
+          ACM_CERTIFICATE_ARN: ${{ steps.acm.outputs.attach_custom_domain == 'true' && steps.acm.outputs.certificate_arn || '' }}
 
       - name: CDK deploy
         run: npx cdk deploy --require-approval never
         env:
           CDK_DEFAULT_ACCOUNT: ${{ secrets.AWS_ACCOUNT_ID }}
-          CDK_DEFAULT_REGION: ${{ vars.AWS_REGION || 'us-east-1' }}
+          CDK_DEFAULT_REGION: ${{ env.AWS_REGION }}
+          SITE_DOMAIN: ${{ env.SITE_DOMAIN }}
+          SITE_WWW_DOMAIN: ${{ env.SITE_WWW_DOMAIN }}
+          ACM_CERTIFICATE_ARN: ${{ steps.acm.outputs.attach_custom_domain == 'true' && steps.acm.outputs.certificate_arn || '' }}
+
+      - name: Print cutover instructions
+        if: always()
+        run: |
+          echo "CloudFront distribution is live. Custom domain attaches automatically once ACM is ISSUED."
+          echo "Cloudflare DNS (orange-cloud OK with Full/Strict SSL after cert is issued):"
+          echo "  CNAME/ALIAS  ${SITE_DOMAIN}      -> <DistributionDomainName from stack outputs>"
+          echo "  CNAME        ${SITE_WWW_DOMAIN}  -> <DistributionDomainName from stack outputs>"
+          echo "Keep Kajabi member login reachable at https://${SITE_DOMAIN}/login (page rule / worker) or https://service2software.mykajabi.com/login."

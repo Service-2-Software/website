@@ -42,7 +42,8 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts (weights trimmed 2026-08-12)
 - `images.unsplash.com` — stock imagery
 - `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (consent-gated)
-- `app.gohighlevel.com` — interim Candidate Login links (navigation only; not in CSP script/connect allowlists)
+- `app.gohighlevel.com` — Candidate Portal (navigation only)
+- `service2software.mykajabi.com` — S2S Core member login (navigation only)
 
 ### Infrastructure controls (AWS)
 
@@ -84,12 +85,15 @@ Public form posts go to `service2software.activehosted.com/proc.php`.
 | Later | Still a single HTML document for all routes | Optional: split pages or defer off-route media |
 | Later | Calendly CSS/JS on every visit | Optional: load on first booking CTA |
 
-## Remaining ops / content TODOs (launch checklist)
+## Launch checklist (2026-08-12)
 
-1. **Point S2S Core / Candidate portal links to production URLs** (nav `S2S Core Login` is still `#`; mega/footer still use GoHighLevel interim).
-2. Confirm GitHub Actions secrets / OIDC (`AWS_DEPLOY_ROLE_ARN`, `AWS_ACCOUNT_ID`) and that deploy to `main` succeeds.
-3. Attach custom domain (`service2software.org`) + ACM cert in `us-east-1`.
-4. Optional: attach AWS WAF WebACL to the CloudFront distribution.
-5. Replace ROI calculator `programCost: 25000` TODO with real annual partnership investment.
-6. Paste exact RateMySKB review text (About page TODO).
-7. Optional Canva photo swaps marked in HTML comments.
+| # | Item | Status |
+| --- | --- | --- |
+| 1 | S2S Core → `https://service2software.mykajabi.com/login`; Candidate Portal → GoHighLevel | Done |
+| 2 | GitHub OIDC deploy secrets | **Confirmed** — 8 successful `Deploy website to AWS` runs on `main`; live https://d2by6tunn6pa78.cloudfront.net (CSP/HSTS present) |
+| 3 | Custom domain `service2software.org` + ACM (`us-east-1`) | **Wired in CI/CDK** — workflow requests/uses ACM; attaches aliases when cert is `ISSUED`. Final Cloudflare DNS cutover (apex/`www` → CloudFront) still required once validation CNAMEs are added |
+| 4 | ROI `programCost` | Done — `$25,000` annual partnership investment |
+| 5 | RateMySKB About quote | Done — Anecia 5★ review (2026-07-14) |
+| 6 | CloudFront WAF | Done in CDK — Common / KnownBadInputs / AmazonIpReputation managed groups |
+
+Optional follow-ups: Canva photo swaps in HTML comments; Cloudflare Page Rule so `/login` on the apex still reaches Kajabi after cutover.
