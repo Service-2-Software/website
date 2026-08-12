@@ -2,9 +2,9 @@
 
 Marketing site for **Service 2 Software (S2S)** — Hire With Purpose.
 
-This branch ships Dave’s latest single-file HTML (`index.html`) plus AWS hosting
-infra (private S3 + CloudFront) and a security hardening pass. See
-[`docs/SECURITY.md`](docs/SECURITY.md).
+This branch ships the marketing site (`index.html` + `assets/`) plus AWS hosting
+infra (private S3 + CloudFront) and a security/perf hardening pass. See
+[`docs/SECURITY.md`](docs/SECURITY.md) for the latest pre-launch scan.
 
 ## Local preview
 
@@ -19,23 +19,33 @@ python3 -m http.server 8000
 | --- | --- | --- |
 | Storage | S3 (private, Block Public Access) | Static assets only |
 | CDN | CloudFront + OAC | HTTPS, edge cache, no public bucket |
+| WAF | WAFv2 (CloudFront scope) | Managed common / bad-input / IP reputation rules |
 | Headers | CloudFront response headers policy | CSP, HSTS, frame deny, etc. |
+| TLS / domain | ACM in `us-east-1` + Cloudflare DNS | Custom domain on CloudFront |
 | IaC | AWS CDK (TypeScript) in `infra/` | Repeatable, reviewable deploys |
 | CI | GitHub Actions + OIDC | No long-lived AWS keys in GitHub |
 
+**Live CloudFront (OIDC deploys verified):** https://d2by6tunn6pa78.cloudfront.net
+
 **Rough cost (dev / light traffic):** CloudFront + S3 typically stays in the
-low single-digit USD/month until traffic grows; custom domain/ACM cert is free.
+low single-digit USD/month until traffic grows; ACM cert is free; WAF managed
+rules add a small monthly fee.
 
 ## Deploy
 
 ### One-time AWS setup
 
 1. Create an IAM role for GitHub OIDC that can deploy this stack  
-   (`cloudformation:*`, `s3:*`, `cloudfront:*`, `iam:PassRole` scoped as needed).
+   (`cloudformation:*`, `s3:*`, `cloudfront:*`, `acm:*`, `wafv2:*`,
+   `iam:PassRole` scoped as needed).
 2. In the GitHub repo, set:
    - Secret `AWS_DEPLOY_ROLE_ARN`
    - Secret `AWS_ACCOUNT_ID`
-   - Optional variable `AWS_REGION` (default `us-east-1`)
+   - Optional variables:
+     - `AWS_REGION` (default `us-east-1`)
+     - `SITE_DOMAIN` (default `service2software.org`)
+     - `SITE_WWW_DOMAIN` (default `www.service2software.org`)
+     - `ACM_CERTIFICATE_ARN` (optional override once cert is issued)
 3. Bootstrap CDK once in the account/region:
 
 ```bash
@@ -51,15 +61,42 @@ cd infra
 npm ci
 export CDK_DEFAULT_ACCOUNT=...
 export CDK_DEFAULT_REGION=us-east-1
+# Optional custom domain (cert must already be ISSUED in us-east-1):
+export SITE_DOMAIN=service2software.org
+export SITE_WWW_DOMAIN=www.service2software.org
+export ACM_CERTIFICATE_ARN=arn:aws:acm:us-east-1:...:certificate/...
 npx cdk deploy
 ```
-
-CloudFront URL is printed as `WebsiteUrl`. Attach `service2software.org` later
-with an ACM certificate in `us-east-1`.
 
 ### CI deploy
 
 Push to `main` (or run **Deploy website to AWS** via `workflow_dispatch`).
+
+The workflow:
+
+1. Ensures an ACM cert for `service2software.org` + `www` (requests one if missing)
+2. Prints DNS validation CNAMEs for Cloudflare
+3. Attaches the cert + aliases on CloudFront **only when the cert status is `ISSUED`**
+4. Always deploys the site + WAF WebACL
+
+### Custom domain cutover (Cloudflare)
+
+DNS for `service2software.org` is on Cloudflare today (Kajabi origin). After ACM
+shows **Issued**:
+
+1. In Cloudflare DNS, point apex + `www` to the stack output `DistributionDomainName`
+   (`d2by6tunn6pa78.cloudfront.net` until replaced by a new distribution domain):
+   - `CNAME` / ALIAS `service2software.org` → `….cloudfront.net`
+   - `CNAME` `www` → `….cloudfront.net`
+2. SSL/TLS mode: **Full (strict)**
+3. Portal login lives at `https://s2score.service2software.org` (separate from this marketing site).
+
+## Portals
+
+| Link | Production URL |
+| --- | --- |
+| S2S Core Login | https://s2score.service2software.org |
+| Candidate Portal / Login | https://s2score.service2software.org |
 
 ## Security
 
@@ -70,8 +107,9 @@ Hardening applied in `index.html` + CloudFront:
 - `rel="noopener noreferrer"` on external tabs
 - Sandboxed testimonials iframe
 - Private origin, TLS 1.2+, HSTS
+- CloudFront WAF (managed rule groups)
+- Consent-gated GA4
 
-Open product TODO (not a hosting blocker): production Core portal URL.
 ActiveCampaign lead forms are wired (`docs/SECURITY.md`).
 
 ## Cookie consent & visitor analytics
