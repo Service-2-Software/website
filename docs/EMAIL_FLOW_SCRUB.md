@@ -12,9 +12,37 @@ Full machine log: `/opt/cursor/artifacts/email_flow_scrub_2026-08-12.log` (cloud
 | Source email templates (27) + PNG header + links | **PASS** |
 | Public AC form embeds + live `proc.php` posts | **PASS** (5/5 HTTP 200) |
 | Authenticated AC API (automations, tags, enrollment, delivery) | **BLOCKED** — Cloudflare **403** |
-| AC browser UI (automation canvas) | **BLOCKED** — session expired |
+| AC browser UI (automation canvas) | **PARTIAL** — user Desktop browser logged in; cloud agent browser still session-expired |
 
-Static and public integration look healthy. **Triggers, Active/Inactive state, branch If/Else, send→campaign mapping, and inbox/SMS delivery were not verified** in this run.
+Static and public integration look healthy. Live automation list is **partially** known from the user’s Automations screenshot; canvas triggers / If/Else / Send mappings still need capture.
+
+## Live automations (partial — user screenshot 2026-08-12)
+
+From `/app/automations` (visible rows only; list may continue below the fold):
+
+| Automation | Status | Notes |
+| --- | --- | --- |
+| Candidate SMS — Call Booked | **Active** | Matches expected Candidate SMS booked journey |
+| Candidate SMS — Applied / No Call | **Active** | Matches expected Candidate SMS apply journey |
+| Automation 4 | **Inactive** | Name is a stub — open canvas to identify / rename / delete |
+| Website - Candidate — Initial Call Completed | **Active** | Matches post-call Pre-Core portal journey |
+
+### Still need to confirm (not visible in that crop, or canvas not opened)
+
+Email journeys (expected Active):
+
+1. Candidate Applied / No Call (Form 11 / ETS branches / separated one-and-done)
+2. Candidate Booked Call (Patrick Calendly tag / timing-ineligible branch)
+3. Partner Inquiry / No Call (Form 16 / role branches)
+4. Partner Booked Call (David Calendly tag)
+5. Newsletter Welcome (list 4 / newsletter opt-in)
+
+SMS (expected if phone + consent wired):
+
+6. Partner SMS — Inquiry / No Call
+7. Partner SMS — Call Booked
+
+For each Active email automation, still need: trigger, If/Else fields, Wait steps, Send → campaign name/ID.
 
 ## What passed
 
