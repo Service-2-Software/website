@@ -42,8 +42,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts (weights trimmed 2026-08-12)
 - `images.unsplash.com` — stock imagery
 - `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (consent-gated)
-- `app.gohighlevel.com` — Candidate Portal (navigation only)
-- `service2software.mykajabi.com` — S2S Core member login (navigation only)
+- `s2score.service2software.org` — S2S Core / Candidate portal (navigation only)
 
 ### Infrastructure controls (AWS)
 
@@ -89,11 +88,11 @@ Public form posts go to `service2software.activehosted.com/proc.php`.
 
 | # | Item | Status |
 | --- | --- | --- |
-| 1 | S2S Core → `https://service2software.mykajabi.com/login`; Candidate Portal → GoHighLevel | Done |
+| 1 | S2S Core / Candidate Portal → `https://s2score.service2software.org` | Done |
 | 2 | GitHub OIDC deploy secrets | **Confirmed** — 8 successful `Deploy website to AWS` runs on `main`; live https://d2by6tunn6pa78.cloudfront.net (CSP/HSTS present) |
 | 3 | Custom domain `service2software.org` + ACM (`us-east-1`) | **Wired in CI/CDK** — workflow requests/uses ACM; attaches aliases when cert is `ISSUED`. Final Cloudflare DNS cutover (apex/`www` → CloudFront) still required once validation CNAMEs are added |
 | 4 | ROI `programCost` | Done — `$25,000` annual partnership investment |
 | 5 | RateMySKB About quote | Done — Anecia 5★ review (2026-07-14) |
 | 6 | CloudFront WAF | Done in CDK — Common / KnownBadInputs / AmazonIpReputation managed groups |
 
-Optional follow-ups: Canva photo swaps in HTML comments; Cloudflare Page Rule so `/login` on the apex still reaches Kajabi after cutover.
+Optional follow-ups: Canva photo swaps in HTML comments.

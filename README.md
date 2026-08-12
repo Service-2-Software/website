@@ -89,16 +89,14 @@ shows **Issued**:
    - `CNAME` / ALIAS `service2software.org` → `….cloudfront.net`
    - `CNAME` `www` → `….cloudfront.net`
 2. SSL/TLS mode: **Full (strict)**
-3. Keep member login on Kajabi: site links use
-   `https://service2software.mykajabi.com/login` (S2S Core). Optionally add a
-   Cloudflare Page Rule / Worker so `service2software.org/login` still reaches Kajabi.
+3. Portal login lives at `https://s2score.service2software.org` (separate from this marketing site).
 
 ## Portals
 
 | Link | Production URL |
 | --- | --- |
-| S2S Core Login | https://service2software.mykajabi.com/login |
-| Candidate Portal | https://app.gohighlevel.com |
+| S2S Core Login | https://s2score.service2software.org |
+| Candidate Portal / Login | https://s2score.service2software.org |
 
 ## Security
 
