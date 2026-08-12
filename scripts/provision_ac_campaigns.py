@@ -299,33 +299,74 @@ def upsert_messages_and_campaigns(lists: dict, state: dict) -> None:
         print(f"campaign created {item['key']} -> {cid}")
 
 
-def add_website_source_to_forms() -> None:
-    """Ensure forms include WEBSITE_SOURCE field (id 36) in cfields when possible."""
-    for fid in ("11", "16", "13"):
+def _cfields(form: dict) -> list:
+    cfields = form.get("cfields") or []
+    if isinstance(cfields, str):
+        try:
+            cfields = json.loads(cfields)
+        except json.JSONDecodeError:
+            return []
+    return [c for c in cfields if isinstance(c, dict)]
+
+
+# Form 16 was rebuilt by hand and is the only form carrying the full set of
+# journey fields, so its definitions are the reference the others are repaired
+# against. AC drops posted field[N] values for fields the form does not declare.
+REFERENCE_FORM = "16"
+REQUIRED_FORM_FIELDS = {
+    "11": ["36", "37", "38", "39"],
+    "13": ["36"],
+}
+FIELD_HEADERS = {
+    "36": "Website Source",
+    "37": "Newsletter Opt-In",
+    "38": "SMS Opt-In",
+    "39": "Journey Segment",
+}
+
+
+def repair_form_fields() -> list[str]:
+    """Give every form the custom fields the website posts to it.
+
+    Definitions are cloned from the reference form so the repaired forms match a
+    shape ActiveCampaign has already accepted.
+    """
+    problems: list[str] = []
+
+    code, data = v3("GET", f"forms/{REFERENCE_FORM}")
+    if code != 200:
+        problems.append(f"reference form {REFERENCE_FORM} unreadable: {code}")
+        return problems
+    reference = {str(c.get("id")): c for c in _cfields(data["form"])}
+
+    for fid, needed in REQUIRED_FORM_FIELDS.items():
         code, data = v3("GET", f"forms/{fid}")
         if code != 200:
-            print(f"skip cfields form {fid}: {code}")
+            problems.append(f"form {fid} unreadable: {code}")
             continue
         form = data["form"]
-        cfields = form.get("cfields") or []
-        if isinstance(cfields, str):
-            try:
-                cfields = json.loads(cfields)
-            except json.JSONDecodeError:
-                cfields = []
-        ids = {str(x.get("id")) for x in cfields if isinstance(x, dict)}
-        if "36" in ids:
-            print(f"form {fid} already has WEBSITE_SOURCE")
+        cfields = _cfields(form)
+        have = {str(c.get("id")) for c in cfields}
+        missing = [f for f in needed if f not in have]
+        if not missing:
+            print(f"form {fid} already declares {needed}")
             continue
-        cfields.append(
-            {
-                "type": "hidden",
-                "header": "Website Source",
-                "id": "36",
-                "required": False,
-                "default_value": "",
-            }
-        )
+
+        for field_id in missing:
+            template = reference.get(field_id)
+            if template:
+                cfields.append({**template, "id": field_id})
+            else:
+                cfields.append(
+                    {
+                        "type": "input",
+                        "header": FIELD_HEADERS.get(field_id, f"Field {field_id}"),
+                        "id": field_id,
+                        "required": False,
+                        "default_value": "",
+                    }
+                )
+
         payload = {
             "form": {
                 "name": form.get("name"),
@@ -336,8 +377,22 @@ def add_website_source_to_forms() -> None:
             }
         }
         code, out = v3("PUT", f"forms/{fid}", payload)
-        # Optional — website already posts field[36]; AC may reject cfields mutation.
-        print(f"form {fid} cfields update -> {code} (site posts field[36] regardless)")
+        if code != 200:
+            problems.append(f"form {fid} could not add {missing}: {code} {out}")
+            print(f"form {fid} add {missing} -> FAILED {code}")
+            continue
+
+        code, data = v3("GET", f"forms/{fid}")
+        still = [
+            f for f in missing if f not in {str(c.get("id")) for c in _cfields(data.get("form", {}))}
+        ]
+        if still:
+            problems.append(f"form {fid} still missing {still} after update")
+            print(f"form {fid} add {missing} -> accepted but {still} absent on re-read")
+        else:
+            print(f"form {fid} added {missing}")
+
+    return problems
 
 
 def main() -> None:
@@ -354,11 +409,16 @@ def main() -> None:
 
     lists = ensure_lists(state)
     update_forms(lists)
-    add_website_source_to_forms()
+    problems = repair_form_fields()
     upsert_messages_and_campaigns(lists, state)
 
     STATE_PATH.write_text(json.dumps(state, indent=2), encoding="utf-8")
     print("wrote", STATE_PATH)
+    if problems:
+        print("\nFORM FIELD PROBLEMS (values posted to these fields are dropped):")
+        for p in problems:
+            print(" !", p)
+        raise SystemExit(1)
     print("DONE — finish automation wiring in AC UI (see docs/EMAIL_CAMPAIGNS.md)")
 
 
