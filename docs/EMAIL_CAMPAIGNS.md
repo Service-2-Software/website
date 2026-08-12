@@ -1,5 +1,12 @@
 # Email campaigns — journeys, tags, Calendly, Salesforce
 
+> **The live automations do not currently match this document.** A
+> 2026-08-12 end-to-end test found candidate ETS branching and partner role
+> branching not happening at all, and the already-separated path sending a
+> Calendly booking push. See [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md) for
+> what each test lead actually received and the fix list. Treat the tables below
+> as the target state, not the current one.
+
 Brooke-format templates: [`emails/templates/`](../emails/templates/)  
 Journey map: [`emails/journey-map.json`](../emails/journey-map.json)  
 Rebuild + provision:
@@ -9,6 +16,13 @@ export ACTIVECAMPAIGN_API_URL=https://service2software.api-us1.com
 export ACTIVECAMPAIGN_API_KEY=...   # never commit
 python3 emails/build_templates.py
 python3 scripts/provision_ac_campaigns.py
+```
+
+Verify:
+
+```bash
+python3 scripts/scrub_ac_automations.py      # contract, live forms, assets, API
+python3 scripts/ac_live_journey_test.py      # real leads, real inboxes
 ```
 
 ## Website behavior (shipped)
@@ -191,7 +205,14 @@ Automated checks (Aug 2026) posted each site form to `proc.php` and verified con
 
 **Fix applied:** `ETS_WINDOW` (32), `HIRING_ROLES` (34), and `COMPANY` (35) had no list field relations, so those values were dropped on form post. They are now related to lists 3–6.
 
-**Still manual:** Activate automations in AC UI and confirm the actual emails send. `Candidate Journey` (automation 8) is triggered on form 11 but showed `entered=0` / inactive during smoke test — flip it **Active** and submit one real test lead to confirm the send steps.
+**Still broken (2026-08-12):** a form can also drop a value by not declaring the
+field at all, which is a separate problem from list relations. Form 11 declares
+only `field[5]` and `field[32]`, so the `WEBSITE_SOURCE`, `NEWSLETTER_OPTIN`,
+`SMS_OPTIN`, and `JOURNEY_SEGMENT` values the site posts to it are discarded;
+form 13 drops `WEBSITE_SOURCE` the same way. Only form 16 carries the full set.
+Candidate SMS consent is therefore collected and thrown away. Running
+`scripts/provision_ac_campaigns.py` repairs both forms once the API is
+reachable.
 
 ## Manual AC steps (cannot be done via API)
 
@@ -200,3 +221,8 @@ Automated checks (Aug 2026) posted each site form to `proc.php` and verified con
 3. Wire **post-call Pre-Core portal** automation on `cand-initial-call-completed`.  
 4. Activate automations after a test lead per segment.  
 5. Dave: revise copy in Claude using Brock/Brooke template against the provisioned HTML.
+
+The partner automations currently send hand-edited campaigns rather than the
+provisioned `S2S · Partner · …` ones, so edits to `emails/templates/` do not
+reach partner leads until their Send steps are repointed. Same check for the
+candidate side before trusting any copy change.
