@@ -1,11 +1,34 @@
 {
   "fields": {
-    "NEWSLETTER_OPTIN": "37",
-    "SMS_OPTIN": "38",
-    "JOURNEY_SEGMENT": "39",
+    "BRANCH": "5",
+    "INITIAL_CALL_DATETIME": "31",
     "ETS_WINDOW": "32",
     "HIRING_ROLES": "34",
-    "WEBSITE_SOURCE": "36"
+    "COMPANY": "35",
+    "WEBSITE_SOURCE": "36",
+    "NEWSLETTER_OPTIN": "37",
+    "SMS_OPTIN": "38",
+    "JOURNEY_SEGMENT": "39"
+  },
+  "forms": {
+    "11": {
+      "name": "Military Application",
+      "list": "5",
+      "audience": "candidate",
+      "posted_by_site": ["5", "32", "36", "37", "38", "39"]
+    },
+    "16": {
+      "name": "Partner Inquiry",
+      "list": "6",
+      "audience": "partner",
+      "posted_by_site": ["34", "35", "36", "37", "38", "39"]
+    },
+    "13": {
+      "name": "Home Page Group",
+      "list": "4",
+      "audience": "newsletter",
+      "posted_by_site": ["36"]
+    }
   },
   "candidate_journeys": {
     "1a": {
@@ -32,6 +55,7 @@
       ],
       "booked": true,
       "tag": "cand-journey-ineligible-timing",
+      "template": "candidate-ineligible-timing",
       "campaign": "S2S \u00b7 Candidate \u00b7 Ineligible \u2014 timing",
       "calendly": false
     },
@@ -77,21 +101,24 @@
         "Account Executive"
       ],
       "booked": true,
-      "tag": "partner-journey-sdr-ae-booked"
+      "tag": "partner-journey-sdr-ae-booked",
+      "campaign": "S2S \u00b7 Partner \u00b7 SDR/AE booked"
     },
     "2b_booked": {
       "roles": [
         "Customer Success"
       ],
       "booked": true,
-      "tag": "partner-journey-cs-booked"
+      "tag": "partner-journey-cs-booked",
+      "campaign": "S2S \u00b7 Partner \u00b7 CS booked"
     },
     "2c_booked": {
       "roles": [
         "Multiple / Other"
       ],
       "booked": true,
-      "tag": "partner-journey-other-booked"
+      "tag": "partner-journey-other-booked",
+      "campaign": "S2S \u00b7 Partner \u00b7 Other booked"
     },
     "2a_nobook": {
       "roles": [
@@ -99,21 +126,85 @@
         "Account Executive"
       ],
       "booked": false,
-      "tag": "partner-journey-sdr-ae-nobook"
+      "tag": "partner-journey-sdr-ae-nobook",
+      "campaign": "S2S \u00b7 Partner \u00b7 SDR/AE no book"
     },
     "2b_nobook": {
       "roles": [
         "Customer Success"
       ],
       "booked": false,
-      "tag": "partner-journey-cs-nobook"
+      "tag": "partner-journey-cs-nobook",
+      "campaign": "S2S \u00b7 Partner \u00b7 CS no book"
     },
     "2c_nobook": {
       "roles": [
         "Multiple / Other"
       ],
       "booked": false,
-      "tag": "partner-journey-other-nobook"
+      "tag": "partner-journey-other-nobook",
+      "campaign": "S2S \u00b7 Partner \u00b7 Other no book"
+    }
+  },
+  "newsletter": {
+    "optin_field": "37",
+    "optin_tag": "optin-newsletter",
+    "list": "4",
+    "welcome": {
+      "template": "newsletter-welcome",
+      "campaign": "S2S \u00b7 Newsletter \u00b7 Welcome"
+    },
+    "followups": [
+      {
+        "template": "newsletter-story",
+        "campaign": "S2S \u00b7 Newsletter \u00b7 Story & mission"
+      }
+    ]
+  },
+  "sms": {
+    "optin_field": "38",
+    "optin_tag": "optin-sms",
+    "gate": "SMS_OPTIN = Yes AND phone is not blank",
+    "automations": [
+      {
+        "name": "Website - Partner SMS \u2014 Inquiry / No Call",
+        "trigger": "form:16",
+        "tags": ["partner-sms-consented", "partner-sms-nudge-sent"]
+      },
+      {
+        "name": "Website - Partner SMS \u2014 Call Booked",
+        "trigger": "tag:calendly-integration-S2S_Initial_Call_with_David",
+        "tags": ["partner-sms-booked-confirmation-sent"]
+      }
+    ]
+  },
+  "calendly": {
+    "candidate": {
+      "tag": "calendly-integration-S2S_Discovery_Call_w/_Patrick",
+      "url": "https://calendly.com/patrick-service2software/initial-call-with-service-2-software",
+      "adds_tags": ["cand-call-booked", "website-servicemember-booked"],
+      "datetime_field": "31"
+    },
+    "partner": {
+      "tag": "calendly-integration-S2S_Initial_Call_with_David",
+      "url": "https://calendly.com/davidhester/s2s-hiring",
+      "adds_tags": ["partner-call-booked", "website-partner-booked"],
+      "datetime_field": "31"
+    }
+  },
+  "bucket_tags": {
+    "candidate_ets": {
+      "More than 12 months": "cand-ets-gt12",
+      "6-12 months": "cand-ets-6-12",
+      "3-6 months": "cand-ets-3-6",
+      "Less than 3 months": "cand-ets-lt3",
+      "Already separated": "cand-ets-separated"
+    },
+    "partner_roles": {
+      "SDR / BDR": "partner-roles-sdr-ae",
+      "Account Executive": "partner-roles-sdr-ae",
+      "Customer Success": "partner-roles-cs",
+      "Multiple / Other": "partner-roles-other"
     }
   },
   "post_call": {
