@@ -277,9 +277,30 @@ def upsert_messages_and_campaigns(lists: dict, state: dict) -> None:
         print(f"campaign created {item['key']} -> {cid}")
 
 
+# Custom fields the website posts; Partner form 16 already has them in AC UI.
+# Military Application (11) historically only exposed branch + ETS — add the rest.
+FORM_HIDDEN_FIELDS = {
+    "11": [
+        {"id": "36", "header": "Website Source", "type": "hidden"},
+        {"id": "37", "header": "Newsletter Opt-In", "type": "hidden"},
+        {"id": "38", "header": "SMS Opt-In", "type": "hidden"},
+        {"id": "39", "header": "Journey Segment", "type": "hidden"},
+    ],
+    "16": [
+        {"id": "36", "header": "Website Source", "type": "hidden"},
+        {"id": "37", "header": "Newsletter Opt-In", "type": "hidden"},
+        {"id": "38", "header": "SMS Opt-In", "type": "hidden"},
+        {"id": "39", "header": "Journey Segment", "type": "hidden"},
+    ],
+    "13": [
+        {"id": "36", "header": "Website Source", "type": "hidden"},
+    ],
+}
+
+
 def add_website_source_to_forms() -> None:
-    """Ensure forms include WEBSITE_SOURCE field (id 36) in cfields when possible."""
-    for fid in ("11", "16", "13"):
+    """Ensure forms include website-posted custom fields in cfields when possible."""
+    for fid, wanted in FORM_HIDDEN_FIELDS.items():
         code, data = v3("GET", f"forms/{fid}")
         if code != 200:
             print(f"skip cfields form {fid}: {code}")
@@ -292,18 +313,23 @@ def add_website_source_to_forms() -> None:
             except json.JSONDecodeError:
                 cfields = []
         ids = {str(x.get("id")) for x in cfields if isinstance(x, dict)}
-        if "36" in ids:
-            print(f"form {fid} already has WEBSITE_SOURCE")
+        added = []
+        for spec in wanted:
+            if str(spec["id"]) in ids:
+                continue
+            cfields.append(
+                {
+                    "type": spec["type"],
+                    "header": spec["header"],
+                    "id": str(spec["id"]),
+                    "required": False,
+                    "default_value": "",
+                }
+            )
+            added.append(spec["id"])
+        if not added:
+            print(f"form {fid} cfields already include { [s['id'] for s in wanted] }")
             continue
-        cfields.append(
-            {
-                "type": "hidden",
-                "header": "Website Source",
-                "id": "36",
-                "required": False,
-                "default_value": "",
-            }
-        )
         payload = {
             "form": {
                 "name": form.get("name"),
@@ -314,8 +340,8 @@ def add_website_source_to_forms() -> None:
             }
         }
         code, out = v3("PUT", f"forms/{fid}", payload)
-        # Optional — website already posts field[36]; AC may reject cfields mutation.
-        print(f"form {fid} cfields update -> {code} (site posts field[36] regardless)")
+        # Optional — website already posts these; AC may reject cfields mutation.
+        print(f"form {fid} cfields add {added} -> {code} (site posts fields regardless)")
 
 
 def main() -> None:

@@ -193,6 +193,20 @@ Automated checks (Aug 2026) posted each site form to `proc.php` and verified con
 
 **Still manual:** Activate automations in AC UI and confirm the actual emails send. `Candidate Journey` (automation 8) is triggered on form 11 but showed `entered=0` / inactive during smoke test — flip it **Active** and submit one real test lead to confirm the send steps.
 
+## Scrub / verify
+
+Full scrub log: [`docs/EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md)
+
+```bash
+export ACTIVECAMPAIGN_API_URL=https://service2software.api-us1.com
+export ACTIVECAMPAIGN_API_KEY=...
+python3 scripts/scrub_ac_automations.py
+```
+
+**Known gap:** Military Application (form **11**) public HTML only exposes branch + ETS; Partner form **16** includes source / newsletter / SMS / journey fields. Website still posts `field[36–39]` on candidate forms — re-run `provision_ac_campaigns.py` once API access works so form 11 cfields match.
+
+**Orphan risk:** `cand-journey-lt3-booked` remains provisioned, but booked **&lt;3 mo** / separated must Send **Ineligible — timing** (`candidate-ineligible-timing`), not the lt3-booked campaign.
+
 ## Manual AC steps (cannot be done via API)
 
 1. Build candidate + partner automations from the tables above (If/Else on fields/tags → Send matching `S2S · …` campaign).  
