@@ -330,7 +330,8 @@ def newsletter_welcome() -> str:
     """Brand-only welcome for the undifferentiated newsletter list (no dual CTAs)."""
     return render_email(
         preheader="Welcome to Service 2 Software — Hire With Purpose.",
-        greeting_html="Hi %FIRSTNAME%,",
+        # Form 13 collects an email address only, so %FIRSTNAME% renders empty here.
+        greeting_html="Hi there,",
         body_html=(
             "Welcome. You're on the list for updates on SkillBridge pathways "
             "into tech sales — from Service 2 Software, a DoW-approved 501(c)(3)."
@@ -353,7 +354,7 @@ def newsletter_welcome() -> str:
 def newsletter_story() -> str:
     return render_email(
         preheader="Why Service 2 Software exists.",
-        greeting_html="Hi %FIRSTNAME%,",
+        greeting_html="Hi there,",
         body_html=(
             "Military talent shouldn't have to guess their way into tech. "
             "We built S2S so transitions into sales careers are structured, funded, "

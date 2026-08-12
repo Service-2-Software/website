@@ -280,6 +280,16 @@ def check_templates(rep: Report, manifest: list[dict]) -> None:
         if "%UNSUBSCRIBELINK%" not in html:
             rep.add(ERROR, "templates", f"{entry['key']} has no unsubscribe link")
 
+        # The newsletter form collects an email address only, so a first-name
+        # merge tag renders as an empty string ("Hi ,").
+        if entry["journey"] == "newsletter":
+            for tag in set(re.findall(r"%FIRSTNAME%", html + entry["subject"])):
+                rep.add(
+                    ERROR,
+                    "templates",
+                    f"{entry['key']} uses {tag} but newsletter signups have no name",
+                )
+
         expected = EXPECTED_SENDERS.get(entry["journey"])
         if expected and entry["fromemail"] != expected:
             rep.add(

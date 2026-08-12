@@ -182,7 +182,15 @@ def main() -> int:
     ap.add_argument("--poll", type=int, default=20, help="seconds between polls")
     ap.add_argument("--out", default="/tmp/ac_live_journey_test.json")
     ap.add_argument("--only", default="", help="comma-separated scenario labels")
+    ap.add_argument(
+        "--dump-dir",
+        default="",
+        help="save each delivered body here to diff live copy against emails/templates/",
+    )
     args = ap.parse_args()
+    dump_dir = Path(args.dump_dir) if args.dump_dir else None
+    if dump_dir:
+        dump_dir.mkdir(parents=True, exist_ok=True)
 
     manifest = json.loads(MANIFEST.read_text(encoding="utf-8"))
     wanted = {s.strip() for s in args.only.split(",") if s.strip()}
@@ -221,6 +229,10 @@ def main() -> int:
                     "unresolved_tags": sorted(set(re.findall(r"%[A-Z_]+%", html))),
                     "at": time.strftime("%H:%M:%SZ", time.gmtime()),
                 }
+                if dump_dir:
+                    name = f"{run['scenario']['label']}--{key or 'unmapped'}.html"
+                    (dump_dir / name).write_text(html, encoding="utf-8")
+                    run["received"][mid]["saved_as"] = name
                 new += 1
                 print(
                     f"  [{run['scenario']['label']}] {key or 'UNMAPPED'} "
