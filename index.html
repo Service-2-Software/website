@@ -594,7 +594,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 .ac-opt:hover .ac-badge{border-color:var(--g);background:var(--g);color:var(--k)}
 .ac-opt:hover .ac-cta{opacity:1;transform:none}
 .ac-panel{margin:46px auto 0;max-width:860px}
-.ac-back{background:none;border:none;color:rgba(255,255,255,.55);font-family:var(--fo);font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-bottom:26px;transition:color .2s}
+.ac-back{background:none;border:none;color:#ff4d4d;font-family:var(--fo);font-size:13px;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;margin-bottom:26px;transition:color .2s;font-weight:700}.ac-back:hover{color:#ff7a7a}.ac-optins{display:flex;flex-direction:column;gap:12px;margin:18px 0 8px;text-align:left}.ac-optin{display:flex;gap:10px;align-items:flex-start;font-family:var(--fo);font-size:13px;line-height:1.45;color:rgba(255,255,255,.72);cursor:pointer}.ac-optin input{margin-top:3px;accent-color:var(--g);flex-shrink:0}.ac-optin strong{color:rgba(255,255,255,.92);font-weight:600}.ac-note-sep{margin-top:10px;padding:14px 16px;border-left:3px solid var(--g);background:rgba(206,255,0,.08);color:rgba(255,255,255,.8);font-size:14px;line-height:1.55}.lf .ac-optin,.lsub .ac-optin{color:rgba(255,255,255,.7)}
 .ac-back:hover{color:var(--g)}
 .ac-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px 30px}
 @media(max-width:720px){.ac-grid{grid-template-columns:1fr}}
@@ -704,7 +704,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
   <div class="nrt">
     <!-- TODO: replace href with live S2S Core portal URL at launch -->
     <a class="btn ncore" href="#" onclick="event.preventDefault()">S2S Core Login</a>
-    <a class="btn ncta" onclick="spa('military','mil-cal')">Apply Now</a>
+    <a class="btn ncta" onclick="hfGo('mil')">Apply Now</a>
     <div class="ham" id="ham" onclick="tn()"><span></span><span></span><span></span></div>
   </div>
 </nav>
@@ -830,7 +830,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
   <a onclick="nv('companies')">For Companies</a>
   <a onclick="nv('about')">About</a>
   <a onclick="nv('blog')">Blog &amp; Resources</a>
-  <a onclick="nva('military','mil-cal')" style="color:var(--g)">Apply Now →</a>
+  <a onclick="hfGo('mil')" style="color:var(--g)">Apply Now →</a>
   <div class="mrow">
     <a href="https://app.gohighlevel.com" target="_blank" rel="noopener noreferrer">Candidate Login</a>
     <!-- TODO: replace href with live S2S Core portal URL at launch -->
@@ -852,8 +852,8 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
       </h1>
       <p class="bk" style="max-width:400px;margin-bottom:38px">Fueling customer-facing careers in tech sales, customer success, and beyond, through the Department of War SkillBridge program. 600+ transitions. 96% employment rate.</p>
       <div class="br">
-        <button class="btn bg" onclick="spa('military','mil-cal')">Apply Now →</button>
-        <button class="btn bok" onclick="sp('companies')">Hire Military Talent</button>
+        <button class="btn bg" onclick="hfGo('mil')">Apply Now →</button>
+        <button class="btn bok" onclick="hfGo('co')">Hire Military Talent</button>
       </div>
       <div class="hstats">
         <div class="hs"><div class="hsn">600+</div><div class="hsl">Placed</div></div>
@@ -1111,12 +1111,13 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Military Application" AC form ID) -->
       <div id="hf-mil" class="ac-panel ac-lt" style="display:none">
-        <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
+        <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change selection</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
         <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return hfSubmit(this,'mil')">
           <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+        <input type="hidden" name="field[36]" value="home-candidate">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
@@ -1124,6 +1125,11 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
+           <div class="ac-optins">
+             <label class="ac-optin"><input type="checkbox" name="field[37]" value="Yes"> <span><strong>Newsletter &amp; program updates</strong> — occasional emails about SkillBridge and S2S.</span></label>
+             <label class="ac-optin"><input type="checkbox" name="field[38]" value="Yes"> <span><strong>SMS notifications</strong> — optional texts about your application (msg &amp; data rates may apply; reply STOP to opt out).</span></label>
+           </div>
+           <input type="hidden" name="field[39]" value="">
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
             <span class="ac-micro">Guaranteed: every SkillBridge acceptance includes an OJT internship &middot; Free to candidates &middot; No obligation</span>
@@ -1133,18 +1139,25 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2B: COMPANY (mirrors companies page form; same "Partner Inquiry" AC form ID) -->
       <div id="hf-co" class="ac-panel ac-lt" style="display:none">
-        <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
+        <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change selection</button>
         <h3 class="hf-pt">Talk to Our Team.</h3>
         <p class="bw hf-ps">Simple annual pricing. No surprise fees. Tell us what you need and book a call in one step.</p>
-        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
+        <!-- ActiveCampaign: Partner Inquiry (u/f=16) -->
         <form onsubmit="return hfSubmit(this,'co')">
-          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+          <input type="hidden" name="u" value="16"><input type="hidden" name="f" value="16"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="d45522c4-a3b3-40bf-8e7d-e9dc2f1d51c7">
+        <input type="hidden" name="field[36]" value="home-partner">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
+            <div class="ac-field"><label>Mobile Phone</label><input type="tel" name="phone" autocomplete="tel" placeholder="+1 (555) 555-5555"></div>
             <div class="ac-field"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
             <div class="ac-field"><label>What Roles Are You Hiring?</label><select name="field[34]" required><option value="" disabled selected>Select roles&hellip;</option><option value="SDR / BDR">SDR / BDR</option><option value="Account Executive">Account Executive</option><option value="Customer Success">Customer Success</option><option value="Multiple / Other">Multiple / Other</option></select></div>
           </div>
+           <div class="ac-optins">
+             <label class="ac-optin"><input type="checkbox" name="field[37]" value="Yes"> <span><strong>Newsletter &amp; program updates</strong> — occasional emails about SkillBridge and S2S.</span></label>
+             <label class="ac-optin"><input type="checkbox" name="field[38]" value="Yes"> <span><strong>SMS consent</strong> — I agree to receive texts about my S2S hiring inquiry and scheduled calls at the number provided. Message and data rates may apply; frequency varies; reply STOP to opt out. Consent is not a condition of purchase.</span></label>
+           </div>
+           <input type="hidden" name="field[39]" value="">
           <div class="ac-submit">
             <button class="btn bk2" type="submit">Schedule a Call &rarr;</button>
             <span class="ac-micro">Avg. partner ROI: 8x &middot; 70% internship-to-hire conversion</span>
@@ -1214,6 +1227,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Military Application (u/f=11) -->
         <form onsubmit="return acSubmit(this,'mil')">
           <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+        <input type="hidden" name="field[36]" value="military-page">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
@@ -1221,6 +1235,11 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
+           <div class="ac-optins">
+             <label class="ac-optin"><input type="checkbox" name="field[37]" value="Yes"> <span><strong>Newsletter &amp; program updates</strong> — occasional emails about SkillBridge and S2S.</span></label>
+             <label class="ac-optin"><input type="checkbox" name="field[38]" value="Yes"> <span><strong>SMS notifications</strong> — optional texts about your application (msg &amp; data rates may apply; reply STOP to opt out).</span></label>
+           </div>
+           <input type="hidden" name="field[39]" value="">
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
             <span class="ac-micro">Guaranteed: every SkillBridge acceptance includes an OJT internship &middot; Free to candidates &middot; No obligation</span>
@@ -1393,13 +1412,20 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
           <h2 class="h2k" style="margin-top:16px">Talk to<br>Our Team.</h2>
           <p class="bk" style="margin-top:16px">Simple annual pricing. No surprise fees. Tell us what you need and book a call with our team in one step.</p>
         </div>
-        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
+        <!-- ActiveCampaign: Partner Inquiry (u/f=16) -->
         <form class="lead lead-k" onsubmit="return leadSubmit(this,'co')">
-          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+          <input type="hidden" name="u" value="16"><input type="hidden" name="f" value="16"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="d45522c4-a3b3-40bf-8e7d-e9dc2f1d51c7">
+        <input type="hidden" name="field[36]" value="companies-page">
           <div class="lf"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
           <div class="lf"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
+          <div class="lf"><label>Mobile Phone</label><input type="tel" name="phone" autocomplete="tel" placeholder="+1 (555) 555-5555"></div>
           <div class="lf"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
           <div class="lf"><label>What roles are you hiring?</label><select name="field[34]" required><option value="">Select roles…</option><option value="SDR / BDR">SDR / BDR</option><option value="Account Executive">Account Executive</option><option value="Customer Success">Customer Success</option><option value="Multiple / Other">Multiple / Other</option></select></div>
+           <div class="ac-optins">
+             <label class="ac-optin"><input type="checkbox" name="field[37]" value="Yes"> <span><strong>Newsletter &amp; program updates</strong> — occasional emails about SkillBridge and S2S.</span></label>
+             <label class="ac-optin"><input type="checkbox" name="field[38]" value="Yes"> <span><strong>SMS consent</strong> — I agree to receive texts about my S2S hiring inquiry and scheduled calls at the number provided. Message and data rates may apply; frequency varies; reply STOP to opt out. Consent is not a condition of purchase.</span></label>
+           </div>
+           <input type="hidden" name="field[39]" value="">
           <div class="lsub"><button class="btn bg" type="submit">Schedule a Call →</button><span class="lmicro">Avg. partner ROI: 8x · 70% internship-to-hire conversion</span></div>
         </form>
       </div>
@@ -1510,7 +1536,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <div class="icell rv"><div class="in2">50+</div><div class="il">Partner Companies</div></div>
         <div class="icell rv"><div class="in2">$330K+</div><div class="il">Training Donated in 2025</div></div>
       </div>
-      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=4169e1',null)">Get Involved With S2S →</button></div>
+      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=ceff00',null)">Get Involved With S2S →</button></div>
     </div>
   </section>
 
@@ -1584,6 +1610,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <!-- ActiveCampaign: Home Page Group (u/f=13) -->
         <form class="nlform" id="nl-form" onsubmit="return nlSubmit(this)" novalidate>
           <input type="hidden" name="u" value="13"><input type="hidden" name="f" value="13"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="7b81ae25-d22b-4b40-8645-c9a2ea1ceff8">
+        <input type="hidden" name="field[36]" value="newsletter">
           <span class="nlwrap"><input class="nlinput" type="email" name="email" placeholder="Your email address" required autocomplete="email"></span>
           <button class="nlbtn" type="submit">Subscribe →</button>
         </form>
@@ -1987,6 +2014,16 @@ function spa(n,a){closeMegas();document.querySelectorAll('.page').forEach(p=>p.c
 function nv(n){sp(n);tn()}
 function nva(n,a){spa(n,a);tn()}
 function tn(){document.getElementById('mn').classList.toggle('op')}
+/* Email / shared deep links: ?page=military&section=mil-cal */
+(function s2sDeepLink(){
+  try{
+    var q=new URLSearchParams(location.search);
+    var page=q.get('page');
+    var section=q.get('section');
+    if(!page)return;
+    if(section)spa(page,section); else sp(page);
+  }catch(e){}
+})();
 
 /* ─── COOKIE CONSENT + ANALYTICS (GA4 Consent Mode) ───
    Set S2S_GA_ID to your Google Analytics 4 Measurement ID (G-XXXXXXXX).
@@ -2096,16 +2133,37 @@ window.addEventListener('load',rv)
 
 /* LEAD FORMS — submit to ActiveCampaign (fire-and-forget), then reveal Calendly booking */
 const CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
-function leadSubmit(form,key){
+function s2sValidEmail(v){return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test((v||'').trim());}
+function s2sFlashInvalid(el){if(!el)return;el.focus();var prev=el.style.borderColor;el.style.borderColor='#c62828';setTimeout(function(){el.style.borderColor=prev||'';},1600);}
+function s2sValidateLeadForm(form){
+  var em=form.querySelector('[name=email]');
+  if(!em||!s2sValidEmail(em.value)){s2sFlashInvalid(em);return false;}
+  var name=form.querySelector('[name=fullname]');
+  if(name&&!(name.value||'').trim()){s2sFlashInvalid(name);return false;}
+  var sms=form.querySelector('[name="field[38]"]');
+  var phone=form.querySelector('[name=phone]');
+  if(sms&&sms.checked){
+    var digits=phone?(phone.value||'').replace(/\D/g,''):'';
+    if(digits.length<10||digits.length>15){s2sFlashInvalid(phone);return false;}
+  }
+  return true;
+}
+function s2sPostAC(form){
   try{
-    const fd=new FormData(form);
+    var fd=new FormData(form);
     if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(()=>{});
+      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
+}
+function leadSubmit(form,key){
+  if(!s2sValidateLeadForm(form))return false;
+  s2sApplyJourneyFields(form, key==='mil'?'mil':'co');
+  s2sPostAC(form);
+  form.querySelectorAll('[name="field[37]"],[name="field[38]"]').forEach(function(el){el.disabled=false;});
   document.getElementById(key+'-step1').style.display='none';
   const book=document.getElementById(key+'-book');
   book.classList.add('on');
@@ -2116,19 +2174,8 @@ function leadSubmit(form,key){
 
 /* NEWSLETTER — validate, post to ActiveCampaign (Home Page Group list), show confirmation */
 function nlSubmit(form){
-  var em=form.querySelector('[name=email]');
-  var v=(em.value||'').trim();
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v)){
-    em.focus();em.style.borderColor='#c62828';
-    setTimeout(function(){em.style.borderColor='';},1600);
-    return false;
-  }
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sPostAC(form);
   form.style.display='none';
   document.getElementById('nl-done').style.display='inline-flex';
   return false;
@@ -2136,8 +2183,8 @@ function nlSubmit(form){
 
 /* GATED APPLY FLOW (v4) — gate → path form → ActiveCampaign (fire-and-forget) → matching Calendly */
 const AC_GATE_CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
 /* Calendly POPUP (subdued-background overlay) with name/email prefilled from the submitted form */
 var LAST_CAL=null;
@@ -2166,6 +2213,56 @@ function reopenCal(){if(LAST_CAL){if(window.Calendly&&Calendly.initPopupWidget){
 function acScroll(){var s=document.getElementById('mil-cal');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}
 /* HOME — GET IN THE FIGHT: inline gate → audience form → Calendly (no redirect) */
 function hfScroll(){var s=document.getElementById('home-fight');if(s)s.scrollIntoView({behavior:'smooth',block:'start'});}
+function hfGo(w){
+  sp('home');
+  setTimeout(function(){ hfPick(w); hfScroll(); }, 180);
+}
+function s2sEtsBucket(ets){
+  ets=(ets||'').trim();
+  if(ets==='Already separated') return 'separated';
+  if(ets==='Less than 3 months') return 'lt3';
+  if(ets==='3-6 months') return '3-6';
+  if(ets==='6-12 months' || ets==='More than 12 months') return '6-12';
+  return '';
+}
+function s2sPartnerRoleBucket(role){
+  role=(role||'').trim();
+  if(role==='SDR / BDR' || role==='Account Executive') return 'sdr-ae';
+  if(role==='Customer Success') return 'cs';
+  if(role==='Multiple / Other') return 'other';
+  return '';
+}
+function s2sApplyJourneyFields(form, audience){
+  try{
+    var seg='';
+    if(audience==='mil'){
+      var ets=form.querySelector('[name="field[32]"]');
+      var b=s2sEtsBucket(ets?ets.value:'');
+      if(b==='separated') seg='cand-journey-separated-onedone';
+      else if(b==='lt3') seg='cand-journey-lt3-nobook';
+      else if(b==='3-6') seg='cand-journey-3-6-nobook';
+      else if(b==='6-12') seg='cand-journey-6-12-nobook';
+    }else if(audience==='co'){
+      var role=form.querySelector('[name="field[34]"]');
+      var r=s2sPartnerRoleBucket(role?role.value:'');
+      if(r==='sdr-ae') seg='partner-journey-sdr-ae-nobook';
+      else if(r==='cs') seg='partner-journey-cs-nobook';
+      else if(r==='other') seg='partner-journey-other-nobook';
+    }
+    var j=form.querySelector('[name="field[39]"]');
+    if(j) j.value=seg;
+    var nl=form.querySelector('[name="field[37]"]');
+    var sms=form.querySelector('[name="field[38]"]');
+    if(nl && !nl.checked) nl.disabled=true;
+    if(sms && !sms.checked) sms.disabled=true;
+  }catch(e){}
+}
+function s2sIsSeparated(form){
+  try{
+    var ets=form.querySelector('[name="field[32]"]');
+    return !!(ets && (ets.value||'').trim()==='Already separated');
+  }catch(e){return false;}
+}
 function hfPick(w){
   document.getElementById('hf-choose').style.display='none';
   document.getElementById('hf-mil').style.display=(w==='mil')?'block':'none';
@@ -2178,18 +2275,37 @@ function hfReset(){
   hfScroll();
 }
 function hfSubmit(form,w){
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sApplyJourneyFields(form,w==='mil'?'mil':'co');
+  var separated=w==='mil' && s2sIsSeparated(form);
+  s2sPostAC(form);
+  form.querySelectorAll('[name="field[37]"],[name="field[38]"]').forEach(function(el){el.disabled=false;});
   document.getElementById('hf-mil').style.display='none';
   document.getElementById('hf-co').style.display='none';
-  document.getElementById('hf-book-h').textContent=(w==='mil')?'\u2713 Application received.':'\u2713 Got it \u2014 you\u2019re in.';
-  document.getElementById('hf-book-s').textContent=(w==='mil')?'Lock in your intro call now. Candidates who book immediately move through approval fastest.':'Pick a time that works. You\u2019ll meet directly with our team to map your hiring needs.';
-  document.getElementById('hf-book').style.display='block';
-  calPopup(AC_GATE_CAL_URLS[w],form);
+  if(separated){
+    document.getElementById('hf-book-h').textContent='\u2713 Application received.';
+    document.getElementById('hf-book-s').textContent='Thanks — because you\u2019re already separated, we\u2019ll follow up by email with next steps. No intro call is needed right now.';
+    document.getElementById('hf-book').style.display='block';
+    document.querySelectorAll('#hf-book .btn, #hf-book button.btn').forEach(function(b){
+      if(/book|calendly|slot|call|scheduler/i.test(b.textContent||'')) b.style.display='none';
+    });
+    var note=document.getElementById('hf-sep-note');
+    if(!note){
+      note=document.createElement('div');
+      note.id='hf-sep-note';
+      note.className='ac-note-sep';
+      note.textContent='Already separated candidates receive a one-and-done email — we won\u2019t send a Calendly link.';
+      document.getElementById('hf-book').appendChild(note);
+    }
+    note.style.display='block';
+  }else{
+    document.getElementById('hf-book-h').textContent=(w==='mil')?'\u2713 Application received.':'\u2713 Got it \u2014 you\u2019re in.';
+    document.getElementById('hf-book-s').textContent=(w==='mil')?'Lock in your intro call now. Candidates who book immediately move through approval fastest.':'Pick a time that works. You\u2019ll meet directly with our team to map your hiring needs.';
+    document.getElementById('hf-book').style.display='block';
+    document.querySelectorAll('#hf-book .btn, #hf-book button.btn').forEach(function(b){ b.style.display=''; });
+    var note=document.getElementById('hf-sep-note'); if(note) note.style.display='none';
+    calPopup(AC_GATE_CAL_URLS[w],form);
+  }
   hfScroll();
   return false;
 }
@@ -2200,17 +2316,36 @@ function acReset(){
   acScroll();
 }
 function acSubmit(form,w){
-  try{
-    var fd=new FormData(form);
-    if(fd.get('u')&&fd.get('f')){
-      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
-    }
-  }catch(e){}
+  if(!s2sValidateLeadForm(form))return false;
+  s2sApplyJourneyFields(form,'mil');
+  var separated=s2sIsSeparated(form);
+  s2sPostAC(form);
+  form.querySelectorAll('[name="field[37]"],[name="field[38]"]').forEach(function(el){el.disabled=false;});
   document.getElementById('ac-mil').style.display='none';
-  document.getElementById('ac-book-h').textContent='\u2713 Application received.';
-  document.getElementById('ac-book-s').textContent='Lock in your intro call now. Candidates who book immediately move through approval fastest.';
-  document.getElementById('ac-book').style.display='block';
-  calPopup(AC_GATE_CAL_URLS[w],form);
+  if(separated){
+    document.getElementById('ac-book-h').textContent='\u2713 Application received.';
+    document.getElementById('ac-book-s').textContent='Thanks — because you\u2019re already separated, we\u2019ll follow up by email with next steps. No intro call is needed right now.';
+    document.getElementById('ac-book').style.display='block';
+    document.querySelectorAll('#ac-book .btn, #ac-book button.btn').forEach(function(b){
+      if(/book|calendly|slot|call|scheduler/i.test(b.textContent||'')) b.style.display='none';
+    });
+    var note=document.getElementById('ac-sep-note');
+    if(!note){
+      note=document.createElement('div');
+      note.id='ac-sep-note';
+      note.className='ac-note-sep';
+      note.textContent='Already separated candidates receive a one-and-done email — we won\u2019t send a Calendly link.';
+      document.getElementById('ac-book').appendChild(note);
+    }
+    note.style.display='block';
+  }else{
+    document.getElementById('ac-book-h').textContent='\u2713 Application received.';
+    document.getElementById('ac-book-s').textContent='Lock in your intro call now. Candidates who book immediately move through approval fastest.';
+    document.getElementById('ac-book').style.display='block';
+    document.querySelectorAll('#ac-book .btn, #ac-book button.btn').forEach(function(b){ b.style.display=''; });
+    var note=document.getElementById('ac-sep-note'); if(note) note.style.display='none';
+    calPopup(AC_GATE_CAL_URLS[w],form);
+  }
   acScroll();
   return false;
 }

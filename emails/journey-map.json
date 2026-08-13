@@ -1,0 +1,126 @@
+{
+  "fields": {
+    "NEWSLETTER_OPTIN": "37",
+    "SMS_OPTIN": "38",
+    "JOURNEY_SEGMENT": "39",
+    "ETS_WINDOW": "32",
+    "HIRING_ROLES": "34",
+    "WEBSITE_SOURCE": "36"
+  },
+  "candidate_journeys": {
+    "1a": {
+      "ets": [
+        "6-12 months",
+        "More than 12 months"
+      ],
+      "booked": true,
+      "tag": "cand-journey-6-12-booked",
+      "campaign": "S2S \u00b7 Candidate \u00b7 6-12mo booked"
+    },
+    "1b": {
+      "ets": [
+        "3-6 months"
+      ],
+      "booked": true,
+      "tag": "cand-journey-3-6-booked",
+      "campaign": "S2S \u00b7 Candidate \u00b7 3-6mo booked"
+    },
+    "1c": {
+      "ets": [
+        "Less than 3 months",
+        "Already separated"
+      ],
+      "booked": true,
+      "tag": "cand-journey-ineligible-timing",
+      "campaign": "S2S \u00b7 Candidate \u00b7 Ineligible \u2014 timing",
+      "calendly": false
+    },
+    "1d": {
+      "ets": [
+        "6-12 months",
+        "More than 12 months"
+      ],
+      "booked": false,
+      "tag": "cand-journey-6-12-nobook",
+      "campaign": "S2S \u00b7 Candidate \u00b7 6-12mo no book"
+    },
+    "1e": {
+      "ets": [
+        "3-6 months"
+      ],
+      "booked": false,
+      "tag": "cand-journey-3-6-nobook",
+      "campaign": "S2S \u00b7 Candidate \u00b7 3-6mo no book"
+    },
+    "1f": {
+      "ets": [
+        "Less than 3 months"
+      ],
+      "booked": false,
+      "tag": "cand-journey-lt3-nobook",
+      "campaign": "S2S \u00b7 Candidate \u00b7 <3mo no book"
+    },
+    "separated": {
+      "ets": [
+        "Already separated"
+      ],
+      "booked": null,
+      "tag": "cand-journey-separated-onedone",
+      "campaign": "S2S \u00b7 Candidate \u00b7 Separated one-and-done",
+      "calendly": false
+    }
+  },
+  "partner_journeys": {
+    "2a_booked": {
+      "roles": [
+        "SDR / BDR",
+        "Account Executive"
+      ],
+      "booked": true,
+      "tag": "partner-journey-sdr-ae-booked"
+    },
+    "2b_booked": {
+      "roles": [
+        "Customer Success"
+      ],
+      "booked": true,
+      "tag": "partner-journey-cs-booked"
+    },
+    "2c_booked": {
+      "roles": [
+        "Multiple / Other"
+      ],
+      "booked": true,
+      "tag": "partner-journey-other-booked"
+    },
+    "2a_nobook": {
+      "roles": [
+        "SDR / BDR",
+        "Account Executive"
+      ],
+      "booked": false,
+      "tag": "partner-journey-sdr-ae-nobook"
+    },
+    "2b_nobook": {
+      "roles": [
+        "Customer Success"
+      ],
+      "booked": false,
+      "tag": "partner-journey-cs-nobook"
+    },
+    "2c_nobook": {
+      "roles": [
+        "Multiple / Other"
+      ],
+      "booked": false,
+      "tag": "partner-journey-other-nobook"
+    }
+  },
+  "post_call": {
+    "tag": "cand-initial-call-completed",
+    "campaign": "S2S \u00b7 Candidate \u00b7 Post-call Pre-Core portal",
+    "template": "candidate-post-call-precore-portal",
+    "source_doc": "docs/pre-core-candidate-portal.md",
+    "trigger": "After initial call with Patrick is completed (not booking)"
+  }
+}
