@@ -1,11 +1,10 @@
 # Email campaigns — journeys, tags, Calendly, Salesforce
 
-> **The live automations do not currently match this document.** A
-> 2026-08-12 end-to-end test found candidate ETS branching and partner role
-> branching not happening at all, and the already-separated path sending a
-> Calendly booking push. See [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md) for
-> what each test lead actually received and the fix list. Treat the tables below
-> as the target state, not the current one.
+> **2026-08-13:** Candidate apply ETS branching matches the tables below
+> (live-tested). Partner apply Sends were remapped to campaigns 48/49/50
+> (SDR/AE, CS, Other); live retest in progress. See
+> [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md). Booked/post-call paths were not
+> fully retested this session.
 
 Brooke-format templates: [`emails/templates/`](../emails/templates/)  
 Journey map: [`emails/journey-map.json`](../emails/journey-map.json)  

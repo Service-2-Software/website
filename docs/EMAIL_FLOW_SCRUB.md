@@ -1,3 +1,56 @@
+# ActiveCampaign scrub — 2026-08-13 update
+
+Logged in with AC admin secrets + 2FA. `/api/3` is still Cloudflare-blocked from cloud egress, but the **browser session** can call it.
+
+## What is fixed in production now
+
+| Area | Status |
+| --- | --- |
+| Form 11 fields 36–39 | **FIXED** — public `/f/11` declares 5, 32, 36, 37, 38, 39 |
+| Form 13 field 36 | **FIXED** — public `/f/13` declares 36 |
+| Candidate ETS apply emails | **FIXED** — live retest 2026-08-13 |
+| Already-separated path | **FIXED** — receives one-and-done only, no Calendly push |
+| Newsletter form 13 | **PASS** |
+| PNG wordmark | **PASS** on all delivered mail |
+| Partner role apply emails | **REMAPPED** — automations 26/27/28 send campaigns 104/49/50 (SDR/AE copy, CS, Other). Live retest 2026-08-13 in progress. |
+| Candidate booked / post-call | **NOT RETESTED** this session |
+
+### Candidate live retest (2026-08-13)
+
+Four separate UI-built automations (If conditions set in the builder). Automation 8 paused.
+
+| Scenario | Expected | Received | Result |
+| --- | --- | --- | --- |
+| ETS 6–12 months | `6-12mo no book` | that campaign only | **PASS** |
+| ETS 3–6 months | `3-6mo no book` | that campaign only | **PASS** |
+| ETS &lt; 3 months | `&lt;3mo no book` | that campaign only | **PASS** |
+| Already separated | `Separated one-and-done` | that campaign only | **PASS** |
+
+Sender on these sends was `ceo@service2software.org` (manifest still says `recruiting@`).
+
+Active automations:
+
+- `Website - Candidate — Applied 6-12` (6–12 **or** &gt;12 months)
+- `Website - Candidate — Applied 3-6`
+- `Website - Candidate — Applied lt3`
+- `Website - Candidate — Applied separated`
+
+Inactive: `Website - Candidate Journey - Applied / No Call` (id 8).
+
+### Partner (Send remap 2026-08-13)
+
+Inactive: `Website - Partner — Inquiry / No Call (#2)` (id 10, the even random split).
+
+Active:
+
+- `Website - Partner — Inquiry SDR/AE` (26) → campaign **104** `S2S · Partner · SDR/AE no book - (Copy-104)` (provisioned campaign 48 still unused)
+- `Website - Partner — Inquiry CS` (27) → campaign **49** `S2S · Partner · CS no book` (PUT block 191 with `X-Xsrf-Token`; emailname on the block is stale)
+- `Website - Partner — Inquiry Other` (28) → campaign **50** `S2S · Partner · Other no book` (PUT block 196)
+
+Campaigns 49 and 50 were Active but unsent, so they do not appear in the automation Send picker. Writes without `X-Xsrf-Token` return 403. Address section was set on 49/50 (Service 2 Software, 4922 Bill Gardner Pkwy) so they can be test-sent later.
+
+---
+
 # ActiveCampaign scrub — 2026-08-12
 
 Branch `cursor/ac-email-campaigns-5d2d`. Reproduce with:

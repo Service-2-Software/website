@@ -1,5 +1,7 @@
 # ActiveCampaign fix playbook
 
+**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS (four automations; old automation 8 inactive). Partner even-split (automation 10) inactive. Three role automations active; CS/Other Sends remapped via API (`X-Xsrf-Token`) to campaigns **49** and **50**. Remaining: live-test partner branches, finish booked/post-call Sends, archive campaign 47, sender reconcile.
+
 Run this once either:
 
 1. `/api/3` returns 200 (clear the Developer IP allowlist), then

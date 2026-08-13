@@ -61,6 +61,31 @@ SCENARIOS = [
         # Newsletter opt-in is the observable probe for whether form 11 keeps field[37].
         "expect": ["cand-journey-6-12-nobook"],
         "may_also": ["newsletter-welcome"],
+        "forbid": [
+            "cand-journey-3-6-nobook",
+            "cand-journey-lt3-nobook",
+            "cand-journey-separated-onedone",
+            "candidate-book-nudge",
+        ],
+    },
+    {
+        "label": "cand-3-6",
+        "form": "11",
+        "base": BASE_11,
+        "fullname": "Scrub Candidate ThreeSix",
+        "fields": {
+            "5": "US Marine Corps",
+            "32": "3-6 months",
+            "36": "scrub-candidate",
+            "39": "cand-journey-3-6-nobook",
+        },
+        "expect": ["cand-journey-3-6-nobook"],
+        "forbid": [
+            "cand-journey-6-12-nobook",
+            "cand-journey-lt3-nobook",
+            "cand-journey-separated-onedone",
+            "candidate-book-nudge",
+        ],
     },
     {
         "label": "cand-lt3",
@@ -74,6 +99,12 @@ SCENARIOS = [
             "39": "cand-journey-lt3-nobook",
         },
         "expect": ["cand-journey-lt3-nobook"],
+        "forbid": [
+            "cand-journey-6-12-nobook",
+            "cand-journey-3-6-nobook",
+            "cand-journey-separated-onedone",
+            "candidate-book-nudge",
+        ],
     },
     {
         "label": "cand-separated",
@@ -110,6 +141,10 @@ SCENARIOS = [
         },
         "expect": ["partner-journey-sdr-ae-nobook"],
         "may_also": ["newsletter-welcome"],
+        "forbid": [
+            "partner-journey-cs-nobook",
+            "partner-journey-other-nobook",
+        ],
     },
     {
         "label": "partner-cs",
@@ -123,6 +158,27 @@ SCENARIOS = [
             "39": "partner-journey-cs-nobook",
         },
         "expect": ["partner-journey-cs-nobook"],
+        "forbid": [
+            "partner-journey-sdr-ae-nobook",
+            "partner-journey-other-nobook",
+        ],
+    },
+    {
+        "label": "partner-other",
+        "form": "16",
+        "base": BASE_16,
+        "fullname": "Scrub Partner OtherRoles",
+        "fields": {
+            "34": "Multiple / Other",
+            "35": "S2S Scrub Co",
+            "36": "scrub-partner",
+            "39": "partner-journey-other-nobook",
+        },
+        "expect": ["partner-journey-other-nobook"],
+        "forbid": [
+            "partner-journey-sdr-ae-nobook",
+            "partner-journey-cs-nobook",
+        ],
     },
     {
         "label": "newsletter",
