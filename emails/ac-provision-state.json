@@ -1,0 +1,72 @@
+{
+  "lists": {
+    "master-contact-list": "3",
+    "home-page-group": "4",
+    "website-candidates": "5",
+    "website-partners": "6"
+  },
+  "messages": {
+    "candidate-booking-confirmation": "25",
+    "candidate-book-nudge": "26",
+    "candidate-reminder": "27",
+    "candidate-nurture-skillbridge": "28",
+    "partner-booking-confirmation": "29",
+    "partner-book-nudge": "30",
+    "partner-reminder": "31",
+    "partner-nurture-roi": "32",
+    "newsletter-welcome": "33",
+    "newsletter-story": "34",
+    "candidate-what-we-offer": "36",
+    "partner-what-we-offer": "37",
+    "cand-journey-separated-onedone": "43",
+    "cand-journey-6-12-nobook": "44",
+    "cand-journey-3-6-nobook": "45",
+    "cand-journey-lt3-nobook": "46",
+    "cand-journey-6-12-booked": "47",
+    "cand-journey-3-6-booked": "48",
+    "partner-journey-sdr-ae-nobook": "50",
+    "partner-journey-cs-nobook": "51",
+    "partner-journey-other-nobook": "52",
+    "partner-journey-sdr-ae-booked": "53",
+    "partner-journey-cs-booked": "54",
+    "partner-journey-other-booked": "55",
+    "candidate-post-call-precore-portal": "56",
+    "candidate-ineligible-timing": "69"
+  },
+  "campaigns": {
+    "candidate-booking-confirmation": "18",
+    "candidate-book-nudge": "19",
+    "candidate-reminder": "20",
+    "candidate-nurture-skillbridge": "21",
+    "partner-booking-confirmation": "22",
+    "partner-book-nudge": "23",
+    "partner-reminder": "24",
+    "partner-nurture-roi": "25",
+    "newsletter-welcome": "26",
+    "newsletter-story": "27",
+    "candidate-what-we-offer": "29",
+    "partner-what-we-offer": "30",
+    "cand-journey-separated-onedone": "41",
+    "cand-journey-6-12-nobook": "42",
+    "cand-journey-3-6-nobook": "43",
+    "cand-journey-lt3-nobook": "44",
+    "cand-journey-6-12-booked": "45",
+    "cand-journey-3-6-booked": "46",
+    "partner-journey-sdr-ae-nobook": "48",
+    "partner-journey-cs-nobook": "49",
+    "partner-journey-other-nobook": "50",
+    "partner-journey-sdr-ae-booked": "51",
+    "partner-journey-cs-booked": "52",
+    "partner-journey-other-booked": "53",
+    "candidate-post-call-precore-portal": "54",
+    "candidate-ineligible-timing": "72"
+  },
+  "retired": {
+    "cand-journey-lt3-booked": {
+      "message": "49",
+      "campaign": "47",
+      "superseded_by": "candidate-ineligible-timing",
+      "action": "archive in AC UI"
+    }
+  }
+}
