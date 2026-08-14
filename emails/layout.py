@@ -1,4 +1,9 @@
-"""Shared Brooke-style S2S email layout (#CEFF00 accent, black header)."""
+"""Shared Brooke-style S2S email layout (#CEFF00 accent, black header).
+
+The wordmark uses a fixed pixel width (not width:100%). Gmail expands
+width:100% images to the message pane, which made the header wider than
+the 600px content column.
+"""
 
 BRAND_LIME = "#CEFF00"
 BRAND_BLACK = "#111111"
@@ -87,13 +92,25 @@ def render_email(
       <td align="center" style="padding:0;">
         <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;">
           <tr>
-            <td style="background:{BRAND_BLACK};padding:28px 32px 20px 32px;font-family:Arial,Helvetica,sans-serif;">
-              <img src="{BRAND_WORDMARK}" width="536" alt="SERVICE 2 SOFTWARE" style="display:block;width:100%;max-width:536px;height:auto;border:0;outline:none;text-decoration:none;" />
-              <div style="margin-top:8px;font-size:11px;letter-spacing:0.18em;color:rgba(255,255,255,0.75);text-transform:uppercase;">Veteran Talent · SkillBridge Careers</div>
+            <td style="padding:0 32px;background:#ffffff;font-family:Arial,Helvetica,sans-serif;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;background:{BRAND_BLACK};">
+                <tr>
+                  <td style="padding:20px 24px 16px 24px;">
+                    <img src="{BRAND_WORDMARK}" width="280" alt="SERVICE 2 SOFTWARE" style="display:block;width:280px;max-width:280px;height:auto;border:0;outline:none;text-decoration:none;" />
+                    <div style="margin-top:8px;font-size:11px;letter-spacing:0.18em;color:rgba(255,255,255,0.75);text-transform:uppercase;">Veteran Talent · SkillBridge Careers</div>
+                  </td>
+                </tr>
+              </table>
             </td>
           </tr>
           <tr>
-            <td style="height:4px;background:{BRAND_LIME};font-size:0;line-height:0;">&nbsp;</td>
+            <td style="padding:0 32px;background:#ffffff;font-size:0;line-height:0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;">
+                <tr>
+                  <td style="height:4px;background:{BRAND_LIME};font-size:0;line-height:0;">&nbsp;</td>
+                </tr>
+              </table>
+            </td>
           </tr>
           <tr>
             <td style="padding:36px 32px 40px 32px;font-family:Arial,Helvetica,sans-serif;color:{BRAND_BLACK};">
