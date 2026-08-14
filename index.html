@@ -1156,8 +1156,10 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
       <div id="hf-book" class="ac-panel ac-lt" style="display:none;text-align:center">
         <div class="ac-booked" id="hf-book-h">&#10003; Got it.</div>
         <p class="bw" id="hf-book-s" style="margin-top:10px;margin-bottom:28px">Pick a time that works.</p>
-        <div style="margin-top:6px"><button type="button" class="btn bk2" onclick="reopenCal()">Open Scheduler &#8599;</button></div>
-        <p class="bw" style="margin-top:16px;font-size:13px;color:rgba(17,17,17,.5)">A scheduling window just opened with your info pre-filled. Pop-up blocked? Use the button above.</p>
+        <div id="hf-book-cal">
+          <div style="margin-top:6px"><button type="button" class="btn bk2" onclick="reopenCal()">Open Scheduler &#8599;</button></div>
+          <p class="bw" style="margin-top:16px;font-size:13px;color:rgba(17,17,17,.5)">A scheduling window just opened with your info pre-filled. Pop-up blocked? Use the button above.</p>
+        </div>
         <button type="button" class="ac-back" style="margin-top:26px" onclick="hfReset()">&larr; Start over</button>
       </div>
     </div>
@@ -1232,8 +1234,10 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
       <div id="ac-book" class="ac-panel" style="display:none;text-align:center">
         <div class="ac-booked" id="ac-book-h">&#10003; Got it &mdash; you're in.</div>
         <p class="bk" id="ac-book-s" style="margin-top:10px;margin-bottom:28px">Pick a time that works and we'll take it from here.</p>
-        <div style="margin-top:6px"><button type="button" class="btn bg" onclick="reopenCal()">Open Scheduler &#8599;</button></div>
-        <p class="bk" style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.45)">A scheduling window just opened with your info pre-filled. Pop-up blocked? Use the button above.</p>
+        <div id="ac-book-cal">
+          <div style="margin-top:6px"><button type="button" class="btn bg" onclick="reopenCal()">Open Scheduler &#8599;</button></div>
+          <p class="bk" style="margin-top:16px;font-size:13px;color:rgba(255,255,255,.45)">A scheduling window just opened with your info pre-filled. Pop-up blocked? Use the button above.</p>
+        </div>
         <button type="button" class="ac-back" style="margin-top:26px" onclick="acReset()">&larr; Start over</button>
       </div>
     </div>
@@ -2152,6 +2156,17 @@ function calPopup(url,form){
   return false;
 }
 function reopenCal(){if(LAST_CAL){if(window.Calendly&&Calendly.initPopupWidget){Calendly.initPopupWidget({url:LAST_CAL});}else{window.open(LAST_CAL,'_blank');}}}
+/* SkillBridge intro calls are for candidates with 3+ months remaining. */
+function etsSkipsCalendly(form){
+  try{
+    var v=new FormData(form).get('field[32]');
+    return v==='Less than 3 months'||v==='Already separated';
+  }catch(e){return false;}
+}
+function setBookCalVisible(id,show){
+  var el=document.getElementById(id);
+  if(el)el.style.display=show?'':'none';
+}
 (function(){
   var opts=document.querySelectorAll('.ac-opt');
   if('IntersectionObserver' in window){
@@ -2184,12 +2199,15 @@ function hfSubmit(form,w){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
+  var skipCal=w==='mil'&&etsSkipsCalendly(form);
   document.getElementById('hf-mil').style.display='none';
   document.getElementById('hf-co').style.display='none';
   document.getElementById('hf-book-h').textContent=(w==='mil')?'\u2713 Application received.':'\u2713 Got it \u2014 you\u2019re in.';
-  document.getElementById('hf-book-s').textContent=(w==='mil')?'Lock in your intro call now. Candidates who book immediately move through approval fastest.':'Pick a time that works. You\u2019ll meet directly with our team to map your hiring needs.';
+  document.getElementById('hf-book-s').textContent=skipCal?'Thanks \u2014 our team will follow up by email.':(w==='mil')?'Lock in your intro call now. Candidates who book immediately move through approval fastest.':'Pick a time that works. You\u2019ll meet directly with our team to map your hiring needs.';
+  setBookCalVisible('hf-book-cal',!skipCal);
   document.getElementById('hf-book').style.display='block';
-  calPopup(AC_GATE_CAL_URLS[w],form);
+  if(skipCal){LAST_CAL=null;}
+  else{calPopup(AC_GATE_CAL_URLS[w],form);}
   hfScroll();
   return false;
 }
@@ -2206,11 +2224,14 @@ function acSubmit(form,w){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
   }catch(e){}
+  var skipCal=etsSkipsCalendly(form);
   document.getElementById('ac-mil').style.display='none';
   document.getElementById('ac-book-h').textContent='\u2713 Application received.';
-  document.getElementById('ac-book-s').textContent='Lock in your intro call now. Candidates who book immediately move through approval fastest.';
+  document.getElementById('ac-book-s').textContent=skipCal?'Thanks \u2014 our team will follow up by email.':'Lock in your intro call now. Candidates who book immediately move through approval fastest.';
+  setBookCalVisible('ac-book-cal',!skipCal);
   document.getElementById('ac-book').style.display='block';
-  calPopup(AC_GATE_CAL_URLS[w],form);
+  if(skipCal){LAST_CAL=null;}
+  else{calPopup(AC_GATE_CAL_URLS[w],form);}
   acScroll();
   return false;
 }
