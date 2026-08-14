@@ -531,13 +531,11 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 .roi-tiptext{visibility:hidden;opacity:0;transition:opacity .15s;position:absolute;bottom:135%;left:50%;transform:translateX(-50%);background:var(--k);border:1px solid rgba(255,255,255,.15);color:rgba(255,255,255,.7);font-family:var(--fb);font-size:12px;font-weight:300;letter-spacing:0;text-transform:none;line-height:1.5;padding:10px 12px;width:230px;z-index:10}
 .roi-tip:hover .roi-tiptext{visibility:visible;opacity:1}
 .roi-editnote{display:inline-block;margin-top:20px;background:var(--g);color:var(--k);font-family:var(--fo);font-size:11.5px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:10px 18px;clip-path:polygon(9px 0,100% 0,calc(100% - 9px) 100%,0 100%)}
-.roi-label::after{content:'EDIT';font-family:var(--fo);font-size:8.5px;font-weight:700;letter-spacing:.14em;color:var(--k);background:var(--g);padding:2.5px 7px;margin-left:9px;vertical-align:2px}
 .roi-input-wrap{display:flex;align-items:center;background:#0d0d0d;border:1.5px solid rgba(206,255,0,.45);transition:border-color .15s,box-shadow .15s}
 .roi-input-wrap:hover{border-color:rgba(206,255,0,.75)}
 .roi-input-wrap:focus-within{border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
 .roi-prefix,.roi-suffix{font-family:var(--fo);font-size:17px;font-weight:600;color:rgba(255,255,255,.35);padding:0 13px}
-#roi-calc input[type="number"]{flex:1;width:100%;background:transparent;border:none;outline:none;color:var(--w);font-family:var(--fo);font-size:21px;font-weight:600;padding:12px 4px;-moz-appearance:textfield}
-#roi-calc input[type="number"]::-webkit-outer-spin-button,#roi-calc input[type="number"]::-webkit-inner-spin-button{-webkit-appearance:none}
+#roi-calc input.roi-input{flex:1;width:100%;background:transparent;border:none;outline:none;color:var(--w);font-family:var(--fo);font-size:21px;font-weight:600;padding:12px 4px}
 .roi-results{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
 .roi-card{background:#0d0d0d;border:1px solid rgba(255,255,255,.12);padding:28px 26px;position:relative}
 .roi-card::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--g)}
@@ -1305,23 +1303,23 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <div class="roi-inputs">
           <div class="roi-field">
             <div class="roi-label">SDR On-Target Earnings <span class="roi-tip">?<span class="roi-tiptext">Total annual compensation (base + commission) for a fully-ramped SDR at your company.</span></span></div>
-            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input type="number" id="inp-ote" value="80000" min="0" step="1000"></div>
+            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input class="roi-input" type="text" inputmode="numeric" autocomplete="off" id="inp-ote" value="80,000"></div>
           </div>
           <div class="roi-field">
             <div class="roi-label">Close Rate <span class="roi-tip">?<span class="roi-tiptext">Percentage of qualified opportunities that convert to closed-won deals.</span></span></div>
-            <div class="roi-input-wrap"><input type="number" id="inp-close" value="20" min="0" max="100" step="1" style="padding-left:16px"><span class="roi-suffix">%</span></div>
+            <div class="roi-input-wrap"><input class="roi-input" type="text" inputmode="decimal" autocomplete="off" id="inp-close" value="20" style="padding-left:16px"><span class="roi-suffix">%</span></div>
           </div>
           <div class="roi-field">
             <div class="roi-label">Annual Quota per Rep <span class="roi-tip">?<span class="roi-tiptext">Annual pipeline or revenue quota assigned to each SDR.</span></span></div>
-            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input type="number" id="inp-quota" value="500000" min="0" step="10000"></div>
+            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input class="roi-input" type="text" inputmode="numeric" autocomplete="off" id="inp-quota" value="500,000"></div>
           </div>
           <div class="roi-field">
             <div class="roi-label">Average Contract Value <span class="roi-tip">?<span class="roi-tiptext">Average annual contract value of a closed deal.</span></span></div>
-            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input type="number" id="inp-acv" value="25000" min="0" step="1000"></div>
+            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input class="roi-input" type="text" inputmode="numeric" autocomplete="off" id="inp-acv" value="25,000"></div>
           </div>
           <div class="roi-field">
             <div class="roi-label">Cost to Recruit One SDR <span class="roi-tip">?<span class="roi-tiptext">Agency fees, internal recruiting time, job board spend, and interview hours per hire.</span></span></div>
-            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input type="number" id="inp-recruit" value="15000" min="0" step="500"></div>
+            <div class="roi-input-wrap"><span class="roi-prefix">$</span><input class="roi-input" type="text" inputmode="numeric" autocomplete="off" id="inp-recruit" value="15,000"></div>
           </div>
         </div>
         <div>
@@ -2227,10 +2225,32 @@ function acSubmit(form,w){
   var $=function(id){return document.getElementById(id)};
   if(!$('inp-ote'))return;
   var fmtUSD=function(n){return '$'+Math.round(n).toLocaleString('en-US')};
+  var parseNum=function(str){return parseFloat(String(str).replace(/[^0-9.]/g,''))||0};
+  var formatGrouped=function(el,allowDecimal){
+    var start=el.selectionStart, old=el.value;
+    var digitsBefore=(old.slice(0,start).match(/\d/g)||[]).length;
+    var cleaned=old.replace(/[^0-9.]/g,'');
+    if(allowDecimal){
+      var parts=cleaned.split('.');
+      cleaned=parts.shift()+(parts.length?'.'+parts.join('').slice(0,2):'');
+    }else{
+      cleaned=cleaned.replace(/\./g,'');
+    }
+    if(cleaned===''||cleaned==='.'){el.value=cleaned==='.'?'0.':'';return;}
+    var trailingDot=allowDecimal&&/\.$/.test(cleaned);
+    var n=parseFloat(cleaned);
+    if(!isFinite(n)){el.value='';return;}
+    var formatted=n.toLocaleString('en-US',{maximumFractionDigits:allowDecimal?2:0,minimumFractionDigits:0});
+    if(trailingDot&&formatted.indexOf('.')===-1)formatted+='.';
+    el.value=formatted;
+    var pos=0,seen=0;
+    while(pos<el.value.length&&seen<digitsBefore){if(/\d/.test(el.value.charAt(pos)))seen++;pos++;}
+    try{el.setSelectionRange(pos,pos)}catch(e){}
+  };
   function calc(){
-    var ote=parseFloat($('inp-ote').value)||0, close=(parseFloat($('inp-close').value)||0)/100,
-        quota=parseFloat($('inp-quota').value)||0, acv=parseFloat($('inp-acv').value)||0,
-        recruit=parseFloat($('inp-recruit').value)||0, A=S2S_ASSUMPTIONS;
+    var ote=parseNum($('inp-ote').value), close=parseNum($('inp-close').value)/100,
+        quota=parseNum($('inp-quota').value), acv=parseNum($('inp-acv').value),
+        recruit=parseNum($('inp-recruit').value), A=S2S_ASSUMPTIONS;
     var vacancyCost=(quota/12)*(A.vacancyMonths+A.rampMonths)*close;
     var attritionCost=A.sdrAttritionRate*(recruit+ote*0.5);
     var hireTotal=recruit+vacancyCost+attritionCost;
@@ -2245,7 +2265,9 @@ function acSubmit(form,w){
     $('out-impact').textContent=fmtUSD(totalImpact);
     if($('mout-roi-x')){$('mout-roi-x').textContent=roiX.toFixed(1)+'x';$('mout-roi-pct').textContent=Math.round(roiPct).toLocaleString('en-US')+'%';$('mout-impact').textContent=fmtUSD(totalImpact);}
   }
-  ['inp-ote','inp-close','inp-quota','inp-acv','inp-recruit'].forEach(function(id){$(id).addEventListener('input',calc)});
+  var moneyIds=['inp-ote','inp-quota','inp-acv','inp-recruit'];
+  moneyIds.forEach(function(id){$(id).addEventListener('input',function(){formatGrouped(this,false);calc()})});
+  $('inp-close').addEventListener('input',function(){formatGrouped(this,true);calc()});
   calc();
 })();
 </script>
