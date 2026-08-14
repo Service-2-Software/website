@@ -1,10 +1,24 @@
 import * as path from "path";
 import * as cdk from "aws-cdk-lib";
+import * as acm from "aws-cdk-lib/aws-certificatemanager";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3deploy from "aws-cdk-lib/aws-s3-deployment";
 import { Construct } from "constructs";
+
+/**
+ * Public domains served by this distribution. CloudFront requires the ACM
+ * certificate to live in us-east-1 and to cover every name listed here.
+ */
+const SITE_DOMAIN_NAMES = ["service2software.org", "www.service2software.org"];
+
+/**
+ * ACM certificate (us-east-1) covering the domains above. Override via the
+ * `certificateArn` CDK context value if the certificate is ever reissued.
+ */
+const DEFAULT_CERTIFICATE_ARN =
+  "arn:aws:acm:us-east-1:483013639442:certificate/07b71d16-5f23-4982-908d-74b65d35af3c";
 
 /** CSP aligned with docs/SECURITY.md and index.html meta CSP. */
 const CONTENT_SECURITY_POLICY = [
@@ -95,9 +109,20 @@ export class WebsiteStack extends cdk.Stack {
       }
     );
 
+    const certificateArn =
+      (this.node.tryGetContext("certificateArn") as string | undefined) ??
+      DEFAULT_CERTIFICATE_ARN;
+    const certificate = acm.Certificate.fromCertificateArn(
+      this,
+      "SiteCertificate",
+      certificateArn
+    );
+
     const distribution = new cloudfront.Distribution(this, "Distribution", {
       comment: "Service 2 Software website",
       defaultRootObject: "index.html",
+      domainNames: SITE_DOMAIN_NAMES,
+      certificate,
       minimumProtocolVersion: cloudfront.SecurityPolicyProtocol.TLS_V1_2_2021,
       httpVersion: cloudfront.HttpVersion.HTTP2_AND_3,
       priceClass: cloudfront.PriceClass.PRICE_CLASS_100,
@@ -127,17 +152,6 @@ export class WebsiteStack extends cdk.Stack {
         },
       ],
     });
-
-    // Explicit TLS floor for the default *.cloudfront.net cert (Checkov CKV_AWS_174).
-    const cfnDistribution = distribution.node
-      .defaultChild as cloudfront.CfnDistribution;
-    cfnDistribution.addPropertyOverride(
-      "DistributionConfig.ViewerCertificate",
-      {
-        CloudFrontDefaultCertificate: true,
-        MinimumProtocolVersion: "TLSv1.2_2021",
-      }
-    );
 
     const siteRoot = path.join(__dirname, "..", "..");
 
@@ -176,10 +190,11 @@ export class WebsiteStack extends cdk.Stack {
     });
     new cdk.CfnOutput(this, "DistributionDomainName", {
       value: distribution.distributionDomainName,
-      description: "CloudFront URL (attach custom domain later)",
+      description: "CloudFront distribution domain (point site DNS CNAMEs here)",
     });
     new cdk.CfnOutput(this, "WebsiteUrl", {
-      value: `https://${distribution.distributionDomainName}`,
+      value: `https://${SITE_DOMAIN_NAMES[1]}`,
+      description: "Primary public site URL served via the custom domain",
     });
   }
 }
