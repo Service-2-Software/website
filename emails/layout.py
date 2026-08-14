@@ -1,8 +1,9 @@
 """Shared Brooke-style S2S email layout (#CEFF00 accent, black header).
 
-The wordmark uses a fixed pixel width (not width:100%). Gmail expands
-width:100% images to the message pane, which made the header wider than
-the 600px content column.
+The wordmark uses a fixed 480px width (not width:100%) inside the same
+32px gutters as the body. Gmail expands width:100% images to the message
+pane, which made the header wider than the 600px content column. The PNG
+is 639×46, so 480px keeps it readable while lining up with the CTA.
 """
 
 BRAND_LIME = "#CEFF00"
@@ -96,7 +97,7 @@ def render_email(
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="width:100%;background:{BRAND_BLACK};">
                 <tr>
                   <td style="padding:20px 24px 16px 24px;">
-                    <img src="{BRAND_WORDMARK}" width="280" alt="SERVICE 2 SOFTWARE" style="display:block;width:280px;max-width:280px;height:auto;border:0;outline:none;text-decoration:none;" />
+                    <img src="{BRAND_WORDMARK}" width="480" alt="SERVICE 2 SOFTWARE" style="display:block;width:480px;max-width:480px;height:auto;border:0;outline:none;text-decoration:none;" />
                     <div style="margin-top:8px;font-size:11px;letter-spacing:0.18em;color:rgba(255,255,255,0.75);text-transform:uppercase;">Veteran Talent · SkillBridge Careers</div>
                   </td>
                 </tr>
