@@ -193,8 +193,6 @@ nav.sc{background:rgba(0,0,0,.95);backdrop-filter:blur(20px);border-bottom-color
 .hbadge{position:absolute;bottom:28px;left:28px;background:rgba(0,0,0,.82);border:1px solid rgba(255,255,255,.2);padding:12px 18px}
 .hbadge .t{font-family:var(--fo);font-size:9px;letter-spacing:.28em;text-transform:uppercase;color:rgba(255,255,255,.5)}
 .hbadge .b{font-family:var(--fd);font-weight:900;font-size:16px;letter-spacing:.04em;text-transform:uppercase;color:var(--w)}
-.hplay{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:72px;height:72px;border:1.5px solid rgba(255,255,255,.55);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:all .3s;background:rgba(0,0,0,.22);backdrop-filter:blur(4px)}
-.hplay:hover{border-color:var(--w);background:rgba(0,0,0,.45);transform:translate(-50%,-50%) scale(1.08)}
 .hstats{display:flex;margin-top:52px;border-top:1px solid rgba(255,255,255,.08);padding-top:36px}
 .hs{flex:1;padding-right:22px;border-right:1px solid rgba(255,255,255,.07);margin-right:22px}
 .hs:last-child{border:none;margin:0;padding:0}
@@ -825,7 +823,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
   <a onclick="nv('blog')">Blog &amp; Resources</a>
   <a onclick="nva('military','mil-cal')" style="color:var(--g)">Apply Now →</a>
   <div class="mrow">
-    <a href="https://app.gohighlevel.com" target="_blank" rel="noopener noreferrer">Candidate Login</a>
+    <a href="https://s2score.service2software.org/login" target="_blank" rel="noopener noreferrer">Candidate Login</a>
     <a href="https://s2score.service2software.org/login" target="_blank" rel="noopener noreferrer">S2S Core Login</a>
   </div>
 </div>
@@ -858,7 +856,6 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
       <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=1200&q=85" alt="Team">
       <div class="hro"></div>
       <div class="hbadge"><div class="t">Department of War Approved</div><div class="b">SkillBridge Program</div></div>
-      <div class="hplay"><svg width="15" height="18" viewBox="0 0 15 18" fill="none"><path d="M1 1.5L14 9L1 16.5V1.5Z" fill="white" stroke="white" stroke-width="1.2"/></svg></div>
     </div>
   </section>
 
@@ -1506,7 +1503,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <div class="icell rv"><div class="in2">50+</div><div class="il">Partner Companies</div></div>
         <div class="icell rv"><div class="in2">$330K+</div><div class="il">Training Donated in 2025</div></div>
       </div>
-      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=4169e1',null)">Get Involved With S2S →</button></div>
+      <div style="text-align:center;margin-top:44px"><button class="btn bk2" onclick="calPopup('https://calendly.com/davidhester/30minutes?primary_color=ceff00',null)">Get Involved With S2S →</button></div>
     </div>
   </section>
 
@@ -2092,8 +2089,8 @@ window.addEventListener('load',rv)
 
 /* LEAD FORMS — submit to ActiveCampaign (fire-and-forget), then reveal Calendly booking */
 const CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
 function leadSubmit(form,key){
   try{
@@ -2132,8 +2129,8 @@ function nlSubmit(form){
 
 /* GATED APPLY FLOW (v4) — gate → path form → ActiveCampaign (fire-and-forget) → matching Calendly */
 const AC_GATE_CAL_URLS={
-  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=4169e1',
-  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=4169e1'
+  mil:'https://calendly.com/patrick-service2software/initial-call-with-service-2-software?primary_color=ceff00',
+  co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
 /* Calendly POPUP (subdued-background overlay) with name/email prefilled from the submitted form */
 var LAST_CAL=null;
