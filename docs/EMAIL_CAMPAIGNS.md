@@ -1,11 +1,8 @@
 # Email campaigns — journeys, tags, Calendly, Salesforce
 
-> **The live automations do not currently match this document.** A
-> 2026-08-12 end-to-end test found candidate ETS branching and partner role
-> branching not happening at all, and the already-separated path sending a
-> Calendly booking push. See [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md) for
-> what each test lead actually received and the fix list. Treat the tables below
-> as the target state, not the current one.
+> **2026-08-13:** Candidate apply ETS branching and partner apply role
+> branching both match the tables below (live-tested). Booked/post-call paths
+> were not fully retested. See [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md).
 
 Brooke-format templates: [`emails/templates/`](../emails/templates/)  
 Journey map: [`emails/journey-map.json`](../emails/journey-map.json)  
@@ -160,7 +157,7 @@ Candidate journey senders: **recruiting@service2software.org**.
 | --- | --- | --- |
 | Map Calendly start → `INITIAL_CALL_DATETIME` (31) | AC/Calendly settings | Required for booked emails |
 | Calendly → Salesforce sync | Ops | Critical dependency called out with Dave |
-| Salesforce routing | AC Salesforce connector | List 5 / candidate tags → Recruiting/Patrick; List 6 / partner tags → David; newsletter-only → no sales Lead |
+| Salesforce routing | Salesforce Flow/Apex | Candidate → Patrick + candidate RT; partner → David + partner RT; newsletter-only → no sales Lead. Spec: [`SALESFORCE_LEAD_ASSIGNMENT.md`](SALESFORCE_LEAD_ASSIGNMENT.md) |
 | Wire automations above | AC UI | API cannot create automation graphs |
 | Test leads per ETS + role | Pre go-live | Confirm correct journey tag + email |
 | SMS campaign | Approved | Build the consent-gated SMS automations above |

@@ -87,4 +87,4 @@ CloudFront access logs in AWS provide basic request-level traffic for ops/securi
 ## Email campaigns (ActiveCampaign)
 
 Brooke-format templates and campaign provisioning live under `emails/` + `scripts/provision_ac_campaigns.py`.  
-See [`docs/EMAIL_CAMPAIGNS.md`](docs/EMAIL_CAMPAIGNS.md) for candidate/partner/newsletter series, Calendly datetime mapping, and Salesforce routing.
+See [`docs/EMAIL_CAMPAIGNS.md`](docs/EMAIL_CAMPAIGNS.md) for candidate/partner/newsletter series, Calendly datetime mapping, and Salesforce routing. Lead assignment in Salesforce (no AC managed package): [`docs/SALESFORCE_LEAD_ASSIGNMENT.md`](docs/SALESFORCE_LEAD_ASSIGNMENT.md).

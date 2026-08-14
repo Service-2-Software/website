@@ -1,5 +1,7 @@
 # ActiveCampaign fix playbook
 
+**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS. Partner role apply live-tested PASS (SDR/AE, CS, Other) after switching CS/Other Sends to automation Copy-* campaigns 106/107. Automations 26/27/28 Active. Do not PUT never-sent provisioned campaigns onto a Send block (that broadcast 49/50 to 26 contacts). Remaining: booked/post-call live tests, sender reconcile vs `ceo@` on some copies.
+
 Run this once either:
 
 1. `/api/3` returns 200 (clear the Developer IP allowlist), then
@@ -109,9 +111,10 @@ Rename to **Website - Partner Journey - Inquiry / No Call**.
      → `partner-roles-other` + `partner-journey-other-nobook`  
      → Send **`S2S · Partner · Other no book`**
 2. Opt-ins same as candidate (newsletter / SMS).
-3. **Repoint every Send step** at the provisioned `S2S · Partner · …` campaigns.
-   The live test received a subject that is not in this repo — those hand-edited
-   campaigns must stop being the Send targets.
+3. **Repoint every Send step** at the provisioned `S2S · Partner · …` campaigns
+   **from the automation Send picker** (that creates a `Copy-*` campaign that
+   sends one-to-one). **Never PUT a never-sent campaign id onto a Send block.**
+   That is what broadcast campaigns 49 and 50 to 26 contacts.
 
 ---
 

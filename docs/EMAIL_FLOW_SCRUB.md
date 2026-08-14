@@ -1,3 +1,86 @@
+# ActiveCampaign scrub — 2026-08-13 update
+
+Logged in with AC admin secrets + 2FA. `/api/3` is still Cloudflare-blocked from cloud egress, but the **browser session** can call it.
+
+## What is fixed in production now
+
+| Area | Status |
+| --- | --- |
+| Form 11 fields 36–39 | **FIXED** — public `/f/11` declares 5, 32, 36, 37, 38, 39 |
+| Form 13 field 36 | **FIXED** — public `/f/13` declares 36 |
+| Candidate ETS apply emails | **FIXED** — live retest 2026-08-13 |
+| Already-separated path | **FIXED** — receives one-and-done only, no Calendly push |
+| Newsletter form 13 | **PASS** |
+| PNG wordmark | **PASS** on all delivered mail |
+| Partner role apply emails | **FIXED** — live retest 2026-08-13: SDR, CS, and Other each received only their campaign from `david@` |
+| Candidate booked / post-call | **NOT RETESTED** this session |
+
+### Candidate live retest (2026-08-13)
+
+Four separate UI-built automations (If conditions set in the builder). Automation 8 paused.
+
+| Scenario | Expected | Received | Result |
+| --- | --- | --- | --- |
+| ETS 6–12 months | `6-12mo no book` | that campaign only | **PASS** |
+| ETS 3–6 months | `3-6mo no book` | that campaign only | **PASS** |
+| ETS &lt; 3 months | `&lt;3mo no book` | that campaign only | **PASS** |
+| Already separated | `Separated one-and-done` | that campaign only | **PASS** |
+
+Sender on these sends was `ceo@service2software.org` (manifest still says `recruiting@`).
+
+Active automations:
+
+- `Website - Candidate — Applied 6-12` (6–12 **or** &gt;12 months)
+- `Website - Candidate — Applied 3-6`
+- `Website - Candidate — Applied lt3`
+- `Website - Candidate — Applied separated`
+
+Inactive: `Website - Candidate Journey - Applied / No Call` (id 8).
+
+### Partner (Send remap + live retest 2026-08-13)
+
+Inactive: `Website - Partner — Inquiry / No Call (#2)` (id 10, the even random split).
+
+**Do not API-attach a never-sent provisioned campaign (`status=1`, `send_amt=0`) to an automation Send.** Campaigns **49** and **50** were remapped that way with `X-Xsrf-Token`. On the next form submit ActiveCampaign treated them as a **list broadcast**: `send_amt=26` / `total_amt=26`, then `status=5` (completed). Opens were still 0 at check time. Automations 27 and 28 were switched **Inactive** in the UI immediately after.
+
+Working candidate/partner Sends use **Copy-*** campaigns created from the automation Send picker (example: campaign **92**, campaign **104**). Those stay `status=1` and increment `send_amt` one contact at a time.
+
+Live retest `--only partner-sdr,partner-cs,partner-other` (`/tmp/ac_live_partner.json`):
+
+| Scenario | Expected | Received | Result |
+| --- | --- | --- | --- |
+| SDR / BDR | SDR/AE no book | Other + CS + unmapped subject `Service 2 Software` from `ceo@` | **FAIL** |
+| Customer Success | CS no book | CS + Other | **FAIL** |
+| Multiple / Other | Other no book | Other + CS | **FAIL** |
+
+Interpretation of that first retest:
+
+- Campaigns 49 and 50 hitting the whole partner list explains why every inbox got **both** CS and Other.
+- Automation 26 (SDR) stayed on campaign **104** and recorded `send_amt=1` (one-to-one). That copy’s subject was `Service 2 Software` until message 89 was overwritten from provisioned message 50.
+- If conditions on 26/27/28 store numeric `segmentid` 18/19/20 (same shape as passing candidate apply automations 22–25).
+
+**Fix:** keep 26/27/28 on Copy-* campaigns (104/106/107), copy provisioned HTML onto those messages, never use 49/50 as Send targets.
+
+Second live retest (CS probe `--wait 240`, then SDR+Other `--wait 300`):
+
+| Scenario | Expected | Received | From | Result |
+| --- | --- | --- | --- | --- |
+| Customer Success | CS no book | that campaign only | `david@` | **PASS** |
+| SDR / BDR | SDR/AE no book | that campaign only | `david@` | **PASS** |
+| Multiple / Other | Other no book | that campaign only | `david@` | **PASS** |
+
+Current (live-tested PASS):
+
+- 26 Active → campaign **104** / message **89** (HTML+subject copied from provisioned message 50). Probe: SDR/BDR received only `schedule a hiring call (SDR/AE)` from `david@`.
+- 27 Active → campaign **106** / message **90** (HTML from message 51). Probe: CS received only the CS campaign; `send_amt=1` (one-to-one, not a list send).
+- 28 Active → campaign **107** / message **91** (HTML from message 52). Probe: Other received only `schedule a hiring call`.
+
+Campaigns 49/50 remain `status=5` completed broadcasts. Leave them off automations.
+
+Candidate booked automation 11: 3–6 Send block 70 remapped to campaign **46** (`3-6mo booked`); not live-tested (needs Calendly). Campaign 47 (`<3mo booked` duplicate) is already `status=0`.
+
+---
+
 # ActiveCampaign scrub — 2026-08-12
 
 Branch `cursor/ac-email-campaigns-5d2d`. Reproduce with:
