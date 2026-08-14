@@ -12,7 +12,7 @@ Logged in with AC admin secrets + 2FA. `/api/3` is still Cloudflare-blocked from
 | Already-separated path | **FIXED** — receives one-and-done only, no Calendly push |
 | Newsletter form 13 | **PASS** |
 | PNG wordmark | **PASS** on all delivered mail |
-| Partner role apply emails | **REMAPPED** — automations 26/27/28 send campaigns 104/49/50 (SDR/AE copy, CS, Other). Live retest 2026-08-13 in progress. |
+| Partner role apply emails | **BROKEN again** — automations 27/28 Inactive after a list blast. See partner live retest below. |
 | Candidate booked / post-call | **NOT RETESTED** this session |
 
 ### Candidate live retest (2026-08-13)
@@ -37,17 +37,35 @@ Active automations:
 
 Inactive: `Website - Candidate Journey - Applied / No Call` (id 8).
 
-### Partner (Send remap 2026-08-13)
+### Partner (Send remap + live retest 2026-08-13)
 
 Inactive: `Website - Partner — Inquiry / No Call (#2)` (id 10, the even random split).
 
-Active:
+**Do not API-attach a never-sent provisioned campaign (`status=1`, `send_amt=0`) to an automation Send.** Campaigns **49** and **50** were remapped that way with `X-Xsrf-Token`. On the next form submit ActiveCampaign treated them as a **list broadcast**: `send_amt=26` / `total_amt=26`, then `status=5` (completed). Opens were still 0 at check time. Automations 27 and 28 were switched **Inactive** in the UI immediately after.
 
-- `Website - Partner — Inquiry SDR/AE` (26) → campaign **104** `S2S · Partner · SDR/AE no book - (Copy-104)` (provisioned campaign 48 still unused)
-- `Website - Partner — Inquiry CS` (27) → campaign **49** `S2S · Partner · CS no book` (PUT block 191 with `X-Xsrf-Token`; emailname on the block is stale)
-- `Website - Partner — Inquiry Other` (28) → campaign **50** `S2S · Partner · Other no book` (PUT block 196)
+Working candidate/partner Sends use **Copy-*** campaigns created from the automation Send picker (example: campaign **92**, campaign **104**). Those stay `status=1` and increment `send_amt` one contact at a time.
 
-Campaigns 49 and 50 were Active but unsent, so they do not appear in the automation Send picker. Writes without `X-Xsrf-Token` return 403. Address section was set on 49/50 (Service 2 Software, 4922 Bill Gardner Pkwy) so they can be test-sent later.
+Live retest `--only partner-sdr,partner-cs,partner-other` (`/tmp/ac_live_partner.json`):
+
+| Scenario | Expected | Received | Result |
+| --- | --- | --- | --- |
+| SDR / BDR | SDR/AE no book | Other + CS + unmapped subject `Service 2 Software` from `ceo@` | **FAIL** |
+| Customer Success | CS no book | CS + Other | **FAIL** |
+| Multiple / Other | Other no book | Other + CS | **FAIL** |
+
+Interpretation:
+
+- Campaigns 49 and 50 hitting the whole partner list explains why every inbox got **both** CS and Other.
+- Automation 26 (SDR) stayed on campaign **104** and recorded `send_amt=1` (one-to-one). That copy’s subject is `Service 2 Software` (HTML `<title>`), not `%FIRSTNAME%, schedule a hiring call (SDR/AE)`.
+- If conditions on 26/27/28 still store numeric `segmentid` 18/19/20. They may be fine (candidate apply automations 22–25 use the same shape and passed). Re-test after Copy-* Sends exist; do not use 49/50 again.
+
+Current:
+
+- 26 Active → campaign 104 (wrong subject; SDR body may also be the copy, not provisioned message 50)
+- 27 Inactive → was campaign 49 (completed blast)
+- 28 Inactive → was campaign 50 (completed blast)
+
+Next: create CS/Other emails **inside** the automation Send picker (Copy-* like 104), point 27/28 at those, fix 104’s subject, reactivate, retest.
 
 ---
 

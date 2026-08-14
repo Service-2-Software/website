@@ -1,6 +1,6 @@
 # ActiveCampaign fix playbook
 
-**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS (four automations; old automation 8 inactive). Partner even-split (automation 10) inactive. Three role automations active; CS/Other Sends remapped via API (`X-Xsrf-Token`) to campaigns **49** and **50**. Remaining: live-test partner branches, finish booked/post-call Sends, archive campaign 47, sender reconcile.
+**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS. Partner even-split (automation 10) inactive. **Do not PUT a never-sent campaign onto an automation Send** — that broadcast campaigns 49/50 to 26 contacts; automations 27/28 are Inactive. SDR automation 26 still sends Copy-104 with subject `Service 2 Software`. Create Copy-* emails in the Send picker, then retest.
 
 Run this once either:
 
@@ -111,9 +111,10 @@ Rename to **Website - Partner Journey - Inquiry / No Call**.
      → `partner-roles-other` + `partner-journey-other-nobook`  
      → Send **`S2S · Partner · Other no book`**
 2. Opt-ins same as candidate (newsletter / SMS).
-3. **Repoint every Send step** at the provisioned `S2S · Partner · …` campaigns.
-   The live test received a subject that is not in this repo — those hand-edited
-   campaigns must stop being the Send targets.
+3. **Repoint every Send step** at the provisioned `S2S · Partner · …` campaigns
+   **from the automation Send picker** (that creates a `Copy-*` campaign that
+   sends one-to-one). **Never PUT a never-sent campaign id onto a Send block.**
+   That is what broadcast campaigns 49 and 50 to 26 contacts.
 
 ---
 
