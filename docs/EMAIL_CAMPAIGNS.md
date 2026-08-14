@@ -1,10 +1,8 @@
 # Email campaigns — journeys, tags, Calendly, Salesforce
 
-> **2026-08-13:** Candidate apply ETS branching matches the tables below
-> (live-tested). Partner apply CS/Other automations are **Inactive** after an
-> accidental list send of campaigns 49/50. See
-> [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md). Do not API-attach unsent
-> campaigns to automation Sends — create Copy-* emails in the Send picker.
+> **2026-08-13:** Candidate apply ETS branching and partner apply role
+> branching both match the tables below (live-tested). Booked/post-call paths
+> were not fully retested. See [`EMAIL_FLOW_SCRUB.md`](EMAIL_FLOW_SCRUB.md).
 
 Brooke-format templates: [`emails/templates/`](../emails/templates/)  
 Journey map: [`emails/journey-map.json`](../emails/journey-map.json)  

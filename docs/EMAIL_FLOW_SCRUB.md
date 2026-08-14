@@ -12,7 +12,7 @@ Logged in with AC admin secrets + 2FA. `/api/3` is still Cloudflare-blocked from
 | Already-separated path | **FIXED** — receives one-and-done only, no Calendly push |
 | Newsletter form 13 | **PASS** |
 | PNG wordmark | **PASS** on all delivered mail |
-| Partner role apply emails | **BROKEN again** — automations 27/28 Inactive after a list blast. See partner live retest below. |
+| Partner role apply emails | **FIXED** — live retest 2026-08-13: SDR, CS, and Other each received only their campaign from `david@` |
 | Candidate booked / post-call | **NOT RETESTED** this session |
 
 ### Candidate live retest (2026-08-13)
@@ -53,19 +53,31 @@ Live retest `--only partner-sdr,partner-cs,partner-other` (`/tmp/ac_live_partner
 | Customer Success | CS no book | CS + Other | **FAIL** |
 | Multiple / Other | Other no book | Other + CS | **FAIL** |
 
-Interpretation:
+Interpretation of that first retest:
 
 - Campaigns 49 and 50 hitting the whole partner list explains why every inbox got **both** CS and Other.
-- Automation 26 (SDR) stayed on campaign **104** and recorded `send_amt=1` (one-to-one). That copy’s subject is `Service 2 Software` (HTML `<title>`), not `%FIRSTNAME%, schedule a hiring call (SDR/AE)`.
-- If conditions on 26/27/28 still store numeric `segmentid` 18/19/20. They may be fine (candidate apply automations 22–25 use the same shape and passed). Re-test after Copy-* Sends exist; do not use 49/50 again.
+- Automation 26 (SDR) stayed on campaign **104** and recorded `send_amt=1` (one-to-one). That copy’s subject was `Service 2 Software` until message 89 was overwritten from provisioned message 50.
+- If conditions on 26/27/28 store numeric `segmentid` 18/19/20 (same shape as passing candidate apply automations 22–25).
 
-Current:
+**Fix:** keep 26/27/28 on Copy-* campaigns (104/106/107), copy provisioned HTML onto those messages, never use 49/50 as Send targets.
 
-- 26 Active → campaign 104 (wrong subject; SDR body may also be the copy, not provisioned message 50)
-- 27 Inactive → was campaign 49 (completed blast)
-- 28 Inactive → was campaign 50 (completed blast)
+Second live retest (CS probe `--wait 240`, then SDR+Other `--wait 300`):
 
-Next: create CS/Other emails **inside** the automation Send picker (Copy-* like 104), point 27/28 at those, fix 104’s subject, reactivate, retest.
+| Scenario | Expected | Received | From | Result |
+| --- | --- | --- | --- | --- |
+| Customer Success | CS no book | that campaign only | `david@` | **PASS** |
+| SDR / BDR | SDR/AE no book | that campaign only | `david@` | **PASS** |
+| Multiple / Other | Other no book | that campaign only | `david@` | **PASS** |
+
+Current (live-tested PASS):
+
+- 26 Active → campaign **104** / message **89** (HTML+subject copied from provisioned message 50). Probe: SDR/BDR received only `schedule a hiring call (SDR/AE)` from `david@`.
+- 27 Active → campaign **106** / message **90** (HTML from message 51). Probe: CS received only the CS campaign; `send_amt=1` (one-to-one, not a list send).
+- 28 Active → campaign **107** / message **91** (HTML from message 52). Probe: Other received only `schedule a hiring call`.
+
+Campaigns 49/50 remain `status=5` completed broadcasts. Leave them off automations.
+
+Candidate booked automation 11: 3–6 Send block 70 remapped to campaign **46** (`3-6mo booked`); not live-tested (needs Calendly). Campaign 47 (`<3mo booked` duplicate) is already `status=0`.
 
 ---
 

@@ -1,6 +1,6 @@
 # ActiveCampaign fix playbook
 
-**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS. Partner even-split (automation 10) inactive. **Do not PUT a never-sent campaign onto an automation Send** — that broadcast campaigns 49/50 to 26 contacts; automations 27/28 are Inactive. SDR automation 26 still sends Copy-104 with subject `Service 2 Software`. Create Copy-* emails in the Send picker, then retest.
+**Status 2026-08-13:** Form 11/13 fields repaired. Candidate apply ETS branching live-tested PASS. Partner role apply live-tested PASS (SDR/AE, CS, Other) after switching CS/Other Sends to automation Copy-* campaigns 106/107. Automations 26/27/28 Active. Do not PUT never-sent provisioned campaigns onto a Send block (that broadcast 49/50 to 26 contacts). Remaining: booked/post-call live tests, sender reconcile vs `ceo@` on some copies.
 
 Run this once either:
 
