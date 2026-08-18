@@ -1975,8 +1975,62 @@ function logoFail(img){
   var c=img.nextElementSibling;
   if(c&&c.classList.contains('tinit')){c.style.display='flex';}
 }
-function sp(n){closeMegas();document.querySelectorAll('.page').forEach(p=>p.classList.remove('ac'));const p=document.getElementById('page-'+n);if(p){p.classList.add('ac');window.scrollTo({top:0,behavior:'smooth'});setTimeout(rv,80);trackPage(n)}}
-function spa(n,a){closeMegas();document.querySelectorAll('.page').forEach(p=>p.classList.remove('ac'));const p=document.getElementById('page-'+n);if(p){p.classList.add('ac');window.scrollTo(0,0);setTimeout(()=>{const el=document.getElementById(a);if(el)el.scrollIntoView({behavior:'smooth'});rv()},120);trackPage(n,a)}}
+/* ─── URL ROUTING — every page gets its own path; in-page sections use #anchors.
+   CloudFront serves index.html for unknown paths (403/404 fallback), so deep
+   links like /military resolve to this app and the router shows the right page. */
+var S2S_BASE_TITLE=document.title;
+var PAGE_ROUTES={
+  home:{path:'/',title:''},
+  military:{path:'/military',title:'For Transitioning Military'},
+  companies:{path:'/companies',title:'For Companies'},
+  about:{path:'/about',title:'About'},
+  blog:{path:'/resources',title:'Blog & Resources'},
+  privacy:{path:'/privacy',title:'Privacy Policy'},
+  b1:{path:'/resources/skillbridge-internship-in-sales',title:'How to Get a SkillBridge Internship in Sales'},
+  b2:{path:'/resources/skillbridge-myths-debunked',title:'Top 10 SkillBridge Myths Debunked'},
+  b3:{path:'/resources/skillbridge-application-mistakes',title:'7 Mistakes Veterans Make When Applying to SkillBridge'},
+  b4:{path:'/resources/accepting-job-offer-on-skillbridge',title:'Can You Accept a Job Offer While on SkillBridge?'},
+  b5:{path:'/resources/skillbridge-process-timeline',title:'How Long Does the SkillBridge Process Take?'},
+  b6:{path:'/resources/how-to-qualify-for-skillbridge',title:'How to Qualify for SkillBridge (With Timeline)'},
+  b7:{path:'/resources/skillbridge-vs-career-fellowship',title:'SkillBridge vs. Career Fellowship: Which Is Right for You?'},
+  b8:{path:'/resources/why-sales-career-path',title:'Why Sales as a Career Path?'}
+};
+var PATH_TO_PAGE={};
+Object.keys(PAGE_ROUTES).forEach(function(n){PATH_TO_PAGE[PAGE_ROUTES[n].path]=n});
+function urlFor(n,a){return (PAGE_ROUTES[n]?PAGE_ROUTES[n].path:'/')+(a?'#'+a:'')}
+function syncUrl(n,a,replace){
+  if(location.protocol==='file:')return;
+  var u=urlFor(n,a);
+  try{
+    if(replace){history.replaceState({page:n,anchor:a||null},'',u)}
+    else if(location.pathname+location.hash!==u){history.pushState({page:n,anchor:a||null},'',u)}
+  }catch(e){}
+}
+function renderPage(n,a){
+  closeMegas();
+  var p=document.getElementById('page-'+n);
+  if(!p){n='home';p=document.getElementById('page-home')}
+  document.querySelectorAll('.page').forEach(function(pg){pg.classList.remove('ac')});
+  p.classList.add('ac');
+  var r=PAGE_ROUTES[n];
+  document.title=(r&&r.title)?r.title+' | Service 2 Software':S2S_BASE_TITLE;
+  if(a){window.scrollTo(0,0);setTimeout(function(){var el=document.getElementById(a);if(el)el.scrollIntoView({behavior:'smooth'});rv()},120)}
+  else{window.scrollTo({top:0,behavior:'smooth'});setTimeout(rv,80)}
+  trackPage(n,a);
+  return n;
+}
+function sp(n){n=renderPage(n,null);syncUrl(n,null)}
+function spa(n,a){n=renderPage(n,a);syncUrl(n,a)}
+function routeFromLocation(isInitial){
+  var path=location.pathname.replace(/\/index\.html$/,'/');
+  if(path.length>1)path=path.replace(/\/+$/,'');
+  var n=PATH_TO_PAGE[path]||'home';
+  var a=location.hash?location.hash.slice(1):null;
+  n=renderPage(n,a);
+  if(isInitial)syncUrl(n,a,true);
+}
+window.addEventListener('popstate',function(){routeFromLocation(false)});
+document.addEventListener('DOMContentLoaded',function(){routeFromLocation(true)});
 function nv(n){sp(n);tn()}
 function nva(n,a){spa(n,a);tn()}
 function tn(){document.getElementById('mn').classList.toggle('op')}
@@ -2056,7 +2110,7 @@ function currentPageId(){
 }
 function trackPage(name,anchor){
   if(!s2sGaReady||typeof gtag!=='function'||getCookieConsent()!=='granted')return;
-  var path='/'+(name||'home')+(anchor?'#'+anchor:'');
+  var path=urlFor(name||'home',anchor);
   gtag('event','page_view',{page_title:document.title,page_location:location.origin+path,page_path:path});
 }
 applyConsentDefault();

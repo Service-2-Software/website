@@ -13,6 +13,26 @@ python3 -m http.server 8000
 # open http://localhost:8000
 ```
 
+Each page has its own URL (`/military`, `/companies`, `/about`, `/resources`,
+`/privacy`, `/resources/<article>`); in-page sections append `#anchors`
+(e.g. `/military#mil-cal`). In production CloudFront serves `index.html` for
+unknown paths, so deep links work. The basic server above 404s if you refresh
+on a deep link; to mirror CloudFront locally, use a fallback server:
+
+```bash
+python3 -c "
+from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
+import os
+class H(SimpleHTTPRequestHandler):
+    def send_error(self, code, *a, **k):
+        if code == 404:
+            self.path = '/index.html'
+            return SimpleHTTPRequestHandler.do_GET(self)
+        return SimpleHTTPRequestHandler.send_error(self, code, *a, **k)
+ThreadingHTTPServer(('127.0.0.1', 8000), H).serve_forever()
+"
+```
+
 ## AWS architecture
 
 | Piece | Choice | Why |
