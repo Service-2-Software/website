@@ -27,11 +27,11 @@ const CONTENT_SECURITY_POLICY = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self' https://service2software.activehosted.com",
-  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com",
+  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
-  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com",
+  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://app.rb2b.com",
   "frame-src https://calendly.com https://*.calendly.com https://embed-v2.testimonial.to https://testimonial.to",
   "upgrade-insecure-requests",
 ].join("; ");

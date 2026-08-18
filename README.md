@@ -101,5 +101,7 @@ Choice is stored in `localStorage` and can be changed via footer **Cookie Settin
 
 **Traffic analytics:** GA4 Measurement ID `G-SK3FHELY0M` is set in `index.html` (`S2S_GA_ID`). GA loads only after the visitor accepts analytics cookies.
 
+**Visitor identification:** RB2B (Retention.com) is installed with key `5Z6PVLHGJP6R` (`S2S_RB2B_KEY` in `index.html`). Like GA, it loads only after the visitor accepts analytics cookies, and its domains are allowlisted in the CSP (meta tag + CloudFront policy).
+
 Lead/CRM data (names, emails from forms) continues to flow into ActiveCampaign separately from page analytics.
 CloudFront access logs in AWS provide basic request-level traffic for ops/security.
