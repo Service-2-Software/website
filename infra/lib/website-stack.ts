@@ -31,7 +31,11 @@ const CONTENT_SECURITY_POLICY = [
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
-  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://app.rb2b.com",
+  // RB2B needs app.rb2b.com plus its IP-eligibility check (pro.ip-api.com) and
+  // its data-collection API Gateway. The gateway host is pinned exactly; if RB2B
+  // rotates it in a script update, collection breaks with a CSP violation —
+  // check DevTools console and update both CSPs (here + index.html meta).
+  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://app.rb2b.com https://pro.ip-api.com https://9xgnrndqve.execute-api.us-west-2.amazonaws.com",
   "frame-src https://calendly.com https://*.calendly.com https://embed-v2.testimonial.to https://testimonial.to",
   "upgrade-insecure-requests",
 ].join("; ");
