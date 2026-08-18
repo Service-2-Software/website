@@ -28,12 +28,14 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts
 - `images.unsplash.com` — stock imagery
 - `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (loaded only after cookie consent)
+- `b2bjsstore.s3.us-west-2.amazonaws.com` / `app.rb2b.com` — RB2B visitor identification (loaded only after cookie consent)
 
 ## Cookie consent & analytics
 
 - First-visit banner in `index.html` stores `s2s_cookie_consent` in `localStorage` (`granted` / `denied`).
 - Google Analytics 4 uses Consent Mode defaults (`analytics_storage` denied) until Accept.
 - `S2S_GA_ID` in `index.html` is set to the existing GA4 Measurement ID (`G-SK3FHELY0M`).
+- RB2B (`S2S_RB2B_KEY` in `index.html`, key `5Z6PVLHGJP6R`) loads behind the same Accept gate as GA4; it fetches to `app.rb2b.com` and is allowlisted in both CSPs.
 - Privacy policy SPA page: `page-privacy`. Footer links: Privacy · Cookie Settings.
 
 ## Infrastructure controls (AWS)
