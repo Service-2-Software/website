@@ -27,7 +27,7 @@ const CONTENT_SECURITY_POLICY = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self' https://service2software.activehosted.com",
-  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com",
+  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com https://assets.apollo.io https://d-code.liadm.com",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com",
   "font-src 'self' data: https://fonts.gstatic.com",
   "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
@@ -35,7 +35,9 @@ const CONTENT_SECURITY_POLICY = [
   // its data-collection API Gateway. The gateway host is pinned exactly; if RB2B
   // rotates it in a script update, collection breaks with a CSP violation —
   // check DevTools console and update both CSPs (here + index.html meta).
-  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://app.rb2b.com https://pro.ip-api.com https://9xgnrndqve.execute-api.us-west-2.amazonaws.com",
+  // Apollo website tracker loads from assets.apollo.io, posts events to
+  // aplo-evnt.com, and may load LiveIntent (d-code.liadm.com) for identity.
+  "connect-src 'self' https://service2software.activehosted.com https://calendly.com https://*.calendly.com https://assets.calendly.com https://www.google-analytics.com https://*.google-analytics.com https://analytics.google.com https://*.analytics.google.com https://www.googletagmanager.com https://app.rb2b.com https://pro.ip-api.com https://9xgnrndqve.execute-api.us-west-2.amazonaws.com https://aplo-evnt.com",
   "frame-src https://calendly.com https://*.calendly.com https://embed-v2.testimonial.to https://testimonial.to",
   "upgrade-insecure-requests",
 ].join("; ");

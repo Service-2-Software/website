@@ -29,6 +29,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `images.unsplash.com` — stock imagery
 - `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (loaded only after cookie consent)
 - `b2bjsstore.s3.us-west-2.amazonaws.com` / `app.rb2b.com` / `pro.ip-api.com` / `9xgnrndqve.execute-api.us-west-2.amazonaws.com` — RB2B visitor identification (loaded only after cookie consent; ip-api is RB2B's IP eligibility check, the pinned API Gateway host is its collection endpoint)
+- `assets.apollo.io` / `aplo-evnt.com` / `d-code.liadm.com` — Apollo.io website tracker (loaded only after cookie consent; LiveIntent script is loaded by Apollo for identity matching)
 
 ## Cookie consent & analytics
 
@@ -36,6 +37,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - Google Analytics 4 uses Consent Mode defaults (`analytics_storage` denied) until Accept.
 - `S2S_GA_ID` in `index.html` is set to the existing GA4 Measurement ID (`G-SK3FHELY0M`).
 - RB2B (`S2S_RB2B_KEY` in `index.html`, key `5Z6PVLHGJP6R`) loads behind the same Accept gate as GA4; it fetches to `app.rb2b.com` and is allowlisted in both CSPs.
+- Apollo.io (`S2S_APOLLO_APP_ID` in `index.html`, `65e1f97dab78f4043bc6f260`) loads behind the same Accept gate; it fetches to `aplo-evnt.com` and may load LiveIntent from `d-code.liadm.com`.
 - Privacy policy SPA page: `page-privacy`. Footer links: Privacy · Cookie Settings.
 
 ## Infrastructure controls (AWS)
