@@ -8,7 +8,8 @@
     "WEBSITE_SOURCE": "36",
     "NEWSLETTER_OPTIN": "37",
     "SMS_OPTIN": "38",
-    "JOURNEY_SEGMENT": "39"
+    "JOURNEY_SEGMENT": "39",
+    "INITIAL_CALL_COMPLETED": "41"
   },
   "forms": {
     "11": {
@@ -208,11 +209,15 @@
     }
   },
   "post_call": {
-    "tag": "cand-initial-call-completed",
+    "field_perstag": "INITIAL_CALL_COMPLETED",
+    "field_id": "41",
+    "true_value": "true",
+    "guard_tag": "cand-precore-email-sent",
     "campaign": "S2S \u00b7 Candidate \u00b7 Post-call Pre-Core portal",
     "template": "candidate-post-call-precore-portal",
     "source_doc": "docs/pre-core-candidate-portal.md",
-    "trigger": "After initial call with Patrick is completed (not booking)"
+    "trigger": "INITIAL_CALL_COMPLETED changes to true after Patrick's call (not booking)",
+    "sync_note": "Salesforce Flow + Apex callout (salesforce/) sets field 41 when Lead.Initial_Call_Completed__c becomes true. No AC/SF managed package."
   },
   "retired": {
     "cand-journey-lt3-booked": {

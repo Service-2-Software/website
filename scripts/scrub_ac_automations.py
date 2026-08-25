@@ -119,6 +119,12 @@ def check_provision_state(rep: Report, manifest: list[dict], state: dict) -> Non
             f"retired {name}: AC message {meta.get('message')} / campaign "
             f"{meta.get('campaign')} still exist — {meta.get('action')}",
         )
+    if not (state.get("custom_fields") or {}).get("initial-call-completed"):
+        rep.add(
+            ERROR,
+            "state",
+            "Initial Call Completed has no provisioned AC custom-field ID",
+        )
 
 
 def check_manifest_uniqueness(rep: Report, manifest: list[dict]) -> None:
@@ -177,7 +183,10 @@ def check_journey_wiring(rep: Report, manifest: list[dict], state: dict, journey
     branches = [
         *journey["candidate_journeys"].items(),
         *journey["partner_journeys"].items(),
-        ("post_call", {**journey["post_call"], "tag": journey["post_call"]["tag"]}),
+        (
+            "post_call",
+            {**journey["post_call"], "tag": journey["post_call"]["guard_tag"]},
+        ),
         (
             "newsletter_welcome",
             {**journey["newsletter"]["welcome"], "tag": journey["newsletter"]["optin_tag"]},
@@ -492,7 +501,11 @@ def check_live(rep: Report, base: str, token: str, manifest: list[dict], state: 
 
     needed = {b["tag"] for b in journey["candidate_journeys"].values()}
     needed |= {b["tag"] for b in journey["partner_journeys"].values()}
-    needed |= {journey["post_call"]["tag"], journey["newsletter"]["optin_tag"], journey["sms"]["optin_tag"]}
+    needed |= {
+        journey["post_call"]["guard_tag"],
+        journey["newsletter"]["optin_tag"],
+        journey["sms"]["optin_tag"],
+    }
     needed |= {side["tag"] for side in journey["calendly"].values()}
     for side in journey["calendly"].values():
         needed |= set(side["adds_tags"])
@@ -503,6 +516,44 @@ def check_live(rep: Report, base: str, token: str, manifest: list[dict], state: 
     have = {t.get("tag") for t in data.get("tags", [])}
     for tag in sorted(needed - have):
         rep.add(ERROR, "tags", f"tag {tag!r} does not exist in ActiveCampaign")
+
+    code, data = api_get(base, token, "fields", {"limit": 100})
+    expected_perstag = journey["post_call"]["field_perstag"]
+    field = next(
+        (
+            item
+            for item in data.get("fields", [])
+            if (item.get("perstag") or "").upper() == expected_perstag.upper()
+        ),
+        None,
+    )
+    if not field:
+        rep.add(ERROR, "fields", f"custom field %{expected_perstag}% does not exist")
+    elif field.get("type") != "checkbox":
+        rep.add(
+            ERROR,
+            "fields",
+            f"%{expected_perstag}% is {field.get('type')!r}, not Salesforce-compatible 'checkbox'",
+        )
+    else:
+        expected_id = (state.get("custom_fields") or {}).get("initial-call-completed")
+        if expected_id and str(field["id"]) != str(expected_id):
+            rep.add(
+                ERROR,
+                "fields",
+                f"%{expected_perstag}% is field {field['id']}, but provision state records {expected_id}",
+            )
+        values = {
+            option.get("value")
+            for option in data.get("fieldOptions", [])
+            if str(option.get("field")) == str(field["id"])
+        }
+        if journey["post_call"]["true_value"] not in values:
+            rep.add(
+                ERROR,
+                "fields",
+                f"%{expected_perstag}% has no lowercase true option for checkbox sync",
+            )
 
 
 # --------------------------------------------------------------------------

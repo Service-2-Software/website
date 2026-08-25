@@ -137,7 +137,16 @@ Confirm these are Active and wired as named:
 | Candidate SMS — Call Booked | Patrick Calendly tag + SMS gate | booked SMS |
 | Website - Partner SMS Consent / Nudge | Form 16 + SMS gate | see EMAIL_CAMPAIGNS.md |
 | Website - Partner SMS Call Booked | David Calendly tag + SMS gate | booked SMS |
-| Website - Candidate — Initial Call Completed | Tag `cand-initial-call-completed` | `S2S · Candidate · Post-call Pre-Core portal` |
+| Website - Candidate — Initial Call Completed | **Contact field changes** → `INITIAL_CALL_COMPLETED` (field **41**) = `\|\|true\|\|` | Send `S2S · Candidate · Post-call Pre-Core portal` |
+
+**Live state (2026-08-17):** field `INITIAL_CALL_COMPLETED` (41) and tag `cand-precore-email-sent` (89) are provisioned. Automation **18** now triggers on the **field change** (field 41 → `||true||`) and sent Pre-Core to `allie@` in testing (`entered = 1`, campaign 90 `send_amt = 1`). The legacy `tagadd: cand-initial-call-completed` trigger is still present and harmless (that tag isn’t used).
+
+**Re-send protection:** verified — ActiveCampaign does not re-send a one-time campaign to a contact who already received it, so re-flipping field 41 does not resend. Optional hardening: add an If/Else on `cand-precore-email-sent` (tag 89) before the Send and apply it after (UI only; API cannot edit automation graphs).
+
+**How the field gets set (no AC/SF app):** Salesforce record-triggered Flow
+`Lead_Initial_Call_Completed_to_AC` → Apex `ActiveCampaignInitialCallAction` →
+Named Credential callout sets AC field 41. **Live in production and
+`s2s-flowdev2`.** Full steps: [`SF_AC_INITIAL_CALL_SYNC.md`](SF_AC_INITIAL_CALL_SYNC.md).
 
 Delete or permanently deactivate **Automation 4** if it is still the unnamed stub.
 
@@ -168,5 +177,7 @@ Manual extras after live test:
 
 1. Book a Patrick Calendly slot on a 6–12 mo test lead → booked campaign.
 2. Book a Patrick slot on a <3 mo lead → ineligible-timing (not a Calendly push).
-3. Apply tag `cand-initial-call-completed` → Pre-Core portal email.
+3. On `allie@service2software.org`, flip Salesforce `Initial_Call_Completed__c`
+   to true → Flow/Apex sets AC field 41 → Pre-Core portal email. Re-flip and
+   confirm no second email. **(Passed 2026-08-17 in `s2s-flowdev2`.)**
 4. Book a David Calendly slot on an SDR partner → SDR/AE booked campaign.

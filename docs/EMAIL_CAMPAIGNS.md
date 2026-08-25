@@ -46,6 +46,7 @@ python3 scripts/ac_live_journey_test.py      # real leads, real inboxes
 | 38 | `SMS_OPTIN` | `Yes` if checked |
 | 39 | `JOURNEY_SEGMENT` | Initial nobook/separated segment (set in browser) |
 | 31 | `INITIAL_CALL_DATETIME` | Calendly start time |
+| **41** | `INITIAL_CALL_COMPLETED` | Checkbox for “Patrick’s initial call is done.” Post `true` (AC stores `||true||`). Set by Salesforce Flow callout when `Lead.Initial_Call_Completed__c` becomes true — see [`SF_AC_INITIAL_CALL_SYNC.md`](SF_AC_INITIAL_CALL_SYNC.md). |
 
 ## 1. Candidate journeys (ETS × booking)
 
@@ -181,9 +182,13 @@ Template key: `candidate-post-call-precore-portal`
 
 | Step | Action |
 | --- | --- |
-| 1 | Create/use tag `cand-initial-call-completed` |
-| 2 | Apply that tag when the call is done (Salesforce Lead Status sync, or Patrick/recruiter marks complete in AC) |
-| 3 | Automation: **Tag is added** `cand-initial-call-completed` → **Send** `S2S · Candidate · Post-call Pre-Core portal` |
+| 1 | AC checkbox `INITIAL_CALL_COMPLETED` (field **41**, option `true`) — already provisioned |
+| 2 | When Patrick’s call is done, set Salesforce `Lead.Initial_Call_Completed__c` = true. A record-triggered Flow calls Apex, which writes field 41 in AC ([`SF_AC_INITIAL_CALL_SYNC.md`](SF_AC_INITIAL_CALL_SYNC.md)) — **no** AC/SF managed package |
+| 3 | Automation **18** triggers on `INITIAL_CALL_COMPLETED` field change → `\|\|true\|\|` and sends `S2S · Candidate · Post-call Pre-Core portal` |
+| 4 | Re-send protection is automatic: AC does not re-send a one-time campaign to a contact who already got it (verified). Optional explicit guard: If/Else on tag `cand-precore-email-sent` (89) before Send + apply after |
+
+Tested end-to-end 2026-08-17 in the `s2s-flowdev2` sandbox: SF checkbox →
+Flow/Apex → AC field 41 → Pre-Core email sent once; re-trigger did not resend.
 
 Portal links in the email:
 
@@ -218,7 +223,7 @@ reachable.
 
 1. Build candidate + partner automations from the tables above (If/Else on fields/tags → Send matching `S2S · …` campaign).  
 2. Confirm Calendly field map + SF sync.  
-3. Wire **post-call Pre-Core portal** automation on `cand-initial-call-completed`.  
+3. Deploy the Salesforce Flow callout ([`SF_AC_INITIAL_CALL_SYNC.md`](SF_AC_INITIAL_CALL_SYNC.md)) and wire the guarded **post-call Pre-Core portal** automation on AC field `INITIAL_CALL_COMPLETED`.
 4. Activate automations after a test lead per segment.  
 5. Dave: revise copy in Claude using Brock/Brooke template against the provisioned HTML.
 

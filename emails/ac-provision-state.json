@@ -68,5 +68,11 @@
       "superseded_by": "candidate-ineligible-timing",
       "action": "archive in AC UI"
     }
+  },
+  "custom_fields": {
+    "initial-call-completed": "41"
+  },
+  "tags": {
+    "cand-precore-email-sent": "89"
   }
 }

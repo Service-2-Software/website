@@ -88,3 +88,5 @@ CloudFront access logs in AWS provide basic request-level traffic for ops/securi
 
 Brooke-format templates and campaign provisioning live under `emails/` + `scripts/provision_ac_campaigns.py`.  
 See [`docs/EMAIL_CAMPAIGNS.md`](docs/EMAIL_CAMPAIGNS.md) for candidate/partner/newsletter series, Calendly datetime mapping, and Salesforce routing.
+
+**Initial Call Completed → Pre-Core:** Salesforce Flow callout (no AC/SF app) — [`docs/SF_AC_INITIAL_CALL_SYNC.md`](docs/SF_AC_INITIAL_CALL_SYNC.md), Apex under `salesforce/`.

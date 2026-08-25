@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Flow xmlns="http://soap.sforce.com/2006/04/metadata">
+    <apiVersion>62.0</apiVersion>
+    <description>When Lead.Initial_Call_Completed__c becomes true, asynchronously call ActiveCampaign to set INITIAL_CALL_COMPLETED (field 41) so the Pre-Core automation can send. No AC/SF managed package.</description>
+    <environments>Default</environments>
+    <interviewLabel>Lead Initial Call Completed to AC {!$Flow.CurrentDateTime}</interviewLabel>
+    <label>Lead Initial Call Completed to AC</label>
+    <processType>AutoLaunchedFlow</processType>
+    <status>Active</status>
+    <actionCalls>
+        <name>Sync_to_ActiveCampaign</name>
+        <label>Sync Initial Call Completed to ActiveCampaign</label>
+        <locationX>176</locationX>
+        <locationY>288</locationY>
+        <actionName>ActiveCampaignInitialCallAction</actionName>
+        <actionType>apex</actionType>
+        <flowTransactionModel>Automatic</flowTransactionModel>
+        <inputParameters>
+            <name>leadId</name>
+            <value>
+                <elementReference>$Record.Id</elementReference>
+            </value>
+        </inputParameters>
+        <nameSegment>ActiveCampaignInitialCallAction</nameSegment>
+    </actionCalls>
+    <start>
+        <locationX>50</locationX>
+        <locationY>0</locationY>
+        <doesRequireRecordChangedToMeetCriteria>true</doesRequireRecordChangedToMeetCriteria>
+        <filterFormula>{!$Record.Initial_Call_Completed__c} = TRUE &amp;&amp; NOT(ISBLANK({!$Record.Email}))</filterFormula>
+        <object>Lead</object>
+        <recordTriggerType>CreateAndUpdate</recordTriggerType>
+        <scheduledPaths>
+            <name>Run_Asynchronously</name>
+            <connector>
+                <targetReference>Sync_to_ActiveCampaign</targetReference>
+            </connector>
+            <pathType>AsyncAfterCommit</pathType>
+        </scheduledPaths>
+        <triggerType>RecordAfterSave</triggerType>
+    </start>
+</Flow>

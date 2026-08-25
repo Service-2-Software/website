@@ -59,6 +59,14 @@ FORM_ROUTING = {
     },
 }
 
+POST_CALL_FIELD = {
+    "title": "Initial Call Completed",
+    "perstag": "INITIAL_CALL_COMPLETED",
+    "type": "checkbox",
+    "true_value": "true",
+}
+POST_CALL_GUARD_TAG = "cand-precore-email-sent"
+
 
 def env(name: str) -> str:
     v = os.environ.get(name, "").strip()
@@ -142,6 +150,125 @@ def resolve_list_id(lists: dict, token: str) -> str:
     if token.isdigit():
         return token
     return lists[token]
+
+
+def ensure_post_call_field(lists: dict, state: dict) -> str:
+    """Create the Salesforce-compatible checkbox used by the Pre-Core automation."""
+    code, data = v3("GET", "fields", params={"limit": 100})
+    if code != 200:
+        raise SystemExit(f"field fetch failed: {code} {data}")
+
+    expected_perstag = POST_CALL_FIELD["perstag"].upper()
+    field = next(
+        (
+            item
+            for item in data.get("fields", [])
+            if (item.get("perstag") or "").upper() == expected_perstag
+            or item.get("title") == POST_CALL_FIELD["title"]
+        ),
+        None,
+    )
+    if field and field.get("type") != POST_CALL_FIELD["type"]:
+        raise SystemExit(
+            f"{POST_CALL_FIELD['title']!r} exists as {field.get('type')!r}; "
+            f"Salesforce checkbox mapping requires {POST_CALL_FIELD['type']!r}"
+        )
+
+    if not field:
+        code, out = v3(
+            "POST",
+            "fields",
+            {
+                "field": {
+                    "title": POST_CALL_FIELD["title"],
+                    "descript": (
+                        "Set when Patrick's initial call is completed. Drives the "
+                        "one-time Pre-Core portal email. Not auto-synced from Salesforce."
+                    ),
+                    "type": POST_CALL_FIELD["type"],
+                    "perstag": POST_CALL_FIELD["perstag"],
+                    "group": 1,
+                    "show_in_list": True,
+                    "visible": True,
+                    "ordernum": 0,
+                }
+            },
+        )
+        if code not in (200, 201):
+            raise SystemExit(f"create post-call field failed: {code} {out}")
+        field = out["field"]
+        print(f"field created {POST_CALL_FIELD['perstag']} -> {field['id']}")
+    else:
+        print(f"field ok {POST_CALL_FIELD['perstag']} -> {field['id']}")
+
+    field_id = str(field["id"])
+    options = [
+        option
+        for option in data.get("fieldOptions", [])
+        if str(option.get("field")) == field_id
+    ]
+    if not any(option.get("value") == POST_CALL_FIELD["true_value"] for option in options):
+        code, out = v3(
+            "POST",
+            "fieldOption/bulk",
+            {
+                "fieldOptions": [
+                    {
+                        "orderid": 1,
+                        "value": POST_CALL_FIELD["true_value"],
+                        "label": "Completed",
+                        "isdefault": False,
+                        "field": field_id,
+                    }
+                ]
+            },
+        )
+        if code not in (200, 201):
+            raise SystemExit(f"create post-call field option failed: {code} {out}")
+        print(f"field option created {POST_CALL_FIELD['perstag']} = true")
+
+    relationships = {
+        (str(rel.get("field")), str(rel.get("relid")))
+        for rel in data.get("fieldRels", [])
+    }
+    for list_key in ("master-contact-list", "website-candidates"):
+        list_id = str(lists[list_key])
+        if (field_id, list_id) in relationships:
+            continue
+        code, out = v3(
+            "POST",
+            "fieldRels",
+            {"fieldRel": {"relid": list_id, "field": field_id}},
+        )
+        if code not in (200, 201, 422):
+            raise SystemExit(
+                f"relate post-call field to {list_key} failed: {code} {out}"
+            )
+        print(f"field {field_id} related to {list_key} ({list_id})")
+
+    state.setdefault("custom_fields", {})["initial-call-completed"] = field_id
+    return field_id
+
+
+def ensure_tag(name: str, description: str, state: dict) -> str:
+    code, data = v3("GET", "tags", params={"limit": 100})
+    if code != 200:
+        raise SystemExit(f"tag fetch failed: {code} {data}")
+    tag = next((item for item in data.get("tags", []) if item.get("tag") == name), None)
+    if not tag:
+        code, out = v3(
+            "POST",
+            "tags",
+            {"tag": {"tag": name, "tagType": "contact", "description": description}},
+        )
+        if code not in (200, 201):
+            raise SystemExit(f"create tag {name}: {code} {out}")
+        tag = out["tag"]
+        print(f"tag created {name} -> {tag['id']}")
+    else:
+        print(f"tag ok {name} -> {tag['id']}")
+    state.setdefault("tags", {})[name] = str(tag["id"])
+    return str(tag["id"])
 
 
 def update_forms(lists: dict) -> None:
@@ -408,6 +535,12 @@ def main() -> None:
         state = json.loads(STATE_PATH.read_text(encoding="utf-8"))
 
     lists = ensure_lists(state)
+    ensure_post_call_field(lists, state)
+    ensure_tag(
+        POST_CALL_GUARD_TAG,
+        "Prevents the Initial Call Completed automation from sending Pre-Core twice.",
+        state,
+    )
     update_forms(lists)
     problems = repair_form_fields()
     upsert_messages_and_campaigns(lists, state)
