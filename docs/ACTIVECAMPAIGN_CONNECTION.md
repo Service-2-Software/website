@@ -44,6 +44,19 @@ python3 scripts/ac_connect_check.py
 
 The script never prints the token.
 
+## Status (2026-08-28)
+
+| Check | Result |
+| --- | --- |
+| Laptop `GET /api/3/users/me` | **200** — key is valid |
+| Cursor Cloud `/api/3` | still empty Cloudflare **403** |
+| ActiveCampaign AI chat | confirmed: not an account setting; infra must whitelist |
+| Human support ticket | **11476413** |
+
+When support says the Cloudflare rule is lifted, rerun
+`python3 scripts/ac_connect_check.py` from Cursor Cloud. Exit `0` means
+API/MCP work can resume.
+
 ## Unblock (must be done in the AC account, not in this repo)
 
 1. From a laptop, confirm the key works:
