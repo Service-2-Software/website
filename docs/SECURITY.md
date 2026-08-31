@@ -23,7 +23,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 ## Third-party surfaces
 
 - `service2software.activehosted.com` — form posts; also serves the full form embed script (`/f/embed.php?id=7`) on the hidden `/sb-application` page
-- `cdn.jsdelivr.net` — intl-tel-input JS/CSS loaded by the ActiveCampaign full embed (phone field)
+- `cdn.jsdelivr.net` — intl-tel-input JS/CSS and country-flag sprites loaded by the ActiveCampaign full embed (phone field)
 - `fonts.bunny.net` — fonts loaded by the ActiveCampaign full embed
 - `d226aj4ao1t61q.cloudfront.net` — ActiveCampaign CDN images loaded by the full embed
 - `assets.calendly.com` / `calendly.com` — booking widget
