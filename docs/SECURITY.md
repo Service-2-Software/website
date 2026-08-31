@@ -22,7 +22,10 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 
 ## Third-party surfaces
 
-- `service2software.activehosted.com` — form posts
+- `service2software.activehosted.com` — form posts; also serves the full form embed script (`/f/embed.php?id=7`) on the hidden `/sb-application` page
+- `cdn.jsdelivr.net` — intl-tel-input JS/CSS loaded by the ActiveCampaign full embed (phone field)
+- `fonts.bunny.net` — fonts loaded by the ActiveCampaign full embed
+- `d226aj4ao1t61q.cloudfront.net` — ActiveCampaign CDN images loaded by the full embed
 - `assets.calendly.com` / `calendly.com` — booking widget
 - `embed-v2.testimonial.to` — testimonials iframe
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts
@@ -71,8 +74,16 @@ is embedded in the site — only public form `u`/`f` (and related) fields.
 | Site form | AC form | `u` / `f` |
 | --- | --- | --- |
 | Candidate Application (home + military) | Candidate Application | 7 |
+| SkillBridge Candidate Application (hidden `/sb-application` page, full embed) | Candidate Application | 7 |
 | Partner Inquiry (home + companies) | Partner Inquiry | 12 |
 | Newsletter | Home Page Group | 13 |
+
+The `/sb-application` page is intentionally unlisted: candidates receive the URL
+directly during interviews. It is not linked from nav, footer, homepage, or CTAs.
+It uses ActiveCampaign's full HTML embed (script from
+`service2software.activehosted.com/f/embed.php?id=7`), which renders the form
+with AC's own hidden `u`/`f`/`or` values and handles validation, the thank-you
+state, and the intl-tel-input phone field.
 
 Custom fields used: `field[5]` Branch, `field[32]` ETS window, `field[35]` Company,
 `field[34]` Hiring roles. Newsletter list: **Home Page Group**.
