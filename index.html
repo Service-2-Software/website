@@ -1098,19 +1098,20 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         </div>
       </div>
 
-      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Military Application" AC form ID) -->
+      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Candidate Application" AC form ID) -->
       <div id="hf-mil" class="ac-panel ac-lt" style="display:none">
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- ActiveCampaign: Military Application (u/f=11) -->
+        <!-- ActiveCampaign: Candidate Application (u/f=7) -->
         <form onsubmit="return hfSubmit(this,'mil')">
-          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+          <input type="hidden" name="u" value="7"><input type="hidden" name="f" value="7"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e11af7ed-d08e-4ea9-b445-4cb753d1b4a1">
           <div class="ac-grid">
-            <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
+            <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
+            <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
+            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
           <div class="ac-submit">
@@ -1202,14 +1203,15 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- ActiveCampaign: Military Application (u/f=11) -->
+        <!-- ActiveCampaign: Candidate Application (u/f=7) -->
         <form onsubmit="return acSubmit(this,'mil')">
-          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="257864c4-7b9f-41d4-8ceb-ba896dc900fd">
+          <input type="hidden" name="u" value="7"><input type="hidden" name="f" value="7"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e11af7ed-d08e-4ea9-b445-4cb753d1b4a1">
           <div class="ac-grid">
-            <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
+            <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
+            <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
+            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
           <div class="ac-submit">
@@ -2223,6 +2225,7 @@ var LAST_CAL=null;
 function calPopup(url,form){
   var q=[];
   if(form){try{var fd=new FormData(form);var n=fd.get('fullname'),e=fd.get('email');
+    if(!n){n=((fd.get('firstname')||'')+' '+(fd.get('lastname')||'')).trim();}
     if(n){q.push('name='+encodeURIComponent(n));}if(e){q.push('email='+encodeURIComponent(e));}}catch(err){}}
   var full=q.length?url+(url.indexOf('?')>-1?'&':'?')+q.join('&'):url;
   LAST_CAL=full;

@@ -15,7 +15,7 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 | Medium | `innerHTML` used for confirmation copy (XSS footgun) | Fixed — switched to `textContent` |
 | Low | External `target="_blank"` links without `rel="noopener noreferrer"` | Fixed |
 | Low | Testimonial iframe had no sandbox / referrer policy | Fixed — sandbox + referrerpolicy |
-| Low | ActiveCampaign form IDs still placeholders (`TODO_AC_FORM_ID`) | Fixed — wired to forms 11/12/13 |
+| Low | ActiveCampaign form IDs still placeholders (`TODO_AC_FORM_ID`) | Fixed — wired to forms 7/12/13 |
 | Info | Calendly script loaded without SRI | Accepted — third-party widget; CSP allowlists origin |
 | Info | `mode: 'no-cors'` AC POSTs | Expected for AC `proc.php`; response opaque by design |
 | Info | Inline scripts/styles require `'unsafe-inline'` in CSP | Accepted for single-file SPA; tighten if/when assets are split |
@@ -70,7 +70,7 @@ is embedded in the site — only public form `u`/`f` (and related) fields.
 
 | Site form | AC form | `u` / `f` |
 | --- | --- | --- |
-| Military Application (home + military) | Military Application | 11 |
+| Candidate Application (home + military) | Candidate Application | 7 |
 | Partner Inquiry (home + companies) | Partner Inquiry | 12 |
 | Newsletter | Home Page Group | 13 |
 
