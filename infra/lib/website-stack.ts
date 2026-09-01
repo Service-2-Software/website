@@ -27,10 +27,15 @@ const CONTENT_SECURITY_POLICY = [
   "object-src 'none'",
   "frame-ancestors 'none'",
   "form-action 'self' https://service2software.activehosted.com",
-  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com https://assets.apollo.io https://d-code.liadm.com",
-  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com",
-  "font-src 'self' data: https://fonts.gstatic.com",
-  "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com",
+  // The ActiveCampaign full form embed on the hidden /sb-application page loads
+  // its script from service2software.activehosted.com, intl-tel-input JS/CSS
+  // and flag sprites from cdn.jsdelivr.net, fonts from fonts.bunny.net, and
+  // images from AC's CDN (d226aj4ao1t61q.cloudfront.net). Keep in sync with
+  // the index.html meta CSP.
+  "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com https://assets.apollo.io https://d-code.liadm.com https://service2software.activehosted.com https://cdn.jsdelivr.net",
+  "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com https://fonts.bunny.net https://cdn.jsdelivr.net",
+  "font-src 'self' data: https://fonts.gstatic.com https://fonts.bunny.net",
+  "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com https://d226aj4ao1t61q.cloudfront.net https://cdn.jsdelivr.net",
   // RB2B needs app.rb2b.com plus its IP-eligibility check (pro.ip-api.com) and
   // its data-collection API Gateway. The gateway host is pinned exactly; if RB2B
   // rotates it in a script update, collection breaks with a CSP violation —
