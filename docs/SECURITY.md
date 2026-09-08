@@ -29,7 +29,6 @@ Static marketing SPA with lead forms that POST to ActiveCampaign and open Calend
 - `assets.calendly.com` / `calendly.com` — booking widget
 - `embed-v2.testimonial.to` — testimonials iframe
 - `fonts.googleapis.com` / `fonts.gstatic.com` — fonts
-- `images.unsplash.com` — stock imagery
 - `www.googletagmanager.com` / `*.google-analytics.com` — GA4 (loaded only after cookie consent)
 - `b2bjsstore.s3.us-west-2.amazonaws.com` / `app.rb2b.com` / `pro.ip-api.com` / `9xgnrndqve.execute-api.us-west-2.amazonaws.com` — RB2B visitor identification (loaded only after cookie consent; ip-api is RB2B's IP eligibility check, the pinned API Gateway host is its collection endpoint)
 - `assets.apollo.io` / `aplo-evnt.com` / `d-code.liadm.com` — Apollo.io website tracker (loaded only after cookie consent; LiveIntent script is loaded by Apollo for identity matching)
