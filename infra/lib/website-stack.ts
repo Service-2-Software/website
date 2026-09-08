@@ -13,6 +13,47 @@ import { Construct } from "constructs";
  */
 const SITE_DOMAIN_NAMES = ["service2software.org", "www.service2software.org"];
 
+/** Canonical public host (apex). www 301-redirects here, preserving path + query. */
+const CANONICAL_DOMAIN_NAME = SITE_DOMAIN_NAMES[0];
+
+/**
+ * CloudFront Function (viewer-request): 301 any non-canonical host (www) to the
+ * apex, preserving the path and query string. HTTP→HTTPS is still handled by
+ * the viewer protocol policy, and requests on the canonical host pass through
+ * untouched, so the 403/404→index.html SPA fallback keeps working.
+ */
+const REDIRECT_TO_APEX_FUNCTION = `
+function handler(event) {
+  var request = event.request;
+  var host = request.headers.host && request.headers.host.value;
+  if (host === '${CANONICAL_DOMAIN_NAME}') {
+    return request;
+  }
+  var params = [];
+  for (var key in request.querystring) {
+    var entry = request.querystring[key];
+    if (entry.multiValue) {
+      entry.multiValue.forEach(function (item) {
+        params.push(item.value === '' ? key : key + '=' + item.value);
+      });
+    } else if (entry.value === '') {
+      params.push(key);
+    } else {
+      params.push(key + '=' + entry.value);
+    }
+  }
+  var qs = params.length ? '?' + params.join('&') : '';
+  return {
+    statusCode: 301,
+    statusDescription: 'Moved Permanently',
+    headers: {
+      location: { value: 'https://${CANONICAL_DOMAIN_NAME}' + request.uri + qs },
+      'cache-control': { value: 'max-age=3600' },
+    },
+  };
+}
+`;
+
 /**
  * ACM certificate (us-east-1) covering the domains above. Override via the
  * `certificateArn` CDK context value if the certificate is ever reissued.
@@ -35,7 +76,7 @@ const CONTENT_SECURITY_POLICY = [
   "script-src 'self' 'unsafe-inline' https://assets.calendly.com https://www.googletagmanager.com https://b2bjsstore.s3.us-west-2.amazonaws.com https://assets.apollo.io https://d-code.liadm.com https://service2software.activehosted.com https://cdn.jsdelivr.net",
   "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://assets.calendly.com https://fonts.bunny.net https://cdn.jsdelivr.net",
   "font-src 'self' data: https://fonts.gstatic.com https://fonts.bunny.net",
-  "img-src 'self' data: https://images.unsplash.com https://www.google-analytics.com https://www.googletagmanager.com https://d226aj4ao1t61q.cloudfront.net https://cdn.jsdelivr.net",
+  "img-src 'self' data: https://www.google-analytics.com https://www.googletagmanager.com https://d226aj4ao1t61q.cloudfront.net https://cdn.jsdelivr.net",
   // RB2B needs app.rb2b.com plus its IP-eligibility check (pro.ip-api.com) and
   // its data-collection API Gateway. The gateway host is pinned exactly; if RB2B
   // rotates it in a script update, collection breaks with a CSP violation —
@@ -129,6 +170,16 @@ export class WebsiteStack extends cdk.Stack {
       certificateArn
     );
 
+    const redirectToApexFunction = new cloudfront.Function(
+      this,
+      "RedirectToApexFunction",
+      {
+        comment: "301 www.service2software.org -> service2software.org",
+        runtime: cloudfront.FunctionRuntime.JS_2_0,
+        code: cloudfront.FunctionCode.fromInline(REDIRECT_TO_APEX_FUNCTION),
+      }
+    );
+
     const distribution = new cloudfront.Distribution(this, "Distribution", {
       comment: "Service 2 Software website",
       defaultRootObject: "index.html",
@@ -147,6 +198,12 @@ export class WebsiteStack extends cdk.Stack {
         cachedMethods: cloudfront.CachedMethods.CACHE_GET_HEAD_OPTIONS,
         compress: true,
         responseHeadersPolicy,
+        functionAssociations: [
+          {
+            function: redirectToApexFunction,
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+          },
+        ],
       },
       errorResponses: [
         {
@@ -204,7 +261,7 @@ export class WebsiteStack extends cdk.Stack {
       description: "CloudFront distribution domain (point site DNS CNAMEs here)",
     });
     new cdk.CfnOutput(this, "WebsiteUrl", {
-      value: `https://${SITE_DOMAIN_NAMES[1]}`,
+      value: `https://${CANONICAL_DOMAIN_NAME}`,
       description: "Primary public site URL served via the custom domain",
     });
   }
