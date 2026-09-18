@@ -1097,19 +1097,20 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         </div>
       </div>
 
-      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Candidate Application" AC form ID) -->
+      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Military Application" AC form ID) -->
       <div id="hf-mil" class="ac-panel ac-lt" style="display:none">
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- ActiveCampaign: Candidate Application (u/f=7) -->
+        <!-- ActiveCampaign: Military Application (f=11) — short apply; has field[32] ETS + field[5] Branch.
+             The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return hfSubmit(this,'mil')">
-          <input type="hidden" name="u" value="7"><input type="hidden" name="f" value="7"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e11af7ed-d08e-4ea9-b445-4cb753d1b4a1">
+          <input type="hidden" name="u" value="6AAD510B9F2BA"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e73e652b-f4f4-4d80-9e1e-b43b2641a8b9">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
-            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
+            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(910) 555-0123"></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
@@ -1202,14 +1203,15 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- ActiveCampaign: Candidate Application (u/f=7) -->
+        <!-- ActiveCampaign: Military Application (f=11) — short apply; has field[32] ETS + field[5] Branch.
+             The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return acSubmit(this,'mil')">
-          <input type="hidden" name="u" value="7"><input type="hidden" name="f" value="7"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e11af7ed-d08e-4ea9-b445-4cb753d1b4a1">
+          <input type="hidden" name="u" value="6AAD510B9F2BA"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e73e652b-f4f4-4d80-9e1e-b43b2641a8b9">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
-            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
+            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(910) 555-0123"></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="US Marine Corps">Marine Corps</option><option value="US Navy">Navy</option><option value="US Air Force">Air Force</option><option value="US Space Force">Space Force</option><option value="US Coast Guard">Coast Guard</option></select></div>
             <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
           </div>
@@ -2282,6 +2284,41 @@ function etsSkipsCalendly(form){
     return v==='Less than 3 months'||v==='Already separated';
   }catch(e){return false;}
 }
+/* Short mil applies post to AC Form 11 (Military Application). Form 11 requires
+   fullname to create a contact, so build it from first+last. field[36]/field[39]
+   tag where the short apply came from (optional in AC). */
+function milFormData(form){
+  var fd=new FormData(form);
+  var full=((fd.get('firstname')||'')+' '+(fd.get('lastname')||'')).replace(/\s+/g,' ').trim();
+  if(full)fd.set('fullname',full);
+  try{fd.set('field[36]',location.pathname||'/');}catch(e){}
+  fd.set('field[39]','short-apply');
+  return fd;
+}
+/* Light phone sanity check — AC rejects non-real E.164 numbers, so catch
+   obviously fake ones (e.g. 555 area codes) before submit. Blank passes:
+   phone is optional. Non-US numbers entered with "+" just need E.164 length. */
+function milPhoneValid(form){
+  var inp=form.querySelector('input[name="phone"]');
+  if(!inp)return true;
+  inp.setCustomValidity('');
+  var raw=inp.value.trim();
+  if(!raw)return true;
+  var d=raw.replace(/\D/g,'');
+  var ok;
+  if(raw.charAt(0)==='+'&&d.charAt(0)!=='1'){
+    ok=d.length>=8&&d.length<=15;
+  }else{
+    if(d.length===11&&d.charAt(0)==='1')d=d.slice(1);
+    ok=d.length===10&&d.charAt(0)>='2'&&d.charAt(3)>='2'&&d.slice(0,3)!=='555';
+  }
+  if(!ok){
+    inp.setCustomValidity('Please enter a real phone number, e.g. (910) 555-0123 \u2014 or leave it blank.');
+    inp.reportValidity();
+    inp.addEventListener('input',function(){inp.setCustomValidity('');},{once:true});
+  }
+  return ok;
+}
 function setBookCalVisible(id,show){
   var el=document.getElementById(id);
   if(el)el.style.display=show?'':'none';
@@ -2312,8 +2349,9 @@ function hfReset(){
   hfScroll();
 }
 function hfSubmit(form,w){
+  if(w==='mil'&&!milPhoneValid(form))return false;
   try{
-    var fd=new FormData(form);
+    var fd=(w==='mil')?milFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
@@ -2337,8 +2375,9 @@ function acReset(){
   acScroll();
 }
 function acSubmit(form,w){
+  if(w==='mil'&&!milPhoneValid(form))return false;
   try{
-    var fd=new FormData(form);
+    var fd=(w==='mil')?milFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
