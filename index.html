@@ -1097,15 +1097,15 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         </div>
       </div>
 
-      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Military Application" AC form ID) -->
+      <!-- STEP 2A: SERVICE MEMBER (mirrors military page form; same "Website - Military Inquiry" AC form ID) -->
       <div id="hf-mil" class="ac-panel ac-lt" style="display:none">
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- ActiveCampaign: Military Application (f=11) — short apply; has field[32] ETS + field[5] Branch.
+        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[32] ETS + field[5] Branch.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return hfSubmit(this,'mil')">
-          <input type="hidden" name="u" value="6AAD510B9F2BA"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e73e652b-f4f4-4d80-9e1e-b43b2641a8b9">
+          <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
@@ -1126,9 +1126,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Talk to Our Team.</h3>
         <p class="bw hf-ps">Simple annual pricing. No surprise fees. Tell us what you need and book a call in one step.</p>
-        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
+        <!-- ActiveCampaign: Partner Inquiry (f=16) -->
         <form onsubmit="return hfSubmit(this,'co')">
-          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+          <input type="hidden" name="u" value="6ABECBE6DFD3D"><input type="hidden" name="f" value="16"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="9265e93b-4f5e-4f17-a1a6-08df8a91ac81">
           <div class="ac-grid">
             <div class="ac-field"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
             <div class="ac-field"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
@@ -1203,10 +1203,10 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- ActiveCampaign: Military Application (f=11) — short apply; has field[32] ETS + field[5] Branch.
+        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[32] ETS + field[5] Branch.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return acSubmit(this,'mil')">
-          <input type="hidden" name="u" value="6AAD510B9F2BA"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="e73e652b-f4f4-4d80-9e1e-b43b2641a8b9">
+          <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
@@ -1388,9 +1388,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
           <h2 class="h2k" style="margin-top:16px">Talk to<br>Our Team.</h2>
           <p class="bk" style="margin-top:16px">Simple annual pricing. No surprise fees. Tell us what you need and book a call with our team in one step.</p>
         </div>
-        <!-- ActiveCampaign: Partner Inquiry (u/f=12) -->
+        <!-- ActiveCampaign: Partner Inquiry (f=16) -->
         <form class="lead lead-k" onsubmit="return leadSubmit(this,'co')">
-          <input type="hidden" name="u" value="12"><input type="hidden" name="f" value="12"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="4ecb8381-1c2c-44b5-b9e4-96d1fe7cb496">
+          <input type="hidden" name="u" value="6ABECBE6DFD3D"><input type="hidden" name="f" value="16"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="9265e93b-4f5e-4f17-a1a6-08df8a91ac81">
           <div class="lf"><label>First &amp; Last Name</label><input type="text" name="fullname" placeholder="Jane Doe" required></div>
           <div class="lf"><label>Work Email</label><input type="email" name="email" placeholder="you@company.com" required></div>
           <div class="lf"><label>Company</label><input type="text" name="field[35]" placeholder="Company name" required></div>
@@ -2225,7 +2225,7 @@ const CAL_URLS={
 };
 function leadSubmit(form,key){
   try{
-    const fd=new FormData(form);
+    const fd=(key==='co')?coFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(()=>{});
     }
@@ -2295,6 +2295,17 @@ function milFormData(form){
   fd.set('field[39]','short-apply');
   return fd;
 }
+/* Company/partner forms post to AC Form 16 (Partner Inquiry). Its field[34]
+   "What Roles Are You Hiring?" only accepts: Account Management, Customer
+   Support, Customer Success, Project Management, Other. Map the site's role
+   options onto those in the payload only (visible options unchanged). */
+var CO_ROLE_MAP={'SDR / BDR':'Other','Account Executive':'Account Management','Customer Success':'Customer Success','Multiple / Other':'Other'};
+function coFormData(form){
+  var fd=new FormData(form);
+  var r=fd.get('field[34]');
+  if(r)fd.set('field[34]',CO_ROLE_MAP.hasOwnProperty(r)?CO_ROLE_MAP[r]:'Other');
+  return fd;
+}
 /* Light phone sanity check — AC rejects non-real E.164 numbers, so catch
    obviously fake ones (e.g. 555 area codes) before submit. Blank passes:
    phone is optional. Non-US numbers entered with "+" just need E.164 length. */
@@ -2351,7 +2362,7 @@ function hfReset(){
 function hfSubmit(form,w){
   if(w==='mil'&&!milPhoneValid(form))return false;
   try{
-    var fd=(w==='mil')?milFormData(form):new FormData(form);
+    var fd=(w==='mil')?milFormData(form):(w==='co')?coFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
@@ -2377,7 +2388,7 @@ function acReset(){
 function acSubmit(form,w){
   if(w==='mil'&&!milPhoneValid(form))return false;
   try{
-    var fd=(w==='mil')?milFormData(form):new FormData(form);
+    var fd=(w==='mil')?milFormData(form):(w==='co')?coFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
