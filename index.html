@@ -2284,6 +2284,18 @@ function etsSkipsCalendly(form){
     return v==='Less than 3 months'||v==='Already separated';
   }catch(e){return false;}
 }
+/* AC Form 11 validates phone as E.164 (+XXXXXXXXXXXXX) and silently rejects
+   anything else (the no-cors POST hides the error), so normalize the optional
+   phone into that shape before posting. Blank stays blank. */
+function milPhoneE164(v){
+  v=(v||'').trim();
+  if(!v)return '';
+  if(v.charAt(0)==='+')return '+'+v.slice(1).replace(/\D/g,'');
+  var d=v.replace(/\D/g,'');
+  if(!d)return '';
+  if(d.length===10)return '+1'+d;
+  return '+'+d;
+}
 /* Short mil applies post to AC Form 11. Form 11 only has fullname, so build it
    from first+last and drop the separate name parts from the payload. */
 function milFormData(form){
@@ -2291,6 +2303,7 @@ function milFormData(form){
   var full=((fd.get('firstname')||'')+' '+(fd.get('lastname')||'')).replace(/\s+/g,' ').trim();
   if(full)fd.set('fullname',full);
   fd.delete('firstname');fd.delete('lastname');
+  if(fd.has('phone'))fd.set('phone',milPhoneE164(fd.get('phone')));
   return fd;
 }
 /* Company/partner forms post to AC Form 16 (Partner Inquiry). Its field[34]
