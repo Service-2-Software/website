@@ -1,0 +1,11 @@
+{
+  "name": "s2s-website",
+  "private": true,
+  "description": "Tests for the Service 2 Software single-page site (index.html)",
+  "scripts": {
+    "test": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.49.1"
+  }
+}

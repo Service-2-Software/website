@@ -1102,7 +1102,8 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[32] ETS + field[5] Branch.
+        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[8] Separation date
+             (field[32] ETS window is derived from it in milFormData) + field[5] Branch.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return hfSubmit(this,'mil')">
           <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
@@ -1112,7 +1113,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
-            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
+            <div class="ac-field ac-full"><label>Separation (ETS) date</label><input type="date" name="field[8]" required></div>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1203,7 +1204,8 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[32] ETS + field[5] Branch.
+        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[8] Separation date
+             (field[32] ETS window is derived from it in milFormData) + field[5] Branch.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return acSubmit(this,'mil')">
           <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
@@ -1213,7 +1215,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
-            <div class="ac-field ac-full"><label>How Far From Separation (ETS/EAS) Are You?</label><select name="field[32]" required><option value="" disabled selected>Select window&hellip;</option><option value="More than 12 months">More than 12 months</option><option value="6-12 months">6&ndash;12 months</option><option value="3-6 months">3&ndash;6 months</option><option value="Less than 3 months">Less than 3 months</option><option value="Already separated">Already separated</option></select></div>
+            <div class="ac-field ac-full"><label>Separation (ETS) date</label><input type="date" name="field[8]" required></div>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -2277,10 +2279,37 @@ function calPopup(url,form){
   return false;
 }
 function reopenCal(){if(LAST_CAL){if(window.Calendly&&Calendly.initPopupWidget){Calendly.initPopupWidget({url:LAST_CAL});}else{window.open(LAST_CAL,'_blank');}}}
+/* ETS window (field[32]) is derived from the exact Separation (ETS) date the
+   candidate enters (field[8], YYYY-MM-DD from the date input) using the exact
+   option strings the old field[32] dropdown posted. Windows are inclusive of
+   their lower bound: exactly 3 months out posts "3-6 months" and exactly
+   6 months out posts "6-12 months" (the higher window — consistent with
+   "Less than 3 months" strictly excluding 3). Exactly 12 months out stays
+   "6-12 months" because "More than 12 months" requires strictly more than 12.
+   Dates before today post "Already separated"; today itself counts as
+   "Less than 3 months" (separating today, not yet separated). */
+function milAddMonths(t,n){
+  var d=new Date(t.getFullYear(),t.getMonth()+n,t.getDate());
+  if(d.getDate()!==t.getDate())d.setDate(0);/* clamp month-end overflow, e.g. Nov 30 + 3mo -> Feb 28 */
+  return d;
+}
+function milEtsWindow(v){
+  var m=/^(\d{4})-(\d{2})-(\d{2})$/.exec((v||'').trim());
+  if(!m)return '';
+  var d=new Date(+m[1],+m[2]-1,+m[3]);
+  if(isNaN(d))return '';
+  var now=new Date();
+  var t=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(d<t)return 'Already separated';
+  if(d<milAddMonths(t,3))return 'Less than 3 months';
+  if(d<milAddMonths(t,6))return '3-6 months';
+  if(d<=milAddMonths(t,12))return '6-12 months';
+  return 'More than 12 months';
+}
 /* SkillBridge intro calls are for candidates with 3+ months remaining. */
 function etsSkipsCalendly(form){
   try{
-    var v=new FormData(form).get('field[32]');
+    var v=milEtsWindow(new FormData(form).get('field[8]'));
     return v==='Less than 3 months'||v==='Already separated';
   }catch(e){return false;}
 }
@@ -2297,13 +2326,18 @@ function milPhoneE164(v){
   return '+'+d;
 }
 /* Short mil applies post to AC Form 11. Form 11 only has fullname, so build it
-   from first+last and drop the separate name parts from the payload. */
+   from first+last and drop the separate name parts from the payload. field[8]
+   (Separation date, YYYY-MM-DD) comes straight from the date input; the ETS
+   window field[32] is derived from it so downstream AC automations keep
+   receiving the same strings the old dropdown posted. */
 function milFormData(form){
   var fd=new FormData(form);
   var full=((fd.get('firstname')||'')+' '+(fd.get('lastname')||'')).replace(/\s+/g,' ').trim();
   if(full)fd.set('fullname',full);
   fd.delete('firstname');fd.delete('lastname');
   if(fd.has('phone'))fd.set('phone',milPhoneE164(fd.get('phone')));
+  var w=milEtsWindow(fd.get('field[8]'));
+  if(w)fd.set('field[32]',w);
   return fd;
 }
 /* Company/partner forms post to AC Form 16 (Partner Inquiry). Its field[34]
