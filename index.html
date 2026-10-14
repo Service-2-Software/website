@@ -607,6 +607,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 .ac-radio input:checked + span{border-color:var(--g);background:var(--g);color:var(--k)}
 .ac-submit{display:flex;align-items:center;gap:22px;margin-top:34px;flex-wrap:wrap}
 .ac-micro{font-family:var(--fo);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.ac-consent{display:flex;gap:12px;align-items:flex-start;text-align:left;cursor:pointer}
+.ac-consent input[type=checkbox]{width:17px;height:17px;margin-top:2px;flex-shrink:0;accent-color:var(--g);cursor:pointer}
+.ac-consent span{font-family:var(--fb);font-size:12.5px;line-height:1.6;color:rgba(255,255,255,.45)}
 .ac-booked{font-family:var(--fd);font-weight:700;font-size:34px;text-transform:uppercase;text-align:center;color:var(--g)}
 .acq-w{color:rgba(17,17,17,.55)}
 .faqwrap{max-width:860px;margin:0 auto}
@@ -631,6 +634,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 .ac-lt .ac-field input::placeholder{color:rgba(17,17,17,.3)}
 .ac-lt .ac-field input:focus,.ac-lt .ac-field select:focus{border-color:var(--g);box-shadow:0 0 0 1px var(--g)}
 .ac-lt .ac-micro{color:rgba(17,17,17,.45)}
+.ac-lt .ac-consent span{color:rgba(17,17,17,.5)}
 .ac-lt .ac-booked{color:var(--ink)}
 
 /* ─── RESPONSIVE ─── */
@@ -1102,18 +1106,23 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
         <button type="button" class="ac-back" onclick="hfReset()">&larr; Not you? Change</button>
         <h3 class="hf-pt">Start Your Application.</h3>
         <p class="bw hf-ps">60 seconds. Free. Book your intro call the moment you submit.</p>
-        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[8] Separation date
-             (field[32] ETS window is derived from it in milFormData) + field[5] Branch.
+        <!-- ActiveCampaign: Military Inquiry (f=11) — short apply; has field[8] Separation Date
+             (field[32] ETS window is derived from it in milFormData; "N/A - Spouse" when Branch is
+             Military Spouse), field[5] Branch, and optional field[47] lead source.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return hfSubmit(this,'mil')">
-          <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
+          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="a0d5e878-42eb-41ee-9e19-4dd997d107e2">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
-            <div class="ac-field ac-full"><label>Separation (ETS) date</label><input type="date" name="field[8]" required></div>
+            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required onchange="milSpouseToggle(this)"><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
+            <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
+            <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
+            <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
+                 same as AC's own embed serializer. Copy approved by Allie — keep byte-identical. -->
+            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1204,18 +1213,23 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 
       <!-- STEP 2A: SERVICE MEMBER -->
       <div id="ac-mil" class="ac-panel">
-        <!-- ActiveCampaign: Website - Military Inquiry (f=11) — short apply; has field[8] Separation date
-             (field[32] ETS window is derived from it in milFormData) + field[5] Branch.
+        <!-- ActiveCampaign: Military Inquiry (f=11) — short apply; has field[8] Separation Date
+             (field[32] ETS window is derived from it in milFormData; "N/A - Spouse" when Branch is
+             Military Spouse), field[5] Branch, and optional field[47] lead source.
              The long Candidate Application (Form 7) stays on /sb-application only. -->
         <form onsubmit="return acSubmit(this,'mil')">
-          <input type="hidden" name="u" value="6ABECBE5B93F3"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="2ae13585-ab75-4e0a-99cb-9f8f346e508f">
+          <input type="hidden" name="u" value="11"><input type="hidden" name="f" value="11"><input type="hidden" name="s" value=""><input type="hidden" name="c" value="0"><input type="hidden" name="m" value="0"><input type="hidden" name="act" value="sub"><input type="hidden" name="v" value="2"><input type="hidden" name="or" value="a0d5e878-42eb-41ee-9e19-4dd997d107e2">
           <div class="ac-grid">
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
             <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
-            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
-            <div class="ac-field ac-full"><label>Separation (ETS) date</label><input type="date" name="field[8]" required></div>
+            <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required onchange="milSpouseToggle(this)"><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
+            <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
+            <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
+            <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
+                 same as AC's own embed serializer. Copy approved by Allie — keep byte-identical. -->
+            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -2306,7 +2320,21 @@ function milEtsWindow(v){
   if(d<=milAddMonths(t,12))return '6-12 months';
   return 'More than 12 months';
 }
-/* SkillBridge intro calls are for candidates with 3+ months remaining. */
+/* Military Spouse applicants have no separation date: while Branch
+   (field[5]) is "Military Spouse" the Separation Date field is hidden and not
+   required, and milFormData posts field[32] as "N/A - Spouse" (AC Form 11
+   option) instead of a window derived from the date. */
+function milSpouseToggle(sel){
+  var inp=sel.form?sel.form.querySelector('input[name="field[8]"]'):null;
+  if(!inp)return;
+  var sp=sel.value==='Military Spouse';
+  inp.required=!sp;
+  if(sp)inp.value='';
+  var wrap=inp.closest('.ac-field');
+  if(wrap)wrap.style.display=sp?'none':'';
+}
+/* SkillBridge intro calls are for candidates with 3+ months remaining.
+   "N/A - Spouse" (no date → no derived window) books Calendly as usual. */
 function etsSkipsCalendly(form){
   try{
     var v=milEtsWindow(new FormData(form).get('field[8]'));
@@ -2336,8 +2364,13 @@ function milFormData(form){
   if(full)fd.set('fullname',full);
   fd.delete('firstname');fd.delete('lastname');
   if(fd.has('phone'))fd.set('phone',milPhoneE164(fd.get('phone')));
-  var w=milEtsWindow(fd.get('field[8]'));
-  if(w)fd.set('field[32]',w);
+  if(fd.get('field[5]')==='Military Spouse'){
+    fd.set('field[32]','N/A - Spouse');
+    if(!fd.get('field[8]'))fd.delete('field[8]');
+  }else{
+    var w=milEtsWindow(fd.get('field[8]'));
+    if(w)fd.set('field[32]',w);
+  }
   return fd;
 }
 /* Company/partner forms post to AC Form 16 (Partner Inquiry). Its field[34]
@@ -2401,7 +2434,7 @@ function hfSubmit(form,w){
 }
 function acReset(){
   document.getElementById('ac-book').style.display='none';
-  var f=document.querySelector('#ac-mil form'); if(f){f.reset();}
+  var f=document.querySelector('#ac-mil form'); if(f){f.reset();var s=f.querySelector('select[name="field[5]"]');if(s)milSpouseToggle(s);}
   document.getElementById('ac-mil').style.display='block';
   acScroll();
 }

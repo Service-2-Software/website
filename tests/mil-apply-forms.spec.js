@@ -92,38 +92,44 @@ test('milEtsWindow clamps month-end overflow (Nov 30 + 3mo -> Feb 28)', async ({
 
 /* ─── end-to-end submits ─── */
 
-async function fillMilForm(page, formSel, { date, phone }) {
+async function fillMilForm(page, formSel, { date, phone, branch, leadSource, smsConsent }) {
   await page.fill(`${formSel} [name=firstname]`, 'Jane');
   await page.fill(`${formSel} [name=lastname]`, 'Doe');
   await page.fill(`${formSel} [name=email]`, 'jane@example.com');
   if (phone) await page.fill(`${formSel} [name=phone]`, phone);
-  await page.selectOption(`${formSel} [name="field\\[5\\]"]`, 'US Army');
-  await page.fill(`${formSel} [name="field\\[8\\]"]`, date);
+  await page.selectOption(`${formSel} [name="field\\[5\\]"]`, branch || 'US Army');
+  if (date) await page.fill(`${formSel} [name="field\\[8\\]"]`, date);
+  if (leadSource) await page.selectOption(`${formSel} [name="field\\[47\\]"]`, leadSource);
+  if (smsConsent) await page.check(`${formSel} [name=sms_consent]`);
   await page.click(`${formSel} button[type=submit]`);
 }
 
-function expectForm11Basics(post) {
+function expectForm11Basics(post, branch = 'US Army') {
   expect(post.url).toBe('https://service2software.activehosted.com/proc.php');
-  expect(post.entries.u).toBe('6ABECBE5B93F3');
+  expect(post.entries.u).toBe('11');
   expect(post.entries.f).toBe('11');
-  expect(post.entries.or).toBe('2ae13585-ab75-4e0a-99cb-9f8f346e508f');
+  expect(post.entries.or).toBe('a0d5e878-42eb-41ee-9e19-4dd997d107e2');
   expect(post.entries.fullname).toBe('Jane Doe');
   expect(post.entries.firstname).toBeUndefined();
   expect(post.entries.lastname).toBeUndefined();
-  expect(post.entries['field[5]']).toBe('US Army');
-  expect(post.entries['field[8]']).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  expect(post.entries['field[5]']).toBe(branch);
+  if (branch !== 'Military Spouse') {
+    expect(post.entries['field[8]']).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+  }
 }
 
 test('home #hf-mil: 6-12 months window posts field[8]+field[32] and opens Calendly', async ({ page }) => {
   await openPage(page, '/');
   await page.evaluate(() => hfPick('mil'));
-  await fillMilForm(page, '#hf-mil form', { date: '2027-01-10', phone: '(555) 555-5555' });
+  await fillMilForm(page, '#hf-mil form', { date: '2027-01-10', phone: '(555) 555-5555', leadSource: 'LinkedIn', smsConsent: true });
 
   const posts = await page.evaluate(() => window.__acPosts);
   expect(posts).toHaveLength(1);
   expectForm11Basics(posts[0]);
   expect(posts[0].entries['field[8]']).toBe('2027-01-10');
   expect(posts[0].entries['field[32]']).toBe('6-12 months');
+  expect(posts[0].entries['field[47]']).toBe('LinkedIn');
+  expect(posts[0].entries.sms_consent).toBe('on'); // checked box posts on, same as AC embed
   expect(posts[0].entries.phone).toBe('+15555555555');
 
   // Calendly script is blocked, so calPopup falls back to window.open.
@@ -145,6 +151,8 @@ test('home #hf-mil: already-separated date skips Calendly', async ({ page }) => 
   expectForm11Basics(posts[0]);
   expect(posts[0].entries['field[8]']).toBe('2026-06-14');
   expect(posts[0].entries['field[32]']).toBe('Already separated');
+  expect(posts[0].entries['field[47]']).toBe(''); // optional lead source left unselected posts empty (same as AC embed)
+  expect(posts[0].entries.sms_consent).toBeUndefined(); // unchecked consent box is omitted entirely
   expect(posts[0].entries.phone).toBe(''); // optional phone left blank stays blank
 
   expect(await page.evaluate(() => window.__opens)).toHaveLength(0);
@@ -171,13 +179,14 @@ test('/military #ac-mil: less-than-3-months date skips Calendly', async ({ page 
 
 test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ page }) => {
   await openPage(page, '/military');
-  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958' });
+  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958', leadSource: 'S2S Candidate Referral' });
 
   const posts = await page.evaluate(() => window.__acPosts);
   expect(posts).toHaveLength(1);
   expectForm11Basics(posts[0]);
   expect(posts[0].entries['field[8]']).toBe('2028-01-01');
   expect(posts[0].entries['field[32]']).toBe('More than 12 months');
+  expect(posts[0].entries['field[47]']).toBe('S2S Candidate Referral');
   expect(posts[0].entries.phone).toBe('+442079460958');
 
   const opens = await page.evaluate(() => window.__opens);
@@ -186,13 +195,60 @@ test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ pa
   await expect(page.locator('#ac-book-cal')).toBeVisible();
 });
 
-test('both mil forms have the required Separation (ETS) date input and no ETS dropdown', async ({ page }) => {
+test('Military Spouse: date field hidden, posts field[32]="N/A - Spouse" without field[8], opens Calendly', async ({ page }) => {
+  await openPage(page, '/');
+  await page.evaluate(() => hfPick('mil'));
+
+  const dateField = page.locator('#hf-mil form input[name="field\\[8\\]"]');
+  // Selecting Military Spouse hides the date input and drops its required flag...
+  await page.selectOption('#hf-mil form [name="field\\[5\\]"]', 'Military Spouse');
+  await expect(dateField).toBeHidden();
+  expect(await dateField.evaluate((el) => el.required)).toBe(false);
+  // ...and switching back restores it.
+  await page.selectOption('#hf-mil form [name="field\\[5\\]"]', 'US Army');
+  await expect(dateField).toBeVisible();
+  expect(await dateField.evaluate((el) => el.required)).toBe(true);
+
+  await fillMilForm(page, '#hf-mil form', { branch: 'Military Spouse', leadSource: 'SpouseWorks' });
+
+  const posts = await page.evaluate(() => window.__acPosts);
+  expect(posts).toHaveLength(1);
+  expectForm11Basics(posts[0], 'Military Spouse');
+  expect(posts[0].entries['field[32]']).toBe('N/A - Spouse');
+  expect(posts[0].entries['field[8]']).toBeUndefined(); // empty date dropped from payload
+  expect(posts[0].entries['field[47]']).toBe('SpouseWorks');
+
+  // Spouses book the intro call as usual (only the two timing values skip).
+  const opens = await page.evaluate(() => window.__opens);
+  expect(opens).toHaveLength(1);
+  expect(opens[0]).toContain('calendly.com/patrick-service2software/initial-call-with-service-2-software');
+  await expect(page.locator('#hf-book-cal')).toBeVisible();
+});
+
+const FIELD_47_OPTIONS = [
+  '', '7 Eagle', 'Allegiant Vets', 'S2S Candidate Referral', 'Facebook', 'Flyer',
+  'Job Fair', 'LinkedIn', 'SFL-TAP', 'SkillBridge Network',
+  'DoW Skillbridge Website', 'Rate My Skillbridge', 'SpouseWorks', 'Other'
+];
+
+test('both mil forms: required Separation Date input, field[47] options match AC Form 11, no ETS dropdown', async ({ page }) => {
   await openPage(page, '/');
   for (const sel of ['#hf-mil form', '#ac-mil form']) {
     const form = page.locator(sel);
     const date = form.locator('input[type=date][name="field\\[8\\]"]');
     await expect(date).toHaveAttribute('required', '');
-    await expect(form.locator('label', { hasText: 'Separation (ETS) date' })).toHaveCount(1);
+    await expect(form.locator('label', { hasText: 'Separation Date' })).toHaveCount(1);
     await expect(form.locator('select[name="field\\[32\\]"]')).toHaveCount(0);
+    const field47Values = await form.locator('select[name="field\\[47\\]"] option')
+      .evaluateAll((opts) => opts.map((o) => o.value));
+    expect(field47Values).toEqual(FIELD_47_OPTIONS);
+    const consent = form.locator('input[type=checkbox][name=sms_consent]');
+    await expect(consent).toHaveCount(1);
+    await expect(consent).not.toBeChecked(); // unchecked by default
+    expect(await consent.evaluate((el) => el.required)).toBe(false); // optional, same as AC Form 11
+    // Approved consent copy, byte for byte.
+    expect((await form.locator('.ac-consent span').textContent()).trim()).toBe(
+      'By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.'
+    );
   }
 });
