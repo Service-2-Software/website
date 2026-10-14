@@ -176,13 +176,14 @@ test('/military #ac-mil: less-than-3-months date skips Calendly', async ({ page 
 
 test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ page }) => {
   await openPage(page, '/military');
-  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958' });
+  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958', leadSource: 'S2S Candidate Referral' });
 
   const posts = await page.evaluate(() => window.__acPosts);
   expect(posts).toHaveLength(1);
   expectForm11Basics(posts[0]);
   expect(posts[0].entries['field[8]']).toBe('2028-01-01');
   expect(posts[0].entries['field[32]']).toBe('More than 12 months');
+  expect(posts[0].entries['field[47]']).toBe('S2S Candidate Referral');
   expect(posts[0].entries.phone).toBe('+442079460958');
 
   const opens = await page.evaluate(() => window.__opens);
@@ -222,8 +223,8 @@ test('Military Spouse: date field hidden, posts field[32]="N/A - Spouse" without
 });
 
 const FIELD_47_OPTIONS = [
-  '', '7 Eagle', 'Allegiant Vets', 'Candidate Referral', 'Facebook', 'Flyer',
-  'Job Fair', 'LinkedIn', 'S2S Website', 'SFL-TAP', 'SkillBridge Network',
+  '', '7 Eagle', 'Allegiant Vets', 'S2S Candidate Referral', 'Facebook', 'Flyer',
+  'Job Fair', 'LinkedIn', 'SFL-TAP', 'SkillBridge Network',
   'DoW Skillbridge Website', 'Rate My Skillbridge', 'SpouseWorks', 'Other'
 ];
 
