@@ -92,7 +92,7 @@ test('milEtsWindow clamps month-end overflow (Nov 30 + 3mo -> Feb 28)', async ({
 
 /* ─── end-to-end submits ─── */
 
-async function fillMilForm(page, formSel, { date, phone, branch, leadSource }) {
+async function fillMilForm(page, formSel, { date, phone, branch, leadSource, smsConsent }) {
   await page.fill(`${formSel} [name=firstname]`, 'Jane');
   await page.fill(`${formSel} [name=lastname]`, 'Doe');
   await page.fill(`${formSel} [name=email]`, 'jane@example.com');
@@ -100,6 +100,7 @@ async function fillMilForm(page, formSel, { date, phone, branch, leadSource }) {
   await page.selectOption(`${formSel} [name="field\\[5\\]"]`, branch || 'US Army');
   if (date) await page.fill(`${formSel} [name="field\\[8\\]"]`, date);
   if (leadSource) await page.selectOption(`${formSel} [name="field\\[47\\]"]`, leadSource);
+  if (smsConsent) await page.check(`${formSel} [name=sms_consent]`);
   await page.click(`${formSel} button[type=submit]`);
 }
 
@@ -120,7 +121,7 @@ function expectForm11Basics(post, branch = 'US Army') {
 test('home #hf-mil: 6-12 months window posts field[8]+field[32] and opens Calendly', async ({ page }) => {
   await openPage(page, '/');
   await page.evaluate(() => hfPick('mil'));
-  await fillMilForm(page, '#hf-mil form', { date: '2027-01-10', phone: '(555) 555-5555', leadSource: 'LinkedIn' });
+  await fillMilForm(page, '#hf-mil form', { date: '2027-01-10', phone: '(555) 555-5555', leadSource: 'LinkedIn', smsConsent: true });
 
   const posts = await page.evaluate(() => window.__acPosts);
   expect(posts).toHaveLength(1);
@@ -128,6 +129,7 @@ test('home #hf-mil: 6-12 months window posts field[8]+field[32] and opens Calend
   expect(posts[0].entries['field[8]']).toBe('2027-01-10');
   expect(posts[0].entries['field[32]']).toBe('6-12 months');
   expect(posts[0].entries['field[47]']).toBe('LinkedIn');
+  expect(posts[0].entries.sms_consent).toBe('on'); // checked box posts on, same as AC embed
   expect(posts[0].entries.phone).toBe('+15555555555');
 
   // Calendly script is blocked, so calPopup falls back to window.open.
@@ -150,6 +152,7 @@ test('home #hf-mil: already-separated date skips Calendly', async ({ page }) => 
   expect(posts[0].entries['field[8]']).toBe('2026-06-14');
   expect(posts[0].entries['field[32]']).toBe('Already separated');
   expect(posts[0].entries['field[47]']).toBe(''); // optional lead source left unselected posts empty (same as AC embed)
+  expect(posts[0].entries.sms_consent).toBeUndefined(); // unchecked consent box is omitted entirely
   expect(posts[0].entries.phone).toBe(''); // optional phone left blank stays blank
 
   expect(await page.evaluate(() => window.__opens)).toHaveLength(0);
@@ -238,5 +241,9 @@ test('both mil forms: required Separation Date input, field[47] options match AC
     const field47Values = await form.locator('select[name="field\\[47\\]"] option')
       .evaluateAll((opts) => opts.map((o) => o.value));
     expect(field47Values).toEqual(FIELD_47_OPTIONS);
+    const consent = form.locator('input[type=checkbox][name=sms_consent]');
+    await expect(consent).toHaveCount(1);
+    expect(await consent.evaluate((el) => el.required)).toBe(false); // optional, same as AC Form 11
+    await expect(form.locator('.ac-consent span')).toContainText('from Service 2 Software at the number provided');
   }
 });
