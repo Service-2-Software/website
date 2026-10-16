@@ -1121,7 +1121,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
             <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
             <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
-                 same as AC's own embed serializer. Copy approved by Allie — keep byte-identical. -->
+                 same as AC's own embed serializer; milFormData also appends field[53][]=Yes (AC
+                 "SMS Consent" checkbox field 53) when checked, and posts neither when unchecked.
+                 Copy approved by Allie — keep byte-identical. -->
             <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
           </div>
           <div class="ac-submit">
@@ -1228,7 +1230,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
             <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
             <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
-                 same as AC's own embed serializer. Copy approved by Allie — keep byte-identical. -->
+                 same as AC's own embed serializer; milFormData also appends field[53][]=Yes (AC
+                 "SMS Consent" checkbox field 53) when checked, and posts neither when unchecked.
+                 Copy approved by Allie — keep byte-identical. -->
             <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
           </div>
           <div class="ac-submit">
@@ -2357,13 +2361,17 @@ function milPhoneE164(v){
    from first+last and drop the separate name parts from the payload. field[8]
    (Separation date, YYYY-MM-DD) comes straight from the date input; the ETS
    window field[32] is derived from it so downstream AC automations keep
-   receiving the same strings the old dropdown posted. */
+   receiving the same strings the old dropdown posted. When the optional
+   sms_consent box is ticked, the AC "SMS Consent" checkbox field (field 53,
+   option "Yes") is appended as field[53][]=Yes so AC stores a real consent
+   record; when unticked, neither sms_consent nor field[53][] is posted. */
 function milFormData(form){
   var fd=new FormData(form);
   var full=((fd.get('firstname')||'')+' '+(fd.get('lastname')||'')).replace(/\s+/g,' ').trim();
   if(full)fd.set('fullname',full);
   fd.delete('firstname');fd.delete('lastname');
   if(fd.has('phone'))fd.set('phone',milPhoneE164(fd.get('phone')));
+  if(fd.has('sms_consent'))fd.append('field[53][]','Yes');
   if(fd.get('field[5]')==='Military Spouse'){
     fd.set('field[32]','N/A - Spouse');
     if(!fd.get('field[8]'))fd.delete('field[8]');

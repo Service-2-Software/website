@@ -10,6 +10,8 @@
  *  - field[32] derives the exact legacy dropdown strings for sample dates in
  *    every window (incl. boundaries and month-end clamping),
  *  - Calendly popup/skip behavior follows the derived field[32] value,
+ *  - ticked sms_consent posts both sms_consent=on and field[53][]=Yes (AC
+ *    "SMS Consent" checkbox field); unticked posts neither,
  *  - fullname join, phone E.164, field[5] Branch, and the AC Form 11
  *    identifiers (u/f/or) are unchanged.
  */
@@ -130,6 +132,7 @@ test('home #hf-mil: 6-12 months window posts field[8]+field[32] and opens Calend
   expect(posts[0].entries['field[32]']).toBe('6-12 months');
   expect(posts[0].entries['field[47]']).toBe('LinkedIn');
   expect(posts[0].entries.sms_consent).toBe('on'); // checked box posts on, same as AC embed
+  expect(posts[0].entries['field[53][]']).toBe('Yes'); // checked box also posts AC "SMS Consent" field 53
   expect(posts[0].entries.phone).toBe('+15555555555');
 
   // Calendly script is blocked, so calPopup falls back to window.open.
@@ -153,6 +156,7 @@ test('home #hf-mil: already-separated date skips Calendly', async ({ page }) => 
   expect(posts[0].entries['field[32]']).toBe('Already separated');
   expect(posts[0].entries['field[47]']).toBe(''); // optional lead source left unselected posts empty (same as AC embed)
   expect(posts[0].entries.sms_consent).toBeUndefined(); // unchecked consent box is omitted entirely
+  expect(posts[0].entries['field[53][]']).toBeUndefined(); // and field 53 is not posted at all
   expect(posts[0].entries.phone).toBe(''); // optional phone left blank stays blank
 
   expect(await page.evaluate(() => window.__opens)).toHaveLength(0);
@@ -170,6 +174,8 @@ test('/military #ac-mil: less-than-3-months date skips Calendly', async ({ page 
   expectForm11Basics(posts[0]);
   expect(posts[0].entries['field[8]']).toBe('2026-08-01');
   expect(posts[0].entries['field[32]']).toBe('Less than 3 months');
+  expect(posts[0].entries.sms_consent).toBeUndefined(); // unchecked consent box is omitted entirely
+  expect(posts[0].entries['field[53][]']).toBeUndefined(); // and field 53 is not posted at all
 
   expect(await page.evaluate(() => window.__opens)).toHaveLength(0);
   expect(await page.evaluate(() => LAST_CAL)).toBeNull();
@@ -179,7 +185,7 @@ test('/military #ac-mil: less-than-3-months date skips Calendly', async ({ page 
 
 test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ page }) => {
   await openPage(page, '/military');
-  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958', leadSource: 'S2S Candidate Referral' });
+  await fillMilForm(page, '#ac-mil form', { date: '2028-01-01', phone: '+44 20 7946 0958', leadSource: 'S2S Candidate Referral', smsConsent: true });
 
   const posts = await page.evaluate(() => window.__acPosts);
   expect(posts).toHaveLength(1);
@@ -187,6 +193,8 @@ test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ pa
   expect(posts[0].entries['field[8]']).toBe('2028-01-01');
   expect(posts[0].entries['field[32]']).toBe('More than 12 months');
   expect(posts[0].entries['field[47]']).toBe('S2S Candidate Referral');
+  expect(posts[0].entries.sms_consent).toBe('on'); // checked box posts on, same as AC embed
+  expect(posts[0].entries['field[53][]']).toBe('Yes'); // checked box also posts AC "SMS Consent" field 53
   expect(posts[0].entries.phone).toBe('+442079460958');
 
   const opens = await page.evaluate(() => window.__opens);
