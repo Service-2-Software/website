@@ -254,9 +254,12 @@ test('both mil forms: required Separation Date input, field[47] options match AC
     await expect(consent).toHaveCount(1);
     await expect(consent).not.toBeChecked(); // unchecked by default
     expect(await consent.evaluate((el) => el.required)).toBe(false); // optional, same as AC Form 11
-    // Approved consent copy, byte for byte.
+    // Approved consent copy plus the appended Privacy Policy link, byte for byte.
     expect((await form.locator('.ac-consent span').textContent()).trim()).toBe(
-      'By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.'
+      'By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg & data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP. See our Privacy Policy.'
     );
+    const privacyLink = form.locator('.ac-consent span a');
+    await expect(privacyLink).toHaveText('Privacy Policy');
+    await expect(privacyLink).toHaveAttribute('href', '/privacy');
   }
 });

@@ -1123,8 +1123,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
                  same as AC's own embed serializer; milFormData also appends field[53][]=Yes (AC
                  "SMS Consent" checkbox field 53) when checked, and posts neither when unchecked.
-                 Copy approved by Allie — keep byte-identical. -->
-            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
+                 Copy approved by Allie plus an appended Privacy Policy link; keep both
+                 instances byte-identical (tests assert the exact text). -->
+            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP. See our <a href="/privacy">Privacy Policy</a>.</span></label>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1232,8 +1233,9 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
             <!-- Optional SMS consent (AC Form 11 sms_consent). Posts "sms_consent=on" only when checked,
                  same as AC's own embed serializer; milFormData also appends field[53][]=Yes (AC
                  "SMS Consent" checkbox field 53) when checked, and posts neither when unchecked.
-                 Copy approved by Allie — keep byte-identical. -->
-            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP.</span></label>
+                 Copy approved by Allie plus an appended Privacy Policy link; keep both
+                 instances byte-identical (tests assert the exact text). -->
+            <label class="ac-consent ac-full"><input type="checkbox" name="sms_consent"><span>By submitting this form and signing up for texts, you consent to receive text messages (e.g. program updates, interview reminders) from Service 2 Software at the number provided. Consent is not a condition of applying. Msg &amp; data rates may apply. Msg frequency varies. Unsubscribe at any time by replying STOP. See our <a href="/privacy">Privacy Policy</a>.</span></label>
           </div>
           <div class="ac-submit">
             <button class="btn bg" type="submit">Apply Now &rarr;</button>
@@ -1892,45 +1894,138 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
   <section class="sk" style="padding:calc(var(--nh) + 80px) 0 64px">
     <div class="con" style="max-width:880px">
       <div class="ey"><div class="elk"></div><span class="lk">Legal</span></div>
-      <h1 class="h2k" style="margin-top:14px;font-size:clamp(32px,4.5vw,58px)">Privacy &amp; Cookies</h1>
+      <h1 class="h2k" style="margin-top:14px;font-size:clamp(32px,4.5vw,58px)">Privacy Policy</h1>
       <p style="margin-top:18px;font-size:16px;line-height:1.7;color:rgba(255,255,255,.6);max-width:640px">How Service 2 Software collects, uses, and protects information when you visit our website.</p>
+      <p style="margin-top:12px;font-size:13px;color:rgba(255,255,255,.45)">Last updated: October 20, 2026</p>
     </div>
   </section>
   <section class="sw" style="padding:64px 0 110px">
     <div class="con art" style="max-width:880px">
-      <p>Service 2 Software (“S2S,” “we,” “us”) is a 501(c)(3) nonprofit. This page explains what information we collect on <strong>service2software.org</strong>, why we collect it, and the choices you have.</p>
 
-      <h2>Information You Provide</h2>
-      <p>When you apply, inquire as a hiring partner, book a call, or join our newsletter, you may share your name, email, phone number, military branch, ETS window, company details, and related fields. That information is submitted to our CRM / email platform (<strong>ActiveCampaign</strong>) and, when you book a call, to <strong>Calendly</strong>.</p>
-      <p>We use it to respond to you, run the SkillBridge program, match candidates with partners, and send updates you requested. We do not sell your personal information.</p>
+      <h2>Introduction</h2>
+      <p>Service 2 Software (collectively, the &ldquo;Company,&rdquo; &ldquo;we,&rdquo; &ldquo;our,&rdquo; or &ldquo;us&rdquo;) knows that you care about how your personal information is used and shared. We take your privacy seriously and want to outline the measures we employ in safeguarding your personal information. Service 2 Software is a 501(c)(3) nonprofit (EIN 83-0641046).</p>
+      <p>This Privacy Policy covers Company&rsquo;s treatment of information collected when you access our website at <strong>service2software.org</strong>, or any other linked pages, features, content, forms, or communications offered from time to time by Company in connection therewith (collectively, the &ldquo;Site&rdquo;). We recommend that you read this Privacy Policy carefully as it provides important information about your personal information and your rights under the law.</p>
 
-      <h2>Cookies &amp; Similar Technologies</h2>
-      <p>We use a small amount of browser storage to remember your cookie preference. If you accept analytics cookies, we also load <strong>Google Analytics 4</strong> to understand aggregate site traffic (pages viewed, approximate location, device/browser type, and referral source), plus <strong>RB2B</strong> (Retention.com) and <strong>Apollo.io</strong> visitor identification services that may associate your visit with business contact information to help us understand which companies are exploring a partnership. Those tools are off until you accept.</p>
-      <p>Third-party tools on this site may set their own cookies when you use them:</p>
+      <h2>Who This Privacy Policy Applies To</h2>
+      <p>This Privacy Policy applies to information we collect:</p>
       <ul>
-        <li><strong>Calendly</strong> — scheduling widget when you book a call</li>
-        <li><strong>ActiveCampaign</strong> — form submissions and related marketing tooling</li>
-        <li><strong>Testimonial.to</strong> — embedded testimonials player</li>
-        <li><strong>Google Fonts</strong> — typography delivery</li>
+        <li>on the Site; or</li>
+        <li>in communications between you and the Site, including email and, if you opt in, text messages.</li>
       </ul>
 
-      <h2>Analytics</h2>
-      <p>With your consent, Google Analytics helps us see which pages are useful, where visitors come from, and how the site performs — so we can improve the program experience. RB2B and Apollo.io, with the same consent, help our team follow up with companies interested in hiring military talent. You can decline and still use the site. Change your choice anytime via <a onclick="openCookiePrefs()" style="cursor:pointer;text-decoration:underline">Cookie Settings</a>.</p>
+      <h3>SMS/Text Messaging</h3>
+      <p>If you opt in to receive text messages by checking the SMS consent checkbox on one of our application forms, you consent to receive text messages from Service 2 Software related to your application and the program, including program updates, interview reminders, and scheduling and check-in reminders. Message frequency varies. Message and data rates may apply. Consent is not a condition of applying.</p>
+      <p>We do not sell, rent, or share your mobile phone number or SMS opt-in consent with third parties or affiliates for marketing or promotional purposes. Your mobile number is used solely to deliver the messages described above.</p>
+      <p>You may opt out of SMS at any time by replying STOP to any message. For help, reply HELP or contact <a href="mailto:support@service2software.org">support@service2software.org</a>.</p>
 
-      <h2>Infrastructure Logs</h2>
-      <p>Our hosting provider (AWS CloudFront / S3) may retain standard access logs (IP address, URL, user agent, timestamps) for security and reliability. Those logs are not used for marketing profiles.</p>
+      <p>This Privacy Policy does not apply to information collected by any third party, including through any application or content that may link to or be accessible from or on the Site.</p>
+      <p>Please read this Privacy Policy carefully to understand our policies and practices regarding your information and how we will treat it. If you do not agree with our policies and practices, you must stop using the Site. By accessing or using the Site or using any of our services, you acknowledge that you have read and accept the practices and policies outlined in this Privacy Policy and any other Company policies or agreements in place at that time. We reserve the right to make changes to this Privacy Policy from time to time. Your continued use of the Site after we make changes is deemed to be acceptance of those changes, so please check periodically for updates.</p>
 
-      <h2>Your Choices</h2>
+      <h2>Users Must Be At Least 18</h2>
+      <p>Users of our Site must be at least 18 years old; any user under 18 is not authorized. Our Site is not targeted to children under age 18. Additionally, we do not knowingly collect any personal information from children under 18 years of age.</p>
+      <p>If you have reason to believe that a child under the age of 18 has provided personal information to Company through the Site, please contact us, and we will endeavor to delete that information from our databases.</p>
+
+      <h2>Information We Collect and How We Collect It</h2>
+      <p>We collect several types of information from and about users of the Site, including information:</p>
       <ul>
-        <li>Accept or decline analytics cookies in the cookie banner</li>
-        <li>Reopen preferences anytime: <a onclick="openCookiePrefs()" style="cursor:pointer;text-decoration:underline">Cookie Settings</a></li>
-        <li>Unsubscribe from emails using the link in those messages</li>
-        <li>Contact us to access or delete lead data we hold about you</li>
+        <li>by which you may be personally identified, such as name, postal address, e-mail address, phone number, or any other identifier by which you may be contacted online or offline (&ldquo;personal information&rdquo;);</li>
+        <li>you may submit to us, including any content;</li>
+        <li>about your preferences and demographics;</li>
+        <li>geolocation, including precise and regional;</li>
+        <li>about you individually but does not identify you;</li>
+        <li>about your internet connection, the equipment you use to access our Site, and Site usage details;</li>
+        <li>chat modules, messaging and email data, including related metrics;</li>
+        <li>occupation history, including military branch of service and separation date;</li>
+        <li>date of birth;</li>
+        <li>financial and economic information;</li>
+        <li>gender.</li>
+      </ul>
+      <p>We collect this information:</p>
+      <ul>
+        <li>directly from you when you provide it to us, such as when you submit an application or other form, book a call, or contact us with inquiries; and</li>
+        <li>automatically as you use the Site. Information collected automatically may include usage details, and information collected through cookies.</li>
+      </ul>
+      <p>Information you submit through our forms is sent to our CRM and email platform (<strong>ActiveCampaign</strong>) and, when you book a call, to our scheduling provider (<strong>Calendly</strong>).</p>
+      <p>By voluntarily providing us with any such information, you are consenting to our use of it in accordance with this Privacy Policy. You can choose not to provide us with certain information, but then you may not be able to take advantage of many features or opportunities.</p>
+
+      <h3>Automatically Collected Information</h3>
+      <p>Upon engaging the Site or services, the Company automatically receives and records information on our server logs from your browser, including but not limited to your IP address, the type of browser used, cookie information, the page you requested, and duration of activity on our Site. Company may store such information itself or such information may be included in databases owned and maintained by Company affiliates within our corporate family, agents, third party vendors, or service providers. This information may be used to customize the content you see on our Site or to communicate with you about opportunities. This information provides us with the type of user who is accessing our Site and certain browsing activities of that user. We may make extensive use of this data at an aggregated level in order to understand, among other things, how our Site is being used. Company may share this data with its affiliates within our corporate family, agents, third party vendors, service providers, and business partners. Company may also disclose aggregated user statistics in order to describe our services to current and prospective business partners, and to other third parties for other lawful purposes. Please note that we have the ability to retain any data that you provide or that we collect on our Site, even if you do not use our Site.</p>
+      <p>Our hosting provider (AWS CloudFront and S3) may also retain standard access logs (IP address, URL, user agent, timestamps) for security and reliability. Those logs are not used for marketing profiles.</p>
+
+      <h3>Cookies</h3>
+      <p>We use &ldquo;cookies&rdquo; and other tracking technologies to improve your experience and to save you time when visiting the Site. Cookies are little tags that are placed onto your computer. We assign a cookie to your computer when you first visit us in order to enable us to recognize you each time you return. Cookies allow us to customize the Site to your individual preferences in order to create a more personalized experience. On most web browsers, you will find a &ldquo;help&rdquo; section on the toolbar. Please refer to this section for information on how to receive notification when you are receiving a new cookie and how to turn cookies off.</p>
+      <p>If you accept analytics cookies in the banner shown on your first visit, we load <strong>Google Analytics 4</strong> to understand aggregate site traffic, plus <strong>RB2B</strong> (Retention.com) and <strong>Apollo.io</strong> visitor identification services that may associate your visit with business contact information. Those tools are off until you accept, and you can change your choice at any time via <a onclick="openCookiePrefs()" style="cursor:pointer;text-decoration:underline">Cookie Settings</a> in the footer. Third-party tools on the Site (<strong>Calendly</strong>, <strong>ActiveCampaign</strong>, <strong>Testimonial.to</strong>, and <strong>Google Fonts</strong>) may set their own cookies when you use them.</p>
+
+      <h3>Do Not Track</h3>
+      <p>We may track users&rsquo; use of the Site, but because there is no common understanding of what a &ldquo;Do Not Track&rdquo; signal is supposed to mean, we will not respond to browser Do Not Track (DNT) signals. For more information on DNT settings generally, please visit https://allaboutdnt.com.</p>
+
+      <h2>How We Use Your Information</h2>
+      <p>We use information that we collect about you or that you provide to us, including any personal information:</p>
+      <ul>
+        <li>To provide the Site and its contents to you.</li>
+        <li>To process your application or inquiry and operate the program.</li>
+        <li>To provide you with marketing and promotions, and for us to audit the same.</li>
+        <li>To provide you with information, opportunities, or services, including customer support, that you request from us.</li>
+        <li>To provide you with notices about your application, promotions, or other agreements.</li>
+        <li>To carry out our obligations and rights arising from any contracts entered into between you and us.</li>
+        <li>To defend against claims and litigation.</li>
+        <li>To enforce our policies and protect against security incidents, including to prevent fraud, malicious, deceptive or illegal activity.</li>
+        <li>To notify you about changes to the Site or any products or services we offer to provide through it.</li>
+        <li>To fulfill any other purpose for which you provide it.</li>
+        <li>In any other way we may describe when you provide the information.</li>
+        <li>For any purpose with your consent.</li>
+      </ul>
+      <p>You may notify us to opt-out from receiving certain marketing emails and each marketing email will include an opt-out button or unsubscribe link.</p>
+
+      <h2>Disclosure of Your Information</h2>
+      <p>Company is not in the business of selling your information. We have the right to disclose aggregated information about our users, and information that does not identify any individual. We may disclose personal information that we collect or you provide in accordance with this Privacy Policy:</p>
+      <ul>
+        <li>To our subsidiaries and affiliates within our corporate family.</li>
+        <li>To contractors, service providers, vendors, and other third parties we use to support our business.</li>
+        <li>To a buyer or other successor in the event of a merger, divestiture, restructuring, reorganization, dissolution, or other sale or transfer of some or all of Company&rsquo;s assets, whether as a going concern or as part of a bankruptcy, liquidation, or similar proceeding, in which personal information held by Company about our Site users is among the assets transferred.</li>
+        <li>To fulfill the purpose for which you provide it.</li>
+        <li>For any other purpose disclosed by us when you provide the information.</li>
+        <li>To our professional advisors, including lawyers, accountants, consultants, security professionals and other similar parties when disclosure is reasonably necessary.</li>
+        <li>With your consent.</li>
+        <li>To third party vendors who help us provide the Site, such as analytics providers, acting on our behalf under contract.</li>
+      </ul>
+      <p>We may also disclose your personal information:</p>
+      <ul>
+        <li>To comply with a subpoena, court order, administrative or governmental order, or any other requirement of law.</li>
+        <li>If Company, in its sole discretion, deems it necessary in order to protect its rights or the rights of others, to prevent harm to persons or property, or to fight fraud.</li>
+        <li>To enforce or apply our agreements or policies.</li>
       </ul>
 
-      <h2>Contact</h2>
-      <p>Questions about privacy: <a href="mailto:info@service2software.org">info@service2software.org</a><br>Service 2 Software · 501(c)(3) · EIN 83-0641046</p>
-      <p style="margin-top:28px;font-size:13px;color:rgba(17,17,17,.45)">Last updated: August 2026</p>
+      <h2>Data Security</h2>
+      <p>No Internet or e-mail transmission is ever fully secure or error free. In particular, e-mail or forms sent to or from the Site may not be secure. Therefore, you should take special care in deciding what information you send to us via e-mail or through a form. Please keep this in mind when disclosing any personal information to Company via the Internet. Any transmission of personal information is at your own risk. We are not responsible for circumvention of any privacy settings or security measures contained on the Site.</p>
+
+      <h2>Links to Other Web Sites</h2>
+      <p>This Privacy Policy applies only to the Site. The Site may contain links to other web sites not operated or controlled by Company (the &ldquo;Third Party Sites&rdquo;), e.g., Facebook, Twitter, Instagram, YouTube, LinkedIn, and TikTok. The policies and procedures we described here do not apply to the Third Party Sites. The links from the Site do not imply that Company endorses or has reviewed the Third Party Sites. We suggest contacting those sites directly for information on their privacy policies.</p>
+
+      <h2>Social Media</h2>
+      <p>We use social media plug-ins (e.g., Facebook, Twitter, Instagram, TikTok). These features may collect your IP address and/or other information as set forth in each social media platform&rsquo;s privacy notice, which page you are visiting on our Site, and may set a cookie to enable the feature to function properly. Company also has a presence on some social media platforms, such as Facebook, Twitter, Instagram, TikTok. Through our accounts on social media platforms, we may in some instances collect personal information when you interact with the Company accounts or otherwise communicate with us through those accounts or on those platforms. Any information that you post on social media is governed by each social media platform&rsquo;s privacy notices, and any personal information that we collect via our social media accounts will be processed in accordance with this Privacy Policy.</p>
+
+      <h2>Contact Us</h2>
+      <p>To keep your personal information accurate, current, and complete, please contact us as specified below. We will take reasonable steps to update or correct personal information in our possession that you have previously submitted via the Site. Note that you may also manage your communications preferences and the receipt of any commercial communication by clicking the &ldquo;unsubscribe&rdquo; link included at the bottom of all emails from Company.</p>
+      <p>If you have any questions or concerns regarding this Privacy Policy and our privacy practices, please send us a detailed message to <a href="mailto:support@service2software.org">support@service2software.org</a> and we will make every effort to resolve your concerns. You may also contact us at the address below:</p>
+      <p>4922 Bill Gardner Pkwy, #254, Locust Grove, Georgia, 30248</p>
+
+      <h2>International Transfers</h2>
+      <p>Company will primarily store your information in the United States. Where applicable, to facilitate our global operations, we may process personal information from around the world, including from other countries in which Company has operations, in order to provide the Site.</p>
+      <p>If you are accessing or using our Site or otherwise providing personal information to us, you are agreeing and consenting to the processing of your personal information in the United States and other jurisdictions in which we operate.</p>
+
+      <h2>Your California Privacy Rights</h2>
+      <p>California Civil Code Section 1798.83 permits users who are California residents to request certain information regarding the disclosure of personal information to third parties, including our information sharing practices, including the names and addresses of those businesses with whom we have shared your Personal Information, for direct marketing purposes. To make such a request, please contact us using the methods described in the &ldquo;Contact Us&rdquo; section of this Privacy Policy.</p>
+
+      <h2>Your General Data Protection Regulation Rights</h2>
+      <p>General Data Protection Regulation (&ldquo;GDPR&rdquo;) permits users who are in the European Economic Area (&ldquo;EEA&rdquo;) or European Union (&ldquo;EU&rdquo;) and the United Kingdom (&ldquo;UK&rdquo;) to request certain information regarding the control, disclosure, and use of their personal information. In summary, those rights include rights to: fair processing of information and transparency over how we use your personal information, require us to provide you with information regarding the information that we have about you and how we use that information, require us to correct any mistakes in your information which we hold, require the erasure of personal information concerning you in certain situations, and object at any time to the processing, use, and automation of your data.</p>
+      <p>For further information on each of those rights, including the circumstances in which they apply, see the Guidance from the UK Information Commissioner&rsquo;s Office (&ldquo;ICO&rdquo;) on individuals&rsquo; rights under the GDPR. If you would like to exercise any of those rights please contact us using the methods described in the &ldquo;Contact Us&rdquo; section of this Privacy Policy.</p>
+
+      <h3>Transfer Your Information Out of the European Economic Area</h3>
+      <p>We may transfer your personal information to areas outside of the EEA. Such countries do not have the same data protections as the EEA and the UK. However, any transfer of your personal information will be subject to applicable safeguards as prescribed in this Privacy Policy and as permitted under Article 46(5) and any relevant section of the GDPR that are designed to help safeguard your privacy rights and give you remedies in the unlikely event of a misuse of your personal information. To obtain a copy of such safeguards please contact us using the methods described in the &ldquo;Contact Us&rdquo; section of this Privacy Policy.</p>
+
+      <h3>How To File a Complaint Under GDPR</h3>
+      <p>The GDPR also gives you the right to lodge a complaint with a supervisory authority, in particular in the EU (or EEA) state where you work, normally live, or where any alleged infringement of data protection laws occurred.</p>
     </div>
   </section>
 </div>
@@ -1969,7 +2064,7 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
       <div class="fbtm">
         <div class="flegal">
           <div class="fcopy">© 2026 Service 2 Software. All rights reserved.</div>
-          <a onclick="sp('privacy')">Privacy</a>
+          <a onclick="sp('privacy')">Privacy Policy</a>
           <a onclick="openCookiePrefs()">Cookie Settings</a>
         </div>
         <div class="f501">501(c)(3) Non-Profit · Department of War SkillBridge Approved</div>
