@@ -92,7 +92,7 @@ Hardening applied in `index.html` + CloudFront:
 - Private origin, TLS 1.2+, HSTS
 
 Open product TODO (not a hosting blocker): production Core portal URL.
-ActiveCampaign lead forms are wired (`docs/SECURITY.md`).
+ActiveCampaign lead forms are wired (`docs/SECURITY.md`). API/MCP access from Cursor Cloud is a separate issue — see [`docs/ACTIVECAMPAIGN_CONNECTION.md`](docs/ACTIVECAMPAIGN_CONNECTION.md).
 
 ## Cookie consent & visitor analytics
 
