@@ -1,0 +1,23 @@
+{
+  "mcpServers": {
+    "salesforce": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@salesforce/mcp@latest",
+        "--orgs",
+        "s2s-prod",
+        "--toolsets",
+        "orgs,metadata,data,users"
+      ]
+    },
+    "activecampaign": {
+      "command": "npx",
+      "args": ["-y", "@marcelocorrea/mcp-active-campaign"],
+      "env": {
+        "ACTIVECAMPAIGN_ACCOUNT_URL": "https://YOUR_ACCOUNT.api-us1.com",
+        "ACTIVECAMPAIGN_API_KEY": "YOUR_AC_API_KEY"
+      }
+    }
+  }
+}

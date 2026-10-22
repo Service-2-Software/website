@@ -9,6 +9,7 @@ infra/dist/
 .env.*
 !.env.example
 *.pem
+.cursor/mcp.json
 
 # OS / editor
 .DS_Store
