@@ -138,7 +138,7 @@ test('home #hf-mil: 6-12 months window posts field[8]+field[32] and opens Calend
   // Calendly script is blocked, so calPopup falls back to window.open.
   const opens = await page.evaluate(() => window.__opens);
   expect(opens).toHaveLength(1);
-  expect(opens[0]).toContain('calendly.com/patrick-service2software/initial-call-with-service-2-software');
+  expect(opens[0]).toContain('calendly.com/d/dtst-f8b-5sc/s2s-discovery-call');
   expect(opens[0]).toContain('name=Jane%20Doe');
   expect(opens[0]).toContain('email=jane%40example.com');
   await expect(page.locator('#hf-book-cal')).toBeVisible();
@@ -199,7 +199,7 @@ test('/military #ac-mil: more-than-12-months window opens Calendly', async ({ pa
 
   const opens = await page.evaluate(() => window.__opens);
   expect(opens).toHaveLength(1);
-  expect(opens[0]).toContain('calendly.com/patrick-service2software/initial-call-with-service-2-software');
+  expect(opens[0]).toContain('calendly.com/d/dtst-f8b-5sc/s2s-discovery-call');
   await expect(page.locator('#ac-book-cal')).toBeVisible();
 });
 
@@ -229,7 +229,7 @@ test('Military Spouse: date field hidden, posts field[32]="N/A - Spouse" without
   // Spouses book the intro call as usual (only the two timing values skip).
   const opens = await page.evaluate(() => window.__opens);
   expect(opens).toHaveLength(1);
-  expect(opens[0]).toContain('calendly.com/patrick-service2software/initial-call-with-service-2-software');
+  expect(opens[0]).toContain('calendly.com/d/dtst-f8b-5sc/s2s-discovery-call');
   await expect(page.locator('#hf-book-cal')).toBeVisible();
 });
 
