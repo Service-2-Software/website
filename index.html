@@ -637,6 +637,30 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
 .ac-lt .ac-consent span{color:rgba(17,17,17,.5)}
 .ac-lt .ac-booked{color:var(--ink)}
 
+/* Partner confirmation — after a hiring form, before Calendly */
+#partner-gate{position:fixed;inset:0;z-index:10050;display:none;align-items:center;justify-content:center;padding:24px}
+#partner-gate.show{display:flex}
+.pgate-back{position:absolute;inset:0;background:rgba(0,0,0,.72)}
+.pgate-card{position:relative;z-index:1;width:min(560px,100%);max-height:min(640px,calc(100vh - 48px));overflow:auto;background:var(--k);border:1px solid rgba(255,255,255,.12);border-top:2px solid var(--g);padding:36px 32px 28px;box-shadow:0 24px 80px rgba(0,0,0,.5)}
+.pgate-x{position:absolute;top:10px;right:12px;width:36px;height:36px;background:none;border:none;color:rgba(255,255,255,.55);font-size:28px;line-height:1;cursor:pointer}
+.pgate-x:hover{color:var(--w)}
+.pgate-kicker{font-family:var(--fo);font-size:11px;font-weight:700;letter-spacing:.22em;text-transform:uppercase;color:var(--g)}
+.pgate-title{font-family:var(--fd);font-weight:900;font-size:clamp(28px,4vw,40px);line-height:.95;text-transform:uppercase;color:var(--w);margin:10px 36px 14px 0}
+.pgate-copy{font-family:var(--fb);font-size:15.5px;line-height:1.65;color:rgba(255,255,255,.68);margin:0 0 20px}
+.pgate-check{display:flex;gap:12px;align-items:flex-start;cursor:pointer;text-align:left;padding:14px;border:1.5px solid rgba(255,255,255,.16);background:#111}
+.pgate-check:has(input:checked){border-color:var(--g)}
+.pgate-check input{width:18px;height:18px;margin-top:2px;flex-shrink:0;accent-color:#ceff00;cursor:pointer}
+.pgate-check span{font-family:var(--fb);font-size:14.5px;line-height:1.55;color:rgba(255,255,255,.86)}
+.pgate-actions{margin-top:22px}
+#pg-yes:disabled{opacity:.38;cursor:not-allowed;filter:grayscale(.35);transform:none;box-shadow:none;pointer-events:none}
+.pgate-alt{display:inline-block;margin-top:16px;background:none;border:none;padding:0;cursor:pointer;font-family:var(--fo);font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.62);text-decoration:underline;text-underline-offset:3px}
+.pgate-alt:hover{color:var(--g)}
+body.pgate-lock{overflow:hidden}
+@media(max-width:720px){
+  .pgate-card{padding:28px 18px 22px}
+  #pg-yes{width:100%;justify-content:center}
+}
+
 /* ─── RESPONSIVE ─── */
 @media(max-width:1180px){
   .nl,.nrt .ncore,.nrt .ncta{display:none}
@@ -2085,6 +2109,25 @@ footer{background:var(--k);border-top:2px solid var(--g);padding:72px 0 36px}
   </div>
 </div>
 
+<!-- Partner form confirmation: not-military checkbox → Dave's demo, or military application -->
+<div id="partner-gate" class="pgate" role="dialog" aria-modal="true" aria-labelledby="pg-title" aria-hidden="true" hidden>
+  <div class="pgate-back" onclick="closePartnerGate()"></div>
+  <div class="pgate-card">
+    <button type="button" class="pgate-x" onclick="closePartnerGate()" aria-label="Close">&times;</button>
+    <div class="pgate-kicker">Before you book</div>
+    <h3 class="pgate-title" id="pg-title">Book a demo with Dave.</h3>
+    <p class="pgate-copy">This call is for companies hiring through Service 2 Software. If you are a service member or spouse looking for an internship, use the candidate application instead.</p>
+    <label class="pgate-check">
+      <input type="checkbox" id="pg-check" onchange="partnerGateToggle()">
+      <span>I am not currently an active duty service member or spouse looking for an internship.</span>
+    </label>
+    <div class="pgate-actions">
+      <button type="button" class="btn bg" id="pg-yes" disabled onclick="partnerGateYes()">Yes — Book a Demo</button>
+    </div>
+    <button type="button" class="pgate-alt" onclick="partnerGateMilitary()">I am a service member or spouse</button>
+  </div>
+</div>
+
 <script>
 function animateStats(){
   var row=document.querySelector('.srow'); if(!row) return;
@@ -2337,9 +2380,114 @@ const CAL_URLS={
   mil:'https://calendly.com/d/dtst-f8b-5sc/s2s-discovery-call?primary_color=ceff00',
   co:'https://calendly.com/davidhester/s2s-hiring?primary_color=ceff00'
 };
-function leadSubmit(form,key){
+/* Partner forms pause on a confirmation modal. The ActiveCampaign post and
+   Dave's Calendly demo run only after the visitor checks that they are not
+   a service member or spouse looking for an internship. The other path
+   opens the military application and does not create a partner lead. */
+var PENDING_PARTNER=null;
+function openPartnerGate(form,source){
+  PENDING_PARTNER={form:form,source:source};
+  var cb=document.getElementById('pg-check');
+  cb.checked=false;
+  document.getElementById('pg-yes').disabled=true;
+  var g=document.getElementById('partner-gate');
+  g.hidden=false;
+  g.classList.add('show');
+  g.setAttribute('aria-hidden','false');
+  document.body.classList.add('pgate-lock');
+  cb.focus();
+}
+function closePartnerGate(){
+  var g=document.getElementById('partner-gate');
+  if(!g)return;
+  g.classList.remove('show');
+  g.hidden=true;
+  g.setAttribute('aria-hidden','true');
+  document.body.classList.remove('pgate-lock');
+  PENDING_PARTNER=null;
+}
+function partnerGateToggle(){
+  document.getElementById('pg-yes').disabled=!document.getElementById('pg-check').checked;
+}
+function finishPartnerBook(form,source){
   try{
-    const fd=(key==='co')?coFormData(form):new FormData(form);
+    var fd=coFormData(form);
+    if(fd.get('u')&&fd.get('f')){
+      fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
+    }
+  }catch(e){}
+  if(source==='hf'){
+    document.getElementById('hf-mil').style.display='none';
+    document.getElementById('hf-co').style.display='none';
+    document.getElementById('hf-book-h').textContent='\u2713 Got it \u2014 you\u2019re in.';
+    document.getElementById('hf-book-s').textContent='Pick a time that works. You\u2019ll meet directly with Dave to map your hiring needs.';
+    setBookCalVisible('hf-book-cal',true);
+    document.getElementById('hf-book').style.display='block';
+    calPopup(AC_GATE_CAL_URLS.co,form);
+    hfScroll();
+  }else{
+    document.getElementById('co-step1').style.display='none';
+    var book=document.getElementById('co-book');
+    book.classList.add('on');
+    calPopup(CAL_URLS.co,form);
+    book.scrollIntoView({behavior:'smooth',block:'start'});
+  }
+}
+function prefillMilForm(selector,form){
+  var mil=document.querySelector(selector);
+  if(!mil||!form)return;
+  var fd=new FormData(form);
+  var bits=String(fd.get('fullname')||'').trim().split(/\s+/).filter(Boolean);
+  var first=bits.shift()||'';
+  var last=bits.join(' ');
+  var email=String(fd.get('email')||'').trim();
+  var fi=mil.querySelector('[name=firstname]');
+  var la=mil.querySelector('[name=lastname]');
+  var em=mil.querySelector('[name=email]');
+  if(fi)fi.value=first;
+  if(la)la.value=last;
+  if(em)em.value=email;
+}
+function showMilitaryApplication(form,source){
+  if(source==='hf'){
+    prefillMilForm('#hf-mil form',form);
+    document.getElementById('hf-choose').style.display='none';
+    document.getElementById('hf-co').style.display='none';
+    document.getElementById('hf-book').style.display='none';
+    document.getElementById('hf-mil').style.display='block';
+    hfScroll();
+  }else{
+    prefillMilForm('#ac-mil form',form);
+    spa('military','mil-cal');
+  }
+}
+function partnerGateYes(){
+  var p=PENDING_PARTNER;
+  var cb=document.getElementById('pg-check');
+  if(!p||!cb||!cb.checked)return;
+  var form=p.form,source=p.source;
+  closePartnerGate();
+  finishPartnerBook(form,source);
+}
+function partnerGateMilitary(){
+  var p=PENDING_PARTNER;
+  var form=p&&p.form,source=(p&&p.source)||'lead';
+  closePartnerGate();
+  showMilitaryApplication(form,source);
+}
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    var g=document.getElementById('partner-gate');
+    if(g&&g.classList.contains('show'))closePartnerGate();
+  }
+});
+function leadSubmit(form,key){
+  if(key==='co'){
+    openPartnerGate(form,'lead');
+    return false;
+  }
+  try{
+    const fd=new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(()=>{});
     }
@@ -2516,8 +2664,12 @@ function hfReset(){
   hfScroll();
 }
 function hfSubmit(form,w){
+  if(w==='co'){
+    openPartnerGate(form,'hf');
+    return false;
+  }
   try{
-    var fd=(w==='mil')?milFormData(form):(w==='co')?coFormData(form):new FormData(form);
+    var fd=(w==='mil')?milFormData(form):new FormData(form);
     if(fd.get('u')&&fd.get('f')){
       fetch('https://service2software.activehosted.com/proc.php',{method:'POST',mode:'no-cors',body:fd}).catch(function(){});
     }
