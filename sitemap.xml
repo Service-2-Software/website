@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Every URL below is a real routed page in index.html (see PAGE_ROUTES):
+     each renders its own content block and canonicalizes to its own apex URL.
+     /sb-application is intentionally omitted (hidden page, direct URL only).
+     Keep this list in sync with PAGE_ROUTES; tests/seo-files.spec.js checks it. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://service2software.org/</loc></url>
+  <url><loc>https://service2software.org/military</loc></url>
+  <url><loc>https://service2software.org/companies</loc></url>
+  <url><loc>https://service2software.org/about</loc></url>
+  <url><loc>https://service2software.org/resources</loc></url>
+  <url><loc>https://service2software.org/privacy</loc></url>
+  <url><loc>https://service2software.org/resources/skillbridge-internship-in-sales</loc></url>
+  <url><loc>https://service2software.org/resources/skillbridge-myths-debunked</loc></url>
+  <url><loc>https://service2software.org/resources/skillbridge-application-mistakes</loc></url>
+  <url><loc>https://service2software.org/resources/accepting-job-offer-on-skillbridge</loc></url>
+  <url><loc>https://service2software.org/resources/skillbridge-process-timeline</loc></url>
+  <url><loc>https://service2software.org/resources/how-to-qualify-for-skillbridge</loc></url>
+  <url><loc>https://service2software.org/resources/skillbridge-vs-career-fellowship</loc></url>
+  <url><loc>https://service2software.org/resources/why-sales-career-path</loc></url>
+</urlset>
