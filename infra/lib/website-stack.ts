@@ -223,6 +223,18 @@ export class WebsiteStack extends cdk.Stack {
 
     const siteRoot = path.join(__dirname, "..", "..");
 
+    /**
+     * robots.txt and sitemap.xml ship via their own single-file deployments
+     * below so each gets an explicit Content-Type (BucketDeployment applies
+     * `contentType` to every object it uploads, so they can't ride along with
+     * the main sync). They are excluded from the main deployment's source
+     * asset AND from its sync filter: the sync runs `s3 sync --delete`, and
+     * without the filter it would prune the two objects it doesn't know about.
+     * Once the objects exist in the bucket, S3 returns 200 for them, so the
+     * CloudFront 403/404 -> /index.html SPA fallback never intercepts them.
+     */
+    const SEO_FILES = ["robots.txt", "sitemap.xml"];
+
     new s3deploy.BucketDeployment(this, "DeployWebsite", {
       sources: [
         s3deploy.Source.asset(siteRoot, {
@@ -240,13 +252,37 @@ export class WebsiteStack extends cdk.Stack {
             "*.md",
             ".gitignore",
             ".env*",
+            ...SEO_FILES,
           ],
         }),
       ],
       destinationBucket: siteBucket,
+      exclude: SEO_FILES,
       distribution,
       distributionPaths: ["/*"],
       memoryLimit: 512,
+    });
+
+    // Asset globs don't match dot-prefixed entries, so exclude ".*" too;
+    // otherwise .git/.github/.gitignore would ride into these assets.
+    const ONLY = (file: string) => ["**", ".*", ".*/**", `!${file}`];
+
+    new s3deploy.BucketDeployment(this, "DeployRobotsTxt", {
+      sources: [s3deploy.Source.asset(siteRoot, { exclude: ONLY("robots.txt") })],
+      destinationBucket: siteBucket,
+      contentType: "text/plain",
+      prune: false,
+      distribution,
+      distributionPaths: ["/robots.txt"],
+    });
+
+    new s3deploy.BucketDeployment(this, "DeploySitemapXml", {
+      sources: [s3deploy.Source.asset(siteRoot, { exclude: ONLY("sitemap.xml") })],
+      destinationBucket: siteBucket,
+      contentType: "application/xml",
+      prune: false,
+      distribution,
+      distributionPaths: ["/sitemap.xml"],
     });
 
     new cdk.CfnOutput(this, "BucketName", {
