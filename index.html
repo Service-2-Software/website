@@ -1141,7 +1141,7 @@ body.pgate-lock{overflow:hidden}
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
-            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
+            <div class="ac-field"><label>Phone</label><input type="tel" name="phone" placeholder="(555) 555-5555" required></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required onchange="milSpouseToggle(this)"><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
             <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
             <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
@@ -1251,7 +1251,7 @@ body.pgate-lock{overflow:hidden}
             <div class="ac-field"><label>First Name</label><input type="text" name="firstname" placeholder="Jane" required></div>
             <div class="ac-field"><label>Last Name</label><input type="text" name="lastname" placeholder="Doe" required></div>
             <div class="ac-field"><label>Email</label><input type="email" name="email" placeholder="you@email.com" required></div>
-            <div class="ac-field"><label>Phone (Optional)</label><input type="tel" name="phone" placeholder="(555) 555-5555"></div>
+            <div class="ac-field"><label>Phone</label><input type="tel" name="phone" placeholder="(555) 555-5555" required></div>
             <div class="ac-field ac-full"><label>Branch of Service</label><select name="field[5]" required onchange="milSpouseToggle(this)"><option value="" disabled selected>Select branch&hellip;</option><option value="US Army">Army</option><option value="Army Reserves">Army Reserves</option><option value="US Navy">Navy</option><option value="Navy Reserves">Navy Reserves</option><option value="US Air Force">Air Force</option><option value="Air Force Reserves">Air Force Reserves</option><option value="US Marine Corps">Marine Corps</option><option value="Marine Corps Reserves">Marine Corps Reserves</option><option value="US Coast Guard">Coast Guard</option><option value="Space Force">Space Force</option><option value="Military Spouse">Military Spouse</option></select></div>
             <div class="ac-field ac-full"><label>Separation Date</label><input type="date" name="field[8]" required></div>
             <div class="ac-field ac-full"><label>How Did You Hear About Us?</label><select name="field[47]"><option value="" selected>Select one&hellip;</option><option value="7 Eagle">7 Eagle</option><option value="Allegiant Vets">Allegiant Vets</option><option value="S2S Candidate Referral">S2S Candidate Referral</option><option value="Facebook">Facebook</option><option value="Flyer">Flyer</option><option value="Job Fair">Job Fair</option><option value="LinkedIn">LinkedIn</option><option value="SFL-TAP">SFL-TAP</option><option value="SkillBridge Network">SkillBridge Network</option><option value="DoW Skillbridge Website">DoW Skillbridge Website</option><option value="Rate My Skillbridge">Rate My Skillbridge</option><option value="SpouseWorks">SpouseWorks</option><option value="Other">Other</option></select></div>
@@ -2589,7 +2589,7 @@ function etsSkipsCalendly(form){
   }catch(e){return false;}
 }
 /* AC Form 11 validates phone as E.164 (+XXXXXXXXXXXXX) and silently rejects
-   anything else (the no-cors POST hides the error), so normalize the optional
+   anything else (the no-cors POST hides the error), so normalize the required
    phone into that shape before posting. Blank stays blank. */
 function milPhoneE164(v){
   v=(v||'').trim();

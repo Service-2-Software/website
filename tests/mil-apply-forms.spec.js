@@ -98,7 +98,8 @@ async function fillMilForm(page, formSel, { date, phone, branch, leadSource, sms
   await page.fill(`${formSel} [name=firstname]`, 'Jane');
   await page.fill(`${formSel} [name=lastname]`, 'Doe');
   await page.fill(`${formSel} [name=email]`, 'jane@example.com');
-  if (phone) await page.fill(`${formSel} [name=phone]`, phone);
+  // Phone is required. Pass phone: '' to leave it blank (invalid submit).
+  if (phone !== '') await page.fill(`${formSel} [name=phone]`, phone || '(555) 555-5555');
   await page.selectOption(`${formSel} [name="field\\[5\\]"]`, branch || 'US Army');
   if (date) await page.fill(`${formSel} [name="field\\[8\\]"]`, date);
   if (leadSource) await page.selectOption(`${formSel} [name="field\\[47\\]"]`, leadSource);
@@ -157,7 +158,7 @@ test('home #hf-mil: already-separated date skips Calendly', async ({ page }) => 
   expect(posts[0].entries['field[47]']).toBe(''); // optional lead source left unselected posts empty (same as AC embed)
   expect(posts[0].entries.sms_consent).toBeUndefined(); // unchecked consent box is omitted entirely
   expect(posts[0].entries['field[53][]']).toBeUndefined(); // and field 53 is not posted at all
-  expect(posts[0].entries.phone).toBe(''); // optional phone left blank stays blank
+  expect(posts[0].entries.phone).toBe('+15555555555'); // required phone, defaulted by fillMilForm
 
   expect(await page.evaluate(() => window.__opens)).toHaveLength(0);
   expect(await page.evaluate(() => LAST_CAL)).toBeNull();
@@ -239,6 +240,19 @@ const FIELD_47_OPTIONS = [
   'DoW Skillbridge Website', 'Rate My Skillbridge', 'SpouseWorks', 'Other'
 ];
 
+test('both mil forms: blank phone is rejected and nothing is posted', async ({ page }) => {
+  await openPage(page, '/');
+  await page.evaluate(() => hfPick('mil'));
+  await fillMilForm(page, '#hf-mil form', { date: '2027-01-10', phone: '' });
+  expect(await page.evaluate(() => window.__acPosts)).toHaveLength(0);
+  await expect(page.locator('#hf-book')).toBeHidden();
+
+  await page.evaluate(() => sp('military'));
+  await fillMilForm(page, '#ac-mil form', { date: '2027-01-10', phone: '' });
+  expect(await page.evaluate(() => window.__acPosts)).toHaveLength(0);
+  await expect(page.locator('#ac-book')).toBeHidden();
+});
+
 test('both mil forms: required Separation Date input, field[47] options match AC Form 11, no ETS dropdown', async ({ page }) => {
   await openPage(page, '/');
   for (const sel of ['#hf-mil form', '#ac-mil form']) {
@@ -250,6 +264,9 @@ test('both mil forms: required Separation Date input, field[47] options match AC
     const field47Values = await form.locator('select[name="field\\[47\\]"] option')
       .evaluateAll((opts) => opts.map((o) => o.value));
     expect(field47Values).toEqual(FIELD_47_OPTIONS);
+    const phoneInput = form.locator('input[type=tel][name=phone]');
+    await expect(phoneInput).toHaveAttribute('required', '');
+    await expect(form.locator('label', { hasText: /^Phone$/ })).toHaveCount(1);
     const consent = form.locator('input[type=checkbox][name=sms_consent]');
     await expect(consent).toHaveCount(1);
     await expect(consent).not.toBeChecked(); // unchecked by default
